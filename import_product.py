@@ -114,3 +114,25 @@ for sheet in work_book._sheet_list:
             created_product.append(product_id)
 
 print("Total products created or updated:", len(created_product),created_product)
+
+
+
+esugh8erhgiuh
+rwtgtrgtr
+erwgrwgrg
+fsbgwrbgfbh
+sghhhhhhhh,,,
+,
+,
+,
+,
+,
+,
+,,
+
+,
+,
+,,
+,
+,
+
