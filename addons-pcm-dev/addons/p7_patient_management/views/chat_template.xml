@@ -1,0 +1,588 @@
+<odoo>
+    <data>
+        <!-- <template id="patient_chat_template" name="Patient Chat">
+            <t t-call="web.layout">
+                <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+                <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+                
+                <div class="container mt-4">
+                    <h2 class="text-center">Chat with Doctor</h2>
+                    <div class="card">
+                        <div class="card-body chat-box" id="chat-box" style="height: 400px; overflow-y: auto;">
+                            
+                            <t t-foreach="messages" t-as="message">
+                                <div t-if="message.author_id.id == patient" class="text-end">
+                                    <span class="badge bg-primary p-2"> <t t-esc="message.body"/> </span>
+                                </div>
+                                <div t-if="message.author_id.id != patient" class="text-start">
+                                    <span class="badge bg-secondary p-2"> <t t-esc="message.body"/> </span>
+                                </div>
+                            </t>
+                        </div>
+                        <div class="card-footer">
+                            <form action="/chat" method="POST">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="message" placeholder="Type a message..." required="required"/>
+                                    <button name="submit" class="btn btn-primary" type="submit">Send</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </template> -->
+
+        <template id="patient_chat_template" name="Patient Chat">
+            <t t-call="web.layout">       
+                <meta charset="UTF-8"/>
+                <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+                <meta name="description" content="Medical Dashboard for patient pre-operation guidance"/>
+        
+                <!-- Preload critical resources -->
+                <link rel="preload" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" as="style"/>
+                <link rel="preload" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" as="style"/>
+                
+                <!-- Bootstrap CSS -->
+                <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous"/>
+                
+                <!-- Bootstrap Icons -->
+                <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet" crossorigin="anonymous"/>
+                
+                <!-- Font Awesome with integrity check -->
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" 
+                    integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" 
+                    crossorigin="anonymous" referrerpolicy="no-referrer"/>
+
+                <style>
+                    :root {
+                    --primary-color: #54b1c9;
+                    --primary-light: #e0e7ff;
+                    --sidebar-bg: #f8f9fa;
+                    --sidebar-width: 250px;
+                    --text-dark: #212529;
+                    --text-muted: #6c757d;
+                    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+                    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+                    --transition-base: all 0.3s ease-in-out;
+                    }
+                    
+                    .body {
+                    background-color: #f5f7fb;
+                    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                    color: var(--text-dark);
+                    line-height: 1.6;
+                    }
+                    
+                    /* Accessibility improvements */
+                    a, button {
+                    transition: var(--transition-base);
+                    }
+                    
+                    a:focus-visible, 
+                    button:focus-visible {
+                    outline: 2px solid var(--primary-color);
+                    outline-offset: 2px;
+                    }
+                    
+                    /* Sidebar styles */
+                    .sidebar {
+                    width: var(--sidebar-width);
+                    background-color: var(--sidebar-bg);
+                    height: 100vh;
+                    position: fixed;
+                    left: 0;
+                    top: 0;
+                    overflow-y: auto;
+                    border-right: 1px solid #e9ecef;
+                    padding: 1.5rem 1rem;
+                    z-index: 1030;
+                    transition: transform 0.3s ease;
+                    }
+
+                    .sidebar-footer {
+                    margin-top: 2rem;
+                    padding-top: 1rem;
+                    }
+                    
+                    .logo-container {
+                    margin-bottom: 2rem;
+                    }
+                    
+                    .logo {
+                    color: var(--primary-color);
+                    width: 80px;
+                    height: 80px;
+                    border-radius: 10px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-weight: bold;
+                    font-size: 1.5rem;
+                    transition: var(--transition-base);
+                    }
+
+                    .left-logo{
+                    margin-left: 4rem;
+                    }
+                    
+                    .main-content {
+                    margin-left: var(--sidebar-width);
+                    transition: margin-left 0.3s ease;
+                    }
+                    
+                    .header {
+                    background-color: white;
+                    border-bottom: 1px solid #e9ecef;
+                    padding: 0.75rem 2rem;
+                    position: sticky;
+                    top: 0;
+                    z-index: 1020;
+                    }
+                    
+                    .nav-link {
+                    color: #64748b;
+                    padding: 0.5rem 0.75rem;
+                    padding-left: 3rem;
+                    border-radius: 0.375rem;
+                    margin-bottom: 0.5rem;
+                    display: flex;
+                    align-items: center;
+                    gap: 0.75rem;
+                    text-decoration: none;
+                    }
+
+                    .nav-link-logout {
+                    margin-top: 140%;
+                    }
+                    
+                    .nav-link:hover, 
+                    .nav-link.active,
+                    .nav-link:focus {
+                    background-color: var(--primary-light);
+                    color: var(--primary-color);
+                    }
+                    
+                    .nav-link.active {
+                    font-weight: 500;
+                    }
+                    
+                    .nav-icon {
+                    font-size: 1.25rem;
+                    width: 24px;
+                    text-align: center;
+                    }
+                    
+                    .avatar {
+                    width: 32px;
+                    height: 32px;
+                    border-radius: 50%;
+                    overflow: hidden;
+                    }
+                    
+                    .avatar img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                    }
+                    
+                    /* Card styles */
+                    .card {
+                    border: none;
+                    border-radius: 0.5rem;
+                    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+                    transition: var(--transition-base);
+                    height: 100%;
+                    }
+                    
+                    .card:hover {
+                    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+                    }
+                    
+                    .guide-section {
+                    border-left: 3px solid var(--primary-color);
+                    padding-left: 1rem;
+                    margin-bottom: 1rem;
+                    }
+                    
+                    /* Main content area */
+                    .content-area {
+                    padding: 10px;
+                    }
+                    
+                    .overlay {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background-color: rgba(0, 0, 0, 0.5);
+                    z-index: 1025;
+                    opacity: 0;
+                    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+                    visibility: hidden;
+                    transition: var(--transition-base);
+                    }
+                    
+                    .chat-list-container {
+                    height: 600px;
+                    overflow-y: auto;
+                    }
+
+                    /* Footer */
+                    footer {
+                    background-color: #F8F8F8;
+                    height: 70px;
+                    padding: 0 20px;
+                    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    margin-top: 18rem;
+                    }
+
+                    @media (min-width: 1440px) {
+                    .profile-section{
+                        height: 550px;
+                    }
+                    }
+
+                    @media (max-width: 1439px) and (min-width: 768px){
+                    .profile-section{
+                        height: 700px;
+                    }
+                    }
+                    
+                    /* Responsive adjustments */
+                    @media (max-width: 992px) {
+                    .sidebar {
+                        transform: translateX(-100%);
+                    }
+                    
+                    .sidebar.show {
+                        transform: translateX(0);
+                    }
+                    
+                    .main-content {
+                        margin-left: 0;
+                    }
+                    
+                    .overlay.show {
+                        opacity: 1;
+                        visibility: visible;
+                    }
+                    
+                    .mobile-toggle {
+                        display: block !important;
+                    }
+                    
+                    .profile-section {
+                    
+                        
+                        padding: 20px;
+                    }
+                    
+                    .timeline-content {
+                        width: 100%;
+                    }
+                    }
+                    
+                    @media (max-width: 768px) {
+                    .date-nav .d-flex {
+                        flex-wrap: wrap;
+                        justify-content: center;
+                    }
+                    
+                    .date-controls {
+                    
+                        justify-content: center;
+                    }
+                    
+                    .view-more-btn {
+                        margin-top: 10px;
+                        width: 100%;
+                    }
+                    
+                    .profile-image {
+                        width: 60px;
+                        height: 60px;
+                    }
+                    
+                    .nav-link-logout {
+                    margin-top: 80%;
+                    }
+                    }
+                    
+                    @media (max-width: 576px) {
+                    .header {
+                        padding: 0.75rem 1rem;
+                    }
+
+                    .date-pill {
+                    margin: 0;
+                    
+                    }
+                    
+                    .content-area {
+                        padding: 15px;
+                    }
+                    
+                    .profile-section {
+                        padding: 15px;
+                    }
+                    
+                    .chat-list-container {
+                        height: 400px;
+                    }
+                    
+                    .d-flex.pro-details {
+                        flex-direction: column;
+                    }
+
+                    .footer {
+                        margin-top: 2rem;
+                    }
+                    }
+
+                    @media (max-width: 430px) {
+                        
+                    
+                        
+                    }
+                </style>
+
+                <div class="body"> 
+                    <!-- Sidebar -->
+                    <div class="sidebar" id="sidebar">
+                        <div class="left-logo d-flex justify-content-between align-items-center mb-4">
+                        <div class="logo-container d-flex align-items-center gap-3">
+                            <div class="logo" aria-hidden="true"><img src="../p7_patient_management/static/src/img/vanaesa.jpg" alt="Company logo" class="img-fluid" style="border-radius: 10px;"/></div>
+                        </div>
+                        <button class="btn d-lg-none" id="closeSidebar" aria-label="Close sidebar">
+                            <i class="bi bi-x-lg"></i>
+                        </button>
+                        </div>
+                        
+                        <nav class="mb-4" aria-label="Main navigation">
+                        <ul class="nav flex-column">
+                            <li class="nav-item">
+                            <a href="/patient-dashboard" class="nav-link" aria-current="page">
+                                <i class="bi bi-house-fill nav-icon" aria-hidden="true"></i>
+                                <span>Home</span>
+                            </a>
+                            </li>
+                            <li class="nav-item">
+                                <div class="dropdown mt-2 mt-sm-0">
+                                    <button  style="width: 100%;" class="nav-link dropdown-toggle mt-3" type="button" id="calendarDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="bi bi-chat-fill nav-icon" aria-hidden="true"></i>
+                                        <span>Chat</span>
+                                    </button>
+                                    <ul class="dropdown-menu" style="width: 100%;" aria-labelledby="calendarDropdown">
+                                        <li t-if="doc_support == 'premium'"><a href="/chat?target=doctor" class="dropdown-item nav-link" style="padding-left:2rem;" >Doctor</a></li>
+                                        <li><a href="/chat?target=tech" class="dropdown-item nav-link" style="padding-left:2rem;" >Tech-Support</a></li>
+                                    </ul>
+                                </div>
+                            </li>
+                        </ul>
+                        </nav>
+                        
+                        <div class="sidebar-footer">
+                        <a href="/web/session/logout?redirect=/" class="nav-link nav-link-logout">
+                            <i class="bi bi-box-arrow-right nav-icon" aria-hidden="true"></i>
+                            <span>Logout</span>
+                        </a>
+                        </div>
+                    </div>
+
+                    <!-- Overlay for mobile sidebar -->
+                    <div class="overlay" id="overlay"></div>
+
+                    <!-- Main Content -->
+                    <div class="main-content">
+                        <!-- Header -->
+                        <header class="header d-flex align-items-center justify-content-between">
+                        <div class="d-flex align-items-center">
+                            <button class="btn d-lg-none mobile-toggle me-2" id="sidebarToggle" style="display: none;" aria-label="Toggle sidebar">
+                            <i class="bi bi-list"></i>
+                            </button>
+                            <nav aria-label="Breadcrumb">
+                            <ol class="breadcrumb m-0">
+                                <li class="breadcrumb-item"><a href="/patient-dashboard" class="text-decoration-none text-muted">Home</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Chat</li>
+                            </ol>
+                            </nav>
+                        </div>
+                        
+                        <div class="d-flex align-items-center gap-4">
+                            <div class="avatar">
+                            <!-- <img t-if="case.patient_id.image_1920" t-att-src="image_data_uri(case.patient_id.image_1920)" alt="User profile picture" width="32" height="32"/> -->
+                            </div>
+                        </div>
+                        </header>
+
+                        <!-- Patient Guide Content -->
+                        <div class="container-fluid py-1 px-1">
+                        <div class="row">
+                        <div class="col-12">
+                            <main class="content-area">
+                                <!-- >>> UPDATED HEADER BASED ON SUPPORT <<< -->
+                                <h2 t-if="support == 'doctor'" class="text-center">Chat with Doctor</h2>
+                                <h2 t-if="support == 'tech'" class="text-center">Chat with Tech-Support</h2>
+
+                                <div class="card mx-md-5">
+                                    <div class="card-body chat-box chat-list-container" id="chat-box">
+                                        <t t-foreach="messages" t-as="message">
+                                            <div t-if="message.author_id.id == patient" class="text-end my-2">
+                                                <span class="badge bg-primary p-2" style="color:rgb(0, 0, 0); background-color: #b3d9ff !important; font-size: 15px;"> <t t-esc="message.body"/> </span>
+                                            </div>
+                                            <div t-if="message.author_id.id != patient" class="text-start my-2">
+                                                <span class="badge bg-secondary p-2" style="color:rgb(0, 0, 0); background-color: #e6ccff !important; font-size: 15px;"> <t t-esc="message.body"/> </span>
+                                            </div>
+                                        </t>
+                                    </div>
+                                    <div class="card-footer">
+                                        <!-- >>> ADDED 'support' HIDDEN FIELD TO PRESERVE CHAT TYPE <<< -->
+                                        <form action="/chat" method="POST">
+                                            <script>
+                                                if (window.history.replaceState) {
+                                                    window.history.replaceState(null, null, window.location.href);
+                                                }
+                                            </script>
+                                            <input type="hidden" name="target" t-att-value="support"/>
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" name="message" placeholder="Type a message..." required="required"/>
+                                                <button name="submit" class="btn btn-info mx-2" type="submit">Send</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </main>
+                        </div>
+                        </div>
+                        </div>
+                        
+                        <footer>
+                        <div class="text-center"><i class="far fa-copyright" aria-hidden="true"></i> Copyright © Synapse Medical Pte Ltd</div>
+                        <div>
+                            <a href="#" class="text-decoration-none text-dark me-2">Privacy Policy</a>
+                            <a href="#" class="text-decoration-none text-dark">Cookies</a>
+                        </div>
+                        </footer>
+                    </div>
+
+                    <!-- Bootstrap Bundle with Popper -->
+                    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" 
+                            integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" 
+                            crossorigin="anonymous"></script>
+                    
+                    <!-- Improved JavaScript -->
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                        // Sidebar toggle functionality
+                        const sidebar = document.getElementById('sidebar');
+                        const sidebarToggle = document.getElementById('sidebarToggle');
+                        const closeSidebar = document.getElementById('closeSidebar');
+                        const overlay = document.getElementById('overlay');
+                        
+                        function toggleSidebar() {
+                            sidebar.classList.toggle('show');
+                            overlay.classList.toggle('show');
+                            document.body.style.overflow = sidebar.classList.contains('show') ? 'hidden' : '';
+                        }
+                        
+                        if (sidebarToggle) {
+                            sidebarToggle.addEventListener('click', toggleSidebar);
+                        }
+                        
+                        if (closeSidebar) {
+                            closeSidebar.addEventListener('click', toggleSidebar);
+                        }
+                        
+                        if (overlay) {
+                            overlay.addEventListener('click', toggleSidebar);
+                        }
+                        
+                        // Add focus styles for keyboard navigation
+                        document.addEventListener('keyup', function(e) {
+                            if (e.key === 'Tab') {
+                            document.documentElement.classList.add('keyboard-nav');
+                            }
+                        });
+                        
+                        // Smooth scrolling for anchor links
+                        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                            anchor.addEventListener('click', function(e) {
+                            e.preventDefault();
+                            const target = document.querySelector(this.getAttribute('href'));
+                            if (target) {
+                                target.scrollIntoView({
+                                behavior: 'smooth'
+                                });
+                            }
+                            });
+                        });
+                        });
+                    </script>
+                </div>
+
+                
+                <!-- <div class="container mt-4">
+                    <h2 class="text-center">Chat with Doctor</h2>
+                    <div class="card">
+                        <div class="card-body chat-box" id="chat-box" style="height: 400px; overflow-y: auto;">
+                            <span> <t t-esc="patient_case"/> </span>
+                            <t t-foreach="messages" t-as="message">
+                                <div t-if="message.author_id.id == patient" class="text-end">
+                                    <span class="badge bg-primary p-2"> <t t-esc="message.body"/> </span>
+                                </div>
+                                <div t-if="message.author_id.id != patient" class="text-start">
+                                    <span class="badge bg-secondary p-2"> <t t-esc="message.body"/> </span>
+                                </div>
+                            </t>
+                        </div>
+                        <div class="card-footer">
+                            <form action="/chat" method="POST">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="message" placeholder="Type a message..." required="required"/>
+                                    <button name="submit" class="btn btn-primary" type="submit">Send</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div> -->
+            </t>
+        </template>
+
+        <template id="patient_message_template" name="Direct Chat">
+            <div class="o_chat_container" style="display: flex; height: 100%;">
+
+                <!-- Sidebar -->
+                <div class="o_chat_sidebar" style="width: 300px; border-right: 1px solid #ddd; padding: 10px; background: #fff;">
+                    <h6 class="text-muted">DIRECT MESSAGES</h6>
+                    <div class="o_chat_user_entry" t-foreach="direct_messages" t-as="msg">
+                        <div class="o_chat_user_card" style="display: flex; align-items: center; padding: 10px; border-radius: 10px; margin-bottom: 10px; background: #f9f9f9; cursor: pointer;">
+                            <div class="o_chat_user_avatar" style="width: 32px; height: 32px; color: #fff; border-radius: 50%; text-align: center; line-height: 32px; font-weight: bold;">
+                                <!-- <t t-esc="msg.initial"/> -->
+                            </div>
+                            <div style="margin-left: 10px;">
+                                <!-- <div><t t-esc="msg.name"/></div> -->
+                            </div>
+                            <t t-if="msg.unread">
+                                <span class="badge bg-success" style="margin-left: auto;">test</span>
+                            </t>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Chat Window -->
+                <div class="o_chat_main" style="flex: 1; display: flex; align-items: center; justify-content: center; background: #fff;">
+                    <div class="text-center">
+                        <strong>Congratulations, your inbox is empty</strong>
+                        <p class="text-muted">New messages appear here.</p>
+                    </div>
+                </div>
+
+            </div>
+        </template>
+    </data>
+</odoo>

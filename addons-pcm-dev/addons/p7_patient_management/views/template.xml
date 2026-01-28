@@ -1,0 +1,1946 @@
+<odoo>
+    <data>
+        <!-- login page -->
+        <template id="login_template" inherit_id="web.login">
+            <xpath expr="//form" position="replace">
+            <t t-set="no_header" t-value="True"/>
+            <t t-set="no_footer" t-value="True"/>
+            <t t-set="title">VANAESA</t>
+            <meta charset="UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
+            <link rel="stylesheet" href="https://fontawesome.com/icons"/>
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+            <style>
+                .main-body{
+                    height: 100%;
+                    background-color:rgb(209, 228, 230);
+                }
+
+                .main-card {
+                    background-color:rgb(255, 255, 255);
+                    border-radius: 0.75rem;
+                    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+                    padding: 2rem;
+                    max-width: 450px;
+                    z-index: 10;
+                    margin: auto;
+                }
+                
+                .back-btn {
+                    color: #94a3b8;
+                    border: none;
+                    background: transparent;
+                    padding: 0;
+                    font-size: 20px;
+                    cursor: pointer;
+                }
+                
+                .back-btn:hover {
+                    color: #64748b;
+                }
+                
+                .step-indicator {
+                    color: #94a3b8;
+                    font-size: 0.875rem;
+                }
+                
+                .card-header {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-bottom: 1.5rem;
+                }
+                
+                .logo-container {
+                    flex-grow: 1;
+                    display: flex;
+                    justify-content: center;
+                    width:60px;
+                    height:60px;
+                }
+                
+                .logo {
+                    height: 60px;
+                    width: 60px;
+                    border-radius: 10%;
+                    object-fit: contain;
+                }
+                
+                .phone-input-group {
+                    display: flex;
+                    margin-bottom: 1.5rem;
+                
+                }
+                
+                .country-code{
+                    max-width: 100px;
+                }
+
+                .country-code:focus{
+                    outline: none;
+                    border-color: #25b7d3;
+                    box-shadow: 0 0 0 2px rgba(37, 183, 211, 0.2);
+                }
+                
+                
+                
+                .phone-input {
+                    flex-grow: 1;
+                    padding: 0.75rem;
+                    width: 205px;
+                    border: 1px solid #e2e8f0;
+                    border-top-right-radius: 0.375rem;
+                    border-bottom-right-radius: 0.375rem;
+                    outline: none;
+                }
+                
+                .phone-input:focus {
+                    border-color: #25b7d3;
+                    box-shadow: 0 0 0 2px rgba(37, 183, 211, 0.2);
+                }
+
+                .dob-input {
+                    padding: 0.75rem;
+                    border: 1px solid #e2e8f0;
+                    border-radius: 0.375rem;
+                    outline: none;
+                }
+
+                .dob-input:focus {
+                    border-color: #25b7d3;
+                    box-shadow: 0 0 0 2px rgba(37, 183, 211, 0.2);   
+                }
+                
+                .otp-container {
+                    display: flex;
+                    justify-content: center;
+                    gap: 0.5rem;
+                    margin-bottom: 2rem;
+                }
+                
+                .otp-input {
+                    padding: 0.75rem;
+                    border: 1px solid #e2e8f0;
+                    border-radius: 0.375rem;
+                    outline: none;
+                }
+                
+                .otp-input:focus {
+                    border-color: #25b7d3;
+                    box-shadow: 0 0 0 2px rgba(37, 183, 211, 0.2);
+                }
+
+                .action-otp-btn {
+                    width: 50%;
+                    background-color:rgb(32, 155, 63);
+                    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+                    color: white;
+                    border: none;
+                    padding: 0.75rem;
+                    border-radius: 0.375rem;
+                    margin-bottom: 1rem;
+                    transition: background-color 0.2s;
+                }
+                
+                .action-otp-btn-container {
+                    display: flex;
+                    justify-content: center;
+                }
+
+                .action-otp-btn:hover {
+                    background-color: #1da1bb;
+                }
+
+                .action-btn {
+                    width: 100%;
+                    background-color: #25b7d3;
+                    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+                    color: white;
+                    border: none;
+                    padding: 0.75rem;
+                    border-radius: 0.375rem;
+                    margin-bottom: 1rem;
+                    transition: background-color 0.2s;
+                }
+                
+                .action-btn:hover {
+                    background-color: #1da1bb;
+                }
+                
+                .faq-link {
+                    text-align: right;
+                    font-size: 0.875rem;
+                }
+                
+                .faq-link a {
+                    color: #25b7d3;
+                    text-decoration: none;
+                }
+                
+                .faq-link a:hover {
+                    color: #1da1bb;
+                }
+                
+                .footer {
+                    margin-top: auto;
+                    text-align: center;
+                    padding: 1rem;
+                    color: #94a3b8;
+                    font-size: 0.75rem;
+                }
+
+                @media (min-width: 500px) {
+                    .main-card {
+                        width: 500px;
+                    }
+                }
+                
+                @media (max-width: 512px) {
+                    .phone-input {
+                        width: 107px;
+                    }
+                }
+            </style>
+            <form method="post">
+                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                    <input type="hidden" id="otp_status" name="otp_status" t-att-value="otp_status"/>
+                    <input type="hidden" id="send_button" name="send_button" t-att-value="send_status"/>
+                    <input type="hidden" id="resend_button" name="resend_button" t-att-value="resend_status"/>
+                    <!-- <input type="text" id="otp_mandate" name="otp_mandate" t-att-value="otp_mandate"/> -->
+
+            <div class="main-body d-flex justify-content-center align-items-center vh-100">
+                <div >
+                <!-- Main card -->
+                <div class="main-card mx-3">
+                    <div class="card-header">
+                    
+                    <div class="logo-container">
+                        <img src="../p7_patient_management/static/src/img/vanaesa.jpg" alt="Vanaesa Logo" class="logo"/>
+                    </div>
+                    
+                    </div>
+
+                    <div class="text-center mb-4">
+                    <!-- <h2 class="fs-4 fw-medium mb-2">Hi Patrick!</h2> -->
+                        <p class="text-secondary mb-0">Welcome to VANAESA - </p>
+                        <p class="text-secondary mb-0">Virtual Anaesthesia Assessment!</p>
+                    </div>
+
+                    <div class="phone-input-group">
+                    <div class="input-group">
+                                            <select id="country_selector" class="form-control country-code" name="country_selector" required="required">
+                                                <!-- <option value="" disabled="disabled" selected="selected">Select your country</option> -->
+                                                <option value="+1" t-att-selected="'+1' == selected_country">United States (+1)</option>
+                                                <option value="+93" t-att-selected="'+93' == selected_country">Afghanistan (+93)</option>
+                                                <option value="+374" t-att-selected="'+374' == selected_country">Armenia (+374)</option>
+                                                <option value="+994" t-att-selected="'+994' == selected_country">Azerbaijan (+994)</option>
+                                                <option value="+973" t-att-selected="'+973' == selected_country">Bahrain (+973)</option>
+                                                <option value="+880" t-att-selected="'+880' == selected_country">Bangladesh (+880)</option>
+                                                <option value="+975" t-att-selected="'+975' == selected_country">Bhutan (+975)</option>
+                                                <option value="+673" t-att-selected="'+673' == selected_country">Brunei (+673)</option>
+                                                <option value="+855" t-att-selected="'+855' == selected_country">Cambodia (+855)</option>
+                                                <option value="+86" t-att-selected="'+86' == selected_country">China (+86)</option>
+                                                <option value="+357" t-att-selected="'+357' == selected_country">Cyprus (+357)</option>
+                                                <option value="+995" t-att-selected="'+995' == selected_country">Georgia (+995)</option>
+                                                <option value="+91" t-att-selected="'+91' == selected_country">India (+91)</option>
+                                                <option value="+62" t-att-selected="'+62' == selected_country">Indonesia (+62)</option>
+                                                <option value="+98" t-att-selected="'+98' == selected_country">Iran (+98)</option>
+                                                <option value="+964" t-att-selected="'+964' == selected_country">Iraq (+964)</option>
+                                                <option value="+972" t-att-selected="'+972' == selected_country">Israel (+972)</option>
+                                                <option value="+81" t-att-selected="'+81' == selected_country">Japan (+81)</option>
+                                                <option value="+962" t-att-selected="'+962' == selected_country">Jordan (+962)</option>
+                                                <option value="+7" t-att-selected="'+7' == selected_country">Kazakhstan (+7)</option>
+                                                <option value="+965" t-att-selected="'+965' == selected_country">Kuwait (+965)</option>
+                                                <option value="+996" t-att-selected="'+996' == selected_country">Kyrgyzstan (+996)</option>
+                                                <option value="+856" t-att-selected="'+856' == selected_country">Laos (+856)</option>
+                                                <option value="+961" t-att-selected="'+961' == selected_country">Lebanon (+961)</option>
+                                                <option value="+60" t-att-selected="'+60' == selected_country">Malaysia (+60)</option>
+                                                <option value="+960" t-att-selected="'+960' == selected_country">Maldives (+960)</option>
+                                                <option value="+976" t-att-selected="'+976' == selected_country">Mongolia (+976)</option>
+                                                <option value="+95" t-att-selected="'+95' == selected_country">Myanmar (+95)</option>
+                                                <option value="+977" t-att-selected="'+977' == selected_country">Nepal (+977)</option>
+                                                <option value="+850" t-att-selected="'+850' == selected_country">North Korea (+850)</option>
+                                                <option value="+968" t-att-selected="'+968' == selected_country">Oman (+968)</option>
+                                                <option value="+92" t-att-selected="'+92' == selected_country">Pakistan (+92)</option>
+                                                <option value="+970" t-att-selected="'+970' == selected_country">Palestine (+970)</option>
+                                                <option value="+63" t-att-selected="'+63' == selected_country">Philippines (+63)</option>
+                                                <option value="+974" t-att-selected="'+974' == selected_country">Qatar (+974)</option>
+                                                <option value="+7" t-att-selected="'+7' == selected_country">Russia (+7)</option>
+                                                <option value="+966" t-att-selected="'+966' == selected_country">Saudi Arabia (+966)</option>
+                                                <option value="+65" t-att-selected="'+65' == selected_country or not selected_country">Singapore (+65)</option>
+                                                <option value="+82" t-att-selected="'+82' == selected_country">South Korea (+82)</option>
+                                                <option value="+94" t-att-selected="'+94' == selected_country">Sri Lanka (+94)</option>
+                                                <option value="+963" t-att-selected="'+963' == selected_country">Syria (+963)</option>
+                                                <option value="+886" t-att-selected="'+886' == selected_country">Taiwan (+886)</option>
+                                                <option value="+992" t-att-selected="'+992' == selected_country">Tajikistan (+992)</option>
+                                                <option value="+66" t-att-selected="'+66' == selected_country">Thailand (+66)</option>
+                                                <option value="+670" t-att-selected="'+670' == selected_country">Timor-Leste (+670)</option>
+                                                <option value="+90" t-att-selected="'+90' == selected_country">Turkey (+90)</option>
+                                                <option value="+993" t-att-selected="'+993' == selected_country">Turkmenistan (+993)</option>
+                                                <option value="+971" t-att-selected="'+971' == selected_country">United Arab Emirates (+971)</option>
+                                                <option value="+998" t-att-selected="'+998' == selected_country">Uzbekistan (+998)</option>
+                                                <option value="+84" t-att-selected="'+84' == selected_country">Vietnam (+84)</option>
+                                                <option value="+967" t-att-selected="'+967' == selected_country">Yemen (+967)</option>
+                                            </select>
+                                            <input t-if="not mobile_number" type="text" name="mobile_number" id="mobile_number" class="form-control phone-input" required="required" placeholder="Enter mobile number"/>
+                                            <input t-if="mobile_number" type="text" name="mobile_number" id="mobile_number" class="form-control phone-input" required="required" t-att-value="mobile_number" style="width: 120px; border-right: none;" readonly="readonly"/>
+                    </div>
+                    </div>
+                    <div t-if="mobile_invalid" class="alert alert-danger text-alert">Invalid Mobile Number. Please enter a valid number.</div>
+                    <div t-if="error_message" class="alert alert-danger text-alert">Failed to send OTP, please contact administrator.</div>
+                    <label t-if="is_verified == 0" style="padding-top: 5px;">Date of Birth</label><![CDATA[&nbsp;]]><br/>
+                    <div class="otp-container mt-2" t-if="is_verified == 0">
+                        <input type="date" name="dob" id="dob" class="form-control dob-input" required="required"/>
+                    </div>
+                    <div t-if="dob_invalid" class="alert alert-danger text-alert">Incorrect Date of birth. Please enter a valid Date of birth.</div>
+                    <label for="otp" class="form-label">OTP Verification</label>
+                    <div class="otp-container">
+                        <input type="text" name="otp" id="otp" class="form-control otp-input" placeholder="Enter OTP" t-att-required="required"/>
+                    </div>
+                    <div t-if="otp_status == 2" class="alert alert-danger text-alert" id="otp-warning">Invalid OTP. Please enter a valid OTP.</div>
+                    <div t-if="otp_status == 3" class="alert alert-danger text-alert">OTP has expired. Please resend OTP.</div>
+                    <div class="alert alert-danger text-alert" id="expire-warning" style="display:none;">OTP has expired. Please resend OTP.</div>
+                    <div class="mb-3 action-otp-btn-container">
+                    <!-- <button class="action-otp-btn btn-sm">Get OTP</button> -->
+                        <button t-if="send_status == 1" type="submit" class="btn btn-custom mt-2 action-otp-btn" id="send-otp-button">Send OTP</button>
+                        <button t-if="resend_status == 1" type="submit" class="btn btn-custom mt-2 action-otp-btn">Resend OTP</button>
+                        <button type="submit" class="btn btn-custom mt-2 action-otp-btn" id="resend-otp-button" style="display:none;">Resend OTP</button>
+                        <div t-if="otp_status == 1" id="otp-timer" class="mt-2 timer-container">
+                            Resend OTP in<span id="timer-count" class="timer-count">300</span>secs.
+                    </div>
+                    </div>
+                
+                    
+                    <div class="mb-3">
+                    <!-- <button class="action-btn">Sign in</button> -->
+                    <button type="submit" class="action-btn">Sign in</button>
+                    </div>
+                    
+                    <div class="faq-link text-center">
+                    <a href="https://vanaesa.com/" target="_blank">What is VANAESA?</a>
+                    </div>
+                </div>
+
+                <!-- Footer -->
+                <div class="footer mt-auto">
+                    Copyright © Synapse Medical Pte Ltd
+                </div>
+            </div>
+        </div>
+            <!-- Bootstrap JS Bundle with Popper -->
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+                </form>
+
+                <!-- Countdown Timer Script -->
+                <script type="text/javascript">
+                    document.addEventListener("DOMContentLoaded", function() {
+                    let countdownElement = document.getElementById("timer-count");
+                    let resendOtpButton = document.getElementById("resend-otp-button");
+                    let otpTimer = document.getElementById("otp-timer");
+                    let otpInput = document.getElementById("otp");
+                    let expireWarning = document.getElementById("expire-warning");
+
+                    if (countdownElement) {
+                        let timeLeft = parseInt(countdownElement.innerHTML);
+                        // Function to update required attribute based on timer
+                        function updateRequiredStatus() {
+                            otpInput.required = timeLeft > 0;
+                        }
+                        // Set initial required status
+                        updateRequiredStatus();
+                        
+                        let timerInterval = setInterval(function() {
+                            if (timeLeft === 0) {
+                                clearInterval(timerInterval);
+                                updateRequiredStatus();
+                                // Show the expire warning and resend OTP button
+                                if (expireWarning) {
+                                    expireWarning.style.display = "block";
+                                }
+                                if (resendOtpButton) {
+                                    resendOtpButton.style.display = "block";
+                                }
+                                if (otpTimer) {
+                                    otpTimer.style.display = "none";
+                                }
+                            } else {
+                                timeLeft -= 1;
+                                countdownElement.innerHTML = timeLeft;
+                                updateRequiredStatus();
+                            }
+                        }, 1000);
+                    }
+                    // Handling Resend OTP Button Click
+                    if (resendOtpButton) {
+                        resendOtpButton.addEventListener("click", function() {
+                            timeLeft = 300;
+                            countdownElement.innerHTML = timeLeft;
+                            updateRequiredStatus();
+                            // Hide the expire warning and resend button, show timer
+                            if (expireWarning) {
+                                expireWarning.style.display = "none";
+                            }
+                            if (resendOtpButton) {
+                                resendOtpButton.style.display = "none";
+                            }
+                            if (otpTimer) {
+                                otpTimer.style.display = "block";
+                            }
+                            let timerInterval = setInterval(function() {
+                                if (timeLeft === 0) {
+                                    clearInterval(timerInterval);
+                                    updateRequiredStatus();
+                                    
+                                    if (expireWarning) {
+                                        expireWarning.style.display = "block";
+                                    }
+                                    if (resendOtpButton) {
+                                        resendOtpButton.style.display = "block";
+                                    }
+                                    if (otpTimer) {
+                                        otpTimer.style.display = "none";
+                                    }
+                                } else {
+                                    timeLeft -= 1;
+                                    countdownElement.innerHTML = timeLeft;
+                                    updateRequiredStatus();
+                                }
+                            }, 1000);
+                        });
+                    }
+                });
+                </script>
+            </xpath>
+        </template>
+
+        <!-- user verification page : name -->
+        <template id="user_info_verification_template_name" name="User Info Verification Page: Name">
+            <meta charset="UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+            <title>VANAESA</title>
+            <link type="image/x-icon" rel="shortcut icon" href="/p7_patient_management/static/src/img/vanaesa.jpg"/>
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+                <style>
+                    .con-body {
+                        background-color: #d1e4e6;
+                        min-height: 100vh;
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: center;
+                        align-items: center;
+                    }
+
+                    .main-card {
+                        background-color: white;
+                        border-radius: 0.75rem;
+                        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+                        padding: 2rem;
+                        width: 100%;
+                        max-width: 450px;
+                        margin: 1rem auto;
+                    }
+
+                    .back-btn {
+                        color: #94a3b8;
+                        border: none;
+                        background: transparent;
+                        padding: 0;
+                        font-size: 20px;
+                        cursor: pointer;
+                    }
+
+                    .back-btn:hover {
+                        color: #64748b;
+                    }
+
+                    .step-indicator {
+                        color: #94a3b8;
+                        font-size: 0.875rem;
+                    }
+
+                    .card-header {
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                    }
+
+
+                    .logo {
+                        height: 60px;
+                        width: 60px;
+                        background-color: #25b7d3;
+                        border-radius: 10%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        color: white;
+                        font-weight: bold;
+                        font-size: 1.5rem;
+                        margin: 0 auto 1.5rem;
+                        margin-left: 25px;
+                    }
+
+                    .form-control {
+                        margin-bottom: 1rem;
+                        padding: 0.75rem;
+                        font-size: 1rem;
+                    }
+
+                    .action-btn {
+                        width: 100%;
+                        background-color: #25b7d3;
+                        box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+                        color: white;
+                        border: none;
+                        padding: 0.75rem;
+                        border-radius: 0.375rem;
+                        margin-top: 1rem;
+                        transition: background-color 0.2s;
+                        font-weight: 500;
+                    }
+
+                    .action-btn:hover {
+                        background-color: #1da1bb;
+                    }
+
+                    .faq-link {
+                        text-align: right;
+                        font-size: 0.875rem;
+                        }
+                        
+                        .faq-link a {
+                        color: #25b7d3;
+                        text-decoration: none;
+                        }
+                        
+                        .faq-link a:hover {
+                        color: #1da1bb;
+                        }
+
+                    .footer {
+                        text-align: center;
+                        padding: 1rem;
+                        color: #9ca3af;
+                        font-size: 0.75rem;
+                        margin-top: 1rem;
+                    }
+                </style>
+
+                <div class="con-body">
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="col-12">
+                            <!-- Main card -->
+                            <div class="main-card">
+                                <!-- Logo -->
+                                <div class="card-header">
+                                    <button class="back-btn hide"></button>
+                                    <div class="logo-container" style="margin-left: 2.5rem;">
+                                        <img t-att-src="'/p7_patient_management/static/src/img/vanaesa.jpg'" style="width:50px;height:50px;" alt="Vanaesa Logo" class="logo"/>
+                                    </div>
+                                    <div t-if="user.partner_id.user_type == 'patient'" class="step-indicator">Step 1 of 7</div>
+                                    <div t-else="" class="step-indicator">Step 1 of 6</div>
+
+                                                </div>
+                                <div class="text-center mb-4">
+                                    <h2 class="fs-4 fw-medium mb-2">Hi <t t-esc="user.name"/> <t t-esc="user.partner_id.last_name"/></h2>
+                                    <p class="text-secondary mb-0">Welcome to VANAESA Anaesthesia Assessment!</p>
+                                    <p class="text-secondary">Please update your information below</p>
+                                </div>
+                                
+                                <!-- Form starts here -->
+                                <form action="/web/login/verification_name" method="post">
+                                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                    <input type="hidden" name="redirect" t-att-value="redirect"/>
+                                    <input type="hidden" name="uniq_id" t-att-value="uniq_id"/>
+
+                                    <div  class="form-outline form-white">
+                                        <label class="form-label" for="">First name</label>
+                                        <input type="text" id="first_name" name="first_name" required="True" t-att-value="user.name" class="form-control form-control-lg" />        
+                                    </div>
+                                    
+                                    <div class="form-outline form-white">
+                                        <label class="form-label" for="">Last name</label>
+                                        <input type="text" id="last_name" name="last_name" required="True" t-att-value="user.partner_id.last_name" class="form-control form-control-lg"/>
+                                    </div>
+                                    
+                                    <button id="submit-btn" name="submit-btn" type="submit" value="True" class="action-btn">Next</button>
+                                </form>
+
+                                <div class="faq-link mt-5 text-center">
+                                    <a href="https://vanaesa.com/" target="_blank">What is VANAESA?</a>
+                                    </div>
+                            </div>
+                            
+                            <!-- Footer -->
+                            <div class="footer">
+                                Copyright © Synapse Medical Pte Ltd
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </template>
+
+        <!-- user verification page : email -->
+        <template id="user_info_verification_template_email" name="User Info Verification Page: Mail">
+            <meta charset="UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+            <title>VANAESA</title>
+            <link type="image/x-icon" rel="shortcut icon" href="/p7_patient_management/static/src/img/vanaesa.jpg"/>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+                <style>
+                .con-body {
+                    background-color: #d1e4e6;
+                    min-height: 100vh;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                }
+
+                .main-card {
+                    background-color: white;
+                    border-radius: 0.75rem;
+                    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+                    padding: 2rem;
+                    width: 100%;
+                    max-width: 450px;
+                    margin: 1rem auto;
+                }
+
+                .back-btn {
+                    color: #94a3b8;
+                    border: none;
+                    background: transparent;
+                    padding: 0;
+                    font-size: 20px;
+                    cursor: pointer;
+                }
+
+                .back-btn:hover {
+                    color: #64748b;
+                }
+
+                .step-indicator {
+                    color: #94a3b8;
+                    font-size: 0.875rem;
+                }
+
+                .card-header {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                }
+
+
+                .logo {
+                    height: 60px;
+                    width: 60px;
+                    background-color: #25b7d3;
+                    border-radius: 10%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: white;
+                    font-weight: bold;
+                    font-size: 1.5rem;
+                    margin: 0 auto 1.5rem;
+                    margin-left: 5px;
+                }
+
+                .form-control {
+                    margin-bottom: 1rem;
+                    padding: 0.75rem;
+                    font-size: 1rem;
+                }
+                
+                .otp-container {
+                    display: flex;
+                    justify-content: center;
+                    gap: 0.5rem;
+                    margin-bottom: 2rem;
+                }
+                    
+                .otp-input {
+                    padding: 0.75rem;
+                    border: 1px solid #e2e8f0;
+                    border-radius: 0.375rem;
+                    outline: none;
+                }
+                    
+                .otp-input:focus {
+                    border-color: #25b7d3;
+                    box-shadow: 0 0 0 2px rgba(37, 183, 211, 0.2);
+                }
+
+                .action-otp-btn {
+                    width: 50%;
+                    background-color:rgb(32, 155, 63);
+                    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+                    color: white;
+                    border: none;
+                    padding: 0.75rem;
+                    border-radius: 0.375rem;
+                    margin-bottom: 1rem;
+                    transition: background-color 0.2s;
+                }
+                    
+                .action-otp-btn-container {
+                    display: flex;
+                    justify-content: center;
+                }
+
+                .action-otp-btn:hover {
+                    background-color: #1da1bb;
+                }
+
+                .enter-otp-btn-container {
+                    display: flex;
+                    justify-content: center;
+                }
+
+                .action-btn {
+                    width: 100%;
+                    background-color: #25b7d3;
+                    color: white;
+                    border: none;
+                    padding: 0.75rem;
+                    border-radius: 0.375rem;
+                    margin-top: 1rem;
+                    transition: background-color 0.2s;
+                    font-weight: 500;
+                }
+
+                .action-btn:hover {
+                    background-color: #1da1bb;
+                }
+
+                .resend-btn {
+                    background: none;
+                    color: #2576d3;
+                    border: none;
+                    padding: 0;
+                    font: inherit;
+                    cursor: pointer;
+                    outline: inherit;
+                }
+
+                .faq-link {
+                    text-align: right;
+                    font-size: 0.875rem;
+                }
+                    
+                .faq-link a {
+                    color: #25b7d3;
+                    text-decoration: none;
+                }
+                    
+                .faq-link a:hover {
+                    color: #1da1bb;
+                }
+
+                .footer {
+                    text-align: center;
+                    padding: 1rem;
+                    color: #9ca3af;
+                    font-size: 0.75rem;
+                    margin-top: 1rem;
+                }
+
+                
+            </style>
+
+            <div class="con-body">
+                <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-12">
+                    <!-- Main card -->
+                    <div class="main-card">
+                        <!-- Logo -->
+                        <div class="card-header mb-3">
+                            <form action="/web/login/verification_name">
+                                <input type="hidden" name="uniq_id" t-att-value="uniq_id"/>
+                                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                <input type="hidden" name="redirect" t-att-value="redirect"/>
+                                <button class="back-btn" type="submit">
+                                    <i class="fas fa-arrow-left"></i>
+                                </button>
+                            </form>
+                            <div class="logo-container" style="margin-left: 4rem;">
+                                <img t-att-src="'/p7_patient_management/static/src/img/vanaesa.jpg'" alt="Vanaesa Logo" class="logo"/>
+                            </div>
+                            <div t-if="user.partner_id.user_type == 'patient'" class="step-indicator">Step 2 of 7</div>
+                            <div t-else="" class="step-indicator">Step 2 of 6</div>
+
+                        </div>
+                        
+                         <!-- Form starts here -->
+                        <form action="/web/login/verification_email" method="post">
+                            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                            <input type="hidden" name="redirect" t-att-value="redirect"/>
+                            <input type="hidden" name="uniq_id" t-att-value="uniq_id"/>
+                            <input type="hidden" id="otp_expired" name="otp_expired" t-att-value="otp_expired"/>
+                            <input type="hidden" id="otp_sent" name="otp_sent" t-att-value="otp_sent"/>
+                            <h4 class="text-center mb-4">Email</h4>
+                            <div class="form-outline form-white mt-4 mb-1">  
+                                <input type="email" id="email" name="email" t-att-value="email or user.email" class="form-control form-control-lg"/>
+                            </div>
+                            <div class="mb-3 action-otp-btn-container">
+                            <button t-if="verify_status" id="verify-email-btn" name="verify-email-btn" type="submit" value="True" class="action-otp-btn">Verify Email</button></div>
+                            <div t-if="email_invalid" class="text-alert" style="color:red;text-align:center;">The given email is already in use by another user. Please enter a different valid email.</div>
+                            <div t-if="email_required" class="text-alert" style="color:red;text-align:center;">Please enter a valid email!</div>
+                            <div t-if="checkbox_mandate" class="text-alert" style="color:green;text-align:center;">This email address has been verified successfully.</div>
+                            
+                            <div t-if="otp_status" class="otp-label my-3 text-center">
+                                <label for="otp" style="font-size: 14px; font-weight: bold; color: #555;">Enter OTP</label>
+                            </div>
+                        
+                            <div t-if="otp_status" class="otp-input-field enter-otp-btn-container mb-3">
+                                <input t-if="otp_sent" type="text" id="otp" name="otp" class="otp-input"/>
+                            
+                            </div>
+
+                            <div t-if="otp_status" class="otp-input-field enter-otp-btn-container mb-3">
+                                <input t-if="otp_invalid or otp_expired" type="text" name="otp" class="otp-input"/>
+                            </div>
+
+                            <div t-if="otp_sent and otp_status" id="otp-timer" class="text-alert enter-otp-btn-container" style="font-weight: bold; font-size: 14px;font-family: Arial, sans-serif;color: #343a40; padding-top: 10px;">
+                                OTP will be expired within <![CDATA[&nbsp;]]><span id="timer-count" style="font-weight: bold;color: #dc3545;">300</span><![CDATA[&nbsp;]]>secs.
+                            </div><br/>
+                            <div t-if="otp_sent and otp_status" id="otp-timer" class="text-alert enter-otp-btn-container" style="font-weight: bold; font-size: 14px;font-family: Arial, sans-serif;color: #343a40; text-align: center; margin-top: -1.2rem;">
+                                <span>Didn’t get an email? Please check your spam folder for an email "Email Verification"</span>
+                            </div><br/>
+                            <div class="mb-3" style="display: flex; justify-content: center; font-weight: bold; font-size: 14px;font-family: Arial, sans-serif;color: #343a40; text-align: center;">
+                                <button t-if="not (otp_invalid or otp_expired)" id="verify-email" name="verify-email-btn" type="submit" value="True" class="resend-btn" style="min-width: 100px; padding: 8px 16px;"><span class="text-dark">Did not receive OTP? </span><u> Resend OTP</u></button>
+                                <button t-if="otp_invalid or otp_expired" id="resend-otp-btn" name="verify-email-btn" type="submit" value="True" class="resend-btn" style="min-width: 100px; padding: 8px 16px;"><span class="text-dark">Did not receive OTP? </span><u> Resend OTP</u></button>
+                            </div>
+                            <div t-if="otp_status" class="mb-3 action-otp-btn-container" style="display: flex; justify-content: center; gap: 16px; flex-wrap: nowrap;">
+                                <button t-if="not otp_expired" id="submit-otp-btn" name="submit-otp-btn" type="submit" value="True" class="action-otp-btn" style="min-width: 100px; padding: 8px 16px;">Submit OTP</button>
+                                <!-- <button t-if="not (otp_invalid or otp_expired)" id="verify-email" name="verify-email-btn" type="submit" value="True" class="action-otp-btn" style="min-width: 100px; padding: 8px 16px;">Resend OTP</button>
+                                <button t-if="otp_invalid or otp_expired" id="resend-otp-btn" name="verify-email-btn" type="submit" value="True" class="action-otp-btn" style="min-width: 100px; padding: 8px 16px;">Resend OTP</button> -->
+                            </div>
+
+                            <div id="expire-warning" class="text-alert" style="color:red;display:none;text-align:center;">OTP has expired. Please resend OTP.</div>
+                            <div t-if="otp_expired" class="text-alert" style="color:red;text-align:center;">OTP has expired. Please resend OTP.</div>
+                            <div t-if="otp_invalid" class="text-alert" style="color:red;text-align:center;">OTP Invalid. Please enter valid OTP.</div>
+                        
+                            <button id="submit-btn" name="submit-btn" type="submit" class="action-btn" value="True">Next</button> 
+                        </form>
+
+                        <div class="faq-link mt-5 text-center">
+                            <a href="https://vanaesa.com/" target="_blank">What is VANAESA?</a>
+                            </div>
+                    </div>
+                    
+                    <!-- Footer -->
+                    <div class="footer">
+                        Copyright © Synapse Medical Pte Ltd
+                    </div>
+                    </div>
+                </div>
+                </div>
+                </div>
+            <script>
+                document.addEventListener("DOMContentLoaded", function() {
+                    let countdownElement = document.getElementById("timer-count");
+                    let resendOtpButton = document.getElementById("verify-email");
+                    let otpTimer = document.getElementById("otp-timer");
+
+                    let otpInput = document.getElementById("otp");
+                    if (otpInput) {
+                        otpInput.focus();
+                    }
+
+                    if (countdownElement) {
+                        //sendOtpButton.addEventListener('click', function() {
+                            let timeLeft = parseInt(countdownElement.innerHTML);
+                            let timerInterval = setInterval(function() {
+                                if (timeLeft == 0) {
+                                    clearInterval(timerInterval);
+                                    document.getElementById("expire-warning").style.display = "block";
+                                    resendOtpButton.style.display = "block";
+                                    otpTimer.style.display = "none";
+                                } else {
+                                    timeLeft -= 1;
+                                    countdownElement.innerHTML = timeLeft;
+                                }
+                            }, 1000);
+                        //});
+
+                        if (resendOtpButton) {
+                            resendOtpButton.addEventListener('click', function() {
+                                agreeTermsCheckbox.checked = true;
+                                timeLeft = 300; // Reset the timer
+                                countdownElement.innerHTML = timeLeft;
+                                timerInterval = setInterval(function() {
+                                    if (timeLeft == 0) {
+                                        clearInterval(timerInterval);
+                                        document.getElementById("expire-warning").style.display = "block";
+                                        resendOtpButton.style.display = "block";
+                                        otpTimer.style.display = "none";
+                                    } else {
+                                        timeLeft -= 1;
+                                        countdownElement.innerHTML = timeLeft;
+                                    }
+                                }, 1000);
+                            });
+                        }
+                    }
+                });
+            </script>
+        </template>
+
+        <!-- user verification page : mobile -->
+        <template id="user_info_verification_template_mbl" name="User Info Verification Page: Mobile">
+            <meta charset="UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+            <title>VANAESA</title>
+            <link type="image/x-icon" rel="shortcut icon" href="/p7_patient_management/static/src/img/vanaesa.jpg"/>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+            <style>
+                .con-body {
+                    background-color: #d1e4e6;
+                    min-height: 100vh;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                }
+
+                .main-card {
+                    background-color: white;
+                    border-radius: 0.75rem;
+                    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+                    padding: 2rem;
+                    width: 100%;
+                    max-width: 450px;
+                    margin: 1rem auto;
+                }
+
+                .back-btn {
+                    color: #94a3b8;
+                    border: none;
+                    background: transparent;
+                    padding: 0;
+                    font-size: 20px;
+                    cursor: pointer;
+                }
+
+                .back-btn:hover {
+                    color: #64748b;
+                }
+
+                .step-indicator {
+                    color: #94a3b8;
+                    font-size: 0.875rem;
+                }
+
+                .card-header {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                }
+
+
+                .logo {
+                    height: 60px;
+                    width: 60px;
+                    background-color: #25b7d3;
+                    border-radius: 10%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: white;
+                    font-weight: bold;
+                    font-size: 1.5rem;
+                    margin: 0 auto 1.5rem;
+                }
+
+                .form-control {
+                    margin-bottom: 1rem;
+                    padding: 0.75rem;
+                    font-size: 1rem;
+                    border: 1px solid #e2e8f0;
+                    border-top-right-radius: 0.375rem;
+                    border-bottom-right-radius: 0.375rem;
+                    border-top-left-radius: 0rem;
+                    border-bottom-left-radius: 0rem;
+                }
+
+                .phone-input-group {
+                    display: flex;
+                    margin-bottom: 1.5rem;
+                }
+
+                .country-code {
+                    width: 100px;
+                    border-top-left-radius: 0.375rem;
+                    border-bottom-left-radius: 0.375rem;
+                    border-top-right-radius: 0rem;
+                    border-bottom-right-radius: 0rem;
+                }
+
+                .action-btn {
+                    width: 100%;
+                    background-color: #25b7d3;
+                    color: white;
+                    border: none;
+                    padding: 0.75rem;
+                    border-radius: 0.375rem;
+                    margin-top: 1rem;
+                    transition: background-color 0.2s;
+                    font-weight: 500;
+                }
+
+                .action-btn:hover {
+                    background-color: #1da1bb;
+                }
+
+                .faq-link {
+                    text-align: right;
+                    font-size: 0.875rem;
+                }
+                    
+                .faq-link a {
+                    color: #25b7d3;
+                    text-decoration: none;
+                }
+                    
+                .faq-link a:hover {
+                    color: #1da1bb;
+                }
+
+                .footer {
+                    text-align: center;
+                    padding: 1rem;
+                    color: #9ca3af;
+                    font-size: 0.75rem;
+                    margin-top: 1rem;
+                }
+
+                
+            </style>
+
+            <div class="con-body">
+                <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-12">
+                    <!-- Main card -->
+                    <div class="main-card">
+                        <!-- Logo -->
+                        <div class="card-header mb-3">
+                            <form action="/web/login/verification_email">
+                                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                <input type="hidden" name="redirect" t-att-value="redirect"/>
+                                <input type="hidden" name="uniq_id" t-att-value="uniq_id"/>
+                                <button class="back-btn" type="submit">
+                                    <i class="fas fa-arrow-left"></i>
+                                </button>
+                            </form>
+                            <div class="logo-container" style="margin-left: 4rem;">
+                                <img t-att-src="'/p7_patient_management/static/src/img/vanaesa.jpg'" alt="Vanaesa Logo" class="logo"/>
+                            </div>
+                            <div t-if="user.partner_id.user_type == 'patient'" class="step-indicator">Step 3 of 7</div>
+                            <div t-else="" class="step-indicator">Step 3 of 6</div>
+
+                        </div>
+                        <h4 class="text-center mb-4">Mobile</h4>
+                        
+                        <!-- Form starts here -->
+                        <form action="/web/login/verification_mbl" method="post">
+                            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                            <input type="hidden" name="redirect" t-att-value="redirect"/>
+                            <input type="hidden" name="uniq_id" t-att-value="uniq_id"/>
+
+                            <div class="form-outline form-white mt-4 mb-1">
+                                <div class="phone-input-group">
+                                    <select id="country_selector" class="form-control country-code" name="country_selector" required="required">
+                                        <!-- <option value="" disabled="disabled" selected="selected">Select your country</option> -->
+                                        <option value="+1" t-att-selected="'+1' == selected_country">United States (+1)</option>
+                                        <option value="+93" t-att-selected="'+93' == selected_country">Afghanistan (+93)</option>
+                                        <option value="+374" t-att-selected="'+374' == selected_country">Armenia (+374)</option>
+                                        <option value="+994" t-att-selected="'+994' == selected_country">Azerbaijan (+994)</option>
+                                        <option value="+973" t-att-selected="'+973' == selected_country">Bahrain (+973)</option>
+                                        <option value="+880" t-att-selected="'+880' == selected_country">Bangladesh (+880)</option>
+                                        <option value="+975" t-att-selected="'+975' == selected_country">Bhutan (+975)</option>
+                                        <option value="+673" t-att-selected="'+673' == selected_country">Brunei (+673)</option>
+                                        <option value="+855" t-att-selected="'+855' == selected_country">Cambodia (+855)</option>
+                                        <option value="+86" t-att-selected="'+86' == selected_country">China (+86)</option>
+                                        <option value="+357" t-att-selected="'+357' == selected_country">Cyprus (+357)</option>
+                                        <option value="+995" t-att-selected="'+995' == selected_country">Georgia (+995)</option>
+                                        <option value="+91" t-att-selected="'+91' == selected_country">India (+91)</option>
+                                        <option value="+62" t-att-selected="'+62' == selected_country">Indonesia (+62)</option>
+                                        <option value="+98" t-att-selected="'+98' == selected_country">Iran (+98)</option>
+                                        <option value="+964" t-att-selected="'+964' == selected_country">Iraq (+964)</option>
+                                        <option value="+972" t-att-selected="'+972' == selected_country">Israel (+972)</option>
+                                        <option value="+81" t-att-selected="'+81' == selected_country">Japan (+81)</option>
+                                        <option value="+962" t-att-selected="'+962' == selected_country">Jordan (+962)</option>
+                                        <option value="+7" t-att-selected="'+7' == selected_country">Kazakhstan (+7)</option>
+                                        <option value="+965" t-att-selected="'+965' == selected_country">Kuwait (+965)</option>
+                                        <option value="+996" t-att-selected="'+996' == selected_country">Kyrgyzstan (+996)</option>
+                                        <option value="+856" t-att-selected="'+856' == selected_country">Laos (+856)</option>
+                                        <option value="+961" t-att-selected="'+961' == selected_country">Lebanon (+961)</option>
+                                        <option value="+60" t-att-selected="'+60' == selected_country">Malaysia (+60)</option>
+                                        <option value="+960" t-att-selected="'+960' == selected_country">Maldives (+960)</option>
+                                        <option value="+976" t-att-selected="'+976' == selected_country">Mongolia (+976)</option>
+                                        <option value="+95" t-att-selected="'+95' == selected_country">Myanmar (+95)</option>
+                                        <option value="+977" t-att-selected="'+977' == selected_country">Nepal (+977)</option>
+                                        <option value="+850" t-att-selected="'+850' == selected_country">North Korea (+850)</option>
+                                        <option value="+968" t-att-selected="'+968' == selected_country">Oman (+968)</option>
+                                        <option value="+92" t-att-selected="'+92' == selected_country">Pakistan (+92)</option>
+                                        <option value="+970" t-att-selected="'+970' == selected_country">Palestine (+970)</option>
+                                        <option value="+63" t-att-selected="'+63' == selected_country">Philippines (+63)</option>
+                                        <option value="+974" t-att-selected="'+974' == selected_country">Qatar (+974)</option>
+                                        <option vaue="+7" t-att-selected="'+7' == selected_country">Russia (+7)</option>
+                                        <option value="+966" t-att-selected="'+966' == selected_country">Saudi Arabia (+966)</option>
+                                        <option value="+65" t-att-selected="'+65' == selected_country or not selected_country">Singapore (+65)</option>
+                                        <option value="+82" t-att-selected="'+82' == selected_country">South Korea (+82)</option>
+                                        <option value="+94" t-att-selected="'+94' == selected_country">Sri Lanka (+94)</option>
+                                        <option value="+963" t-att-selected="'+963' == selected_country">Syria (+963)</option>
+                                        <option value="+886" t-att-selected="'+886' == selected_country">Taiwan (+886)</option>
+                                        <option value="+992" t-att-selected="'+992' == selected_country">Tajikistan (+992)</option>
+                                        <option value="+66" t-att-selected="'+66' == selected_country">Thailand (+66)</option>
+                                        <option value="+670" t-att-selected="'+670' == selected_country">Timor-Leste (+670)</option>
+                                        <option value="+90" t-att-selected="'+90' == selected_country">Turkey (+90)</option>
+                                        <option value="+993" t-att-selected="'+993' == selected_country">Turkmenistan (+993)</option>
+                                        <option value="+971" t-att-selected="'+971' == selected_country">United Arab Emirates (+971)</option>
+                                        <option value="+998" t-att-selected="'+998' == selected_country">Uzbekistan (+998)</option>
+                                        <option value="+84" t-att-selected="'+84' == selected_country">Vietnam (+84)</option>
+                                        <option value="+967" t-att-selected="'+967' == selected_country">Yemen (+967)</option>
+                                    </select>       
+                                    <input type="tel" id="mobile_number" name="mobile_number" required="True" t-att-value="user.partner_id.mob" class="form-control form-control-lg" />
+                                </div>       
+                            </div>
+                        
+                            <button id="submit-btn" name="submit-btn" type="submit" class="action-btn" value="True">Next</button>
+                        </form>
+
+                        <div class="faq-link mt-5 text-center">
+                            <a href="https://vanaesa.com/" target="_blank">What is VANAESA?</a>
+                        </div>
+                    </div>
+                    
+                    <!-- Footer -->
+                    <div class="footer">
+                        Copyright © Synapse Medical Pte Ltd
+                    </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </template>
+
+        <!-- user verification page : nric -->
+        <template id="user_info_verification_template_nric" name="User Info Verification Page: NRIC/Passport">
+            <meta charset="UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+            <title>VANAESA</title>
+            <link type="image/x-icon" rel="shortcut icon" href="/p7_patient_management/static/src/img/vanaesa.jpg"/>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+            <style>
+                .con-body {
+                    background-color: #d1e4e6;
+                    min-height: 100vh;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                }
+
+                .main-card {
+                    background-color: white;
+                    border-radius: 0.75rem;
+                    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+                    padding: 2rem;
+                    width: 100%;
+                    max-width: 450px;
+                    margin: 1rem auto;
+                }
+
+                .back-btn {
+                    color: #94a3b8;
+                    border: none;
+                    background: transparent;
+                    padding: 0;
+                    font-size: 20px;
+                    cursor: pointer;
+                }
+
+                .back-btn:hover {
+                    color: #64748b;
+                }
+
+                .step-indicator {
+                    color: #94a3b8;
+                    font-size: 0.875rem;
+                }
+
+                .card-header {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                }
+
+
+                .logo {
+                    height: 60px;
+                    width: 60px;
+                    background-color: #25b7d3;
+                    border-radius: 10%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: white;
+                    font-weight: bold;
+                    font-size: 1.5rem;
+                    margin: 0 auto 1.5rem;
+                }
+
+                .form-control {
+                    margin-bottom: 1rem;
+                    padding: 0.75rem;
+                    font-size: 1rem;
+                }
+
+                .action-btn {
+                    width: 100%;
+                    background-color: #25b7d3;
+                    color: white;
+                    border: none;
+                    padding: 0.75rem;
+                    border-radius: 0.375rem;
+                    margin-top: 1rem;
+                    transition: background-color 0.2s;
+                    font-weight: 500;
+                }
+
+                .action-btn:hover {
+                    background-color: #1da1bb;
+                }
+
+                .faq-link {
+                    text-align: right;
+                    font-size: 0.875rem;
+                }
+                    
+                .faq-link a {
+                    color: #25b7d3;
+                    text-decoration: none;
+                }
+                    
+                .faq-link a:hover {
+                    color: #1da1bb;
+                }
+
+                .footer {
+                    text-align: center;
+                    padding: 1rem;
+                    color: #9ca3af;
+                    font-size: 0.75rem;
+                    margin-top: 1rem;
+                }
+
+                
+            </style>
+
+            <div class="con-body">
+                <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-12">
+                    <!-- Main card -->
+                    <div class="main-card">
+                        <!-- Logo -->
+                        <div class="card-header mb-3">
+                            <form action="/web/login/verification_mbl">
+                                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                <input type="hidden" name="redirect" t-att-value="redirect"/>
+                                <input type="hidden" name="uniq_id" t-att-value="uniq_id"/>
+                                <button class="back-btn" type="submit">
+                                    <i class="fas fa-arrow-left"></i>
+                                </button>
+                            </form>
+                            <div class="logo-container" style="margin-left: 4rem;">
+                                <img t-att-src="'/p7_patient_management/static/src/img/vanaesa.jpg'" alt="Vanaesa Logo" class="logo"/>
+                            </div>
+                            <div class="step-indicator">Step 4 of 7</div>
+
+                        </div>
+                        <h4 class="text-center mb-4">NRIC/Passport</h4>
+                        
+                        <!-- Form starts here -->
+                        <form action="/web/login/verification_nric" method="post">
+                            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                            <input type="hidden" name="redirect" t-att-value="redirect"/>
+                            <input type="hidden" name="uniq_id" t-att-value="uniq_id"/>
+
+                            <div class="form-outline form-white mt-4 mb-1">        
+                                <input type="input" id="nric_number" name="nric_number" required="True" t-att-value="user.partner_id.nric_number" class="form-control form-control-lg" />
+                            </div>
+                        
+                            <button id="submit-btn" name="submit-btn" type="submit" class="action-btn" value="True">Next</button>
+                        </form>
+
+                        <div class="faq-link mt-5 text-center">
+                            <a href="https://vanaesa.com/" target="_blank">What is VANAESA?</a>
+                        </div>
+                    </div>
+                    
+                    <!-- Footer -->
+                    <div class="footer">
+                        Copyright © Synapse Medical Pte Ltd
+                    </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </template>
+
+        <!-- user verification page : gender -->
+        <template id="user_info_verification_template_gender" name="User Info Verification Page: Gender">
+            <meta charset="UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+            <title>VANAESA</title>
+            <link type="image/x-icon" rel="shortcut icon" href="/p7_patient_management/static/src/img/vanaesa.jpg"/>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+            <style>
+                .con-body {
+                    background-color: #d1e4e6;
+                    min-height: 100vh;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                }
+
+                .main-card {
+                    background-color: white;
+                    border-radius: 0.75rem;
+                    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+                    padding: 2rem;
+                    width: 100%;
+                    max-width: 450px;
+                    margin: 1rem auto;
+                }
+
+                .back-btn {
+                    color: #94a3b8;
+                    border: none;
+                    background: transparent;
+                    padding: 0;
+                    font-size: 20px;
+                    cursor: pointer;
+                }
+
+                .back-btn:hover {
+                    color: #64748b;
+                }
+
+                .step-indicator {
+                    color: #94a3b8;
+                    font-size: 0.875rem;
+                }
+
+                .card-header {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                }
+
+                .logo {
+                    height: 60px;
+                    width: 60px;
+                    background-color: #25b7d3;
+                    border-radius: 10%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: white;
+                    font-weight: bold;
+                    font-size: 1.5rem;
+                    margin: 0 auto 1.5rem;
+                }
+
+                .form-control {
+                    margin-bottom: 1rem;
+                    padding: 0.75rem;
+                    font-size: 1rem;
+                }
+
+                .gender-options {
+                    display: flex;
+                    justify-content: center;
+                    gap: 20px;
+                    margin-bottom: 30px;
+                }
+                
+                .gender-option {
+                    width: 120px;
+                    height: 120px;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                    border: 2px solid #E5E7EB;
+                    border-radius: 8px;
+                    background-color: #F3F4F6;
+                    color: #6B7280;
+                    cursor: pointer;
+                    transition: all 0.2s ease;
+                }
+                
+                .gender-option:hover {
+                    border-color: #25b7d3;
+                }
+                
+                .gender-option.selected {
+                    background-color: #25b7d3;
+                    color: white;
+                    border-color: #25b7d3;
+                }
+                
+                .gender-icon {
+                    font-size: 40px;
+                    margin-bottom: 8px;
+                }
+
+                .action-btn {
+                    width: 100%;
+                    background-color: #25b7d3;
+                    color: white;
+                    border: none;
+                    padding: 0.75rem;
+                    border-radius: 0.375rem;
+                    margin-top: 1rem;
+                    transition: background-color 0.2s;
+                    font-weight: 500;
+                }
+
+                .action-btn:hover {
+                    background-color: #1da1bb;
+                }
+
+                .action-btn:disabled {
+                    background-color: #9CA3AF;
+                    cursor: not-allowed;
+                }
+
+                .faq-link {
+                    text-align: right;
+                    font-size: 0.875rem;
+                }
+                
+                .faq-link a {
+                    color: #25b7d3;
+                    text-decoration: none;
+                }
+                
+                .faq-link a:hover {
+                    text-decoration: underline;
+                }
+
+                .footer {
+                    text-align: center;
+                    padding: 1rem;
+                    color: #9ca3af;
+                    font-size: 0.75rem;
+                    margin-top: 1rem;
+                }
+            </style>
+
+            <div class="con-body">
+            <div class="container">
+                <div class="row justify-content-center">
+                <div class="col-12">
+                    <!-- Main card -->
+                    <div class="main-card">
+                    <!-- Logo -->
+                    <div class="card-header mb-3">
+                        <div t-if="user.partner_id.user_type == 'patient'">
+                            <form action="/web/login/verification_nric">
+                                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                <input type="hidden" name="redirect" t-att-value="redirect"/>
+                                <input type="hidden" name="uniq_id" t-att-value="uniq_id"/>
+                                <button class="back-btn" type="submit">
+                                    <i class="fas fa-arrow-left"></i>
+                                </button>
+                            </form>
+                        </div>
+                        <div t-else="">
+                            <form action="/web/login/verification_mbl">
+                                <input type="hidden" name="uniq_id" t-att-value="uniq_id"/>
+                                <button class="back-btn" type="submit">
+                                    <i class="fas fa-arrow-left"></i>
+                                </button>
+                            </form>
+                        </div>
+                        <div class="logo-container" style="margin-left: 4rem;">
+                        <img t-att-src="'/p7_patient_management/static/src/img/vanaesa.jpg'" alt="Vanaesa Logo" class="logo"/>
+                        </div>
+                        <div t-if="user.partner_id.user_type == 'patient'" class="step-indicator">Step 5 of 7</div>
+                        <div t-else="" class="step-indicator">Step 4 of 6</div>
+                    </div>
+
+                    <h4 class="text-center mb-4">What is your sex</h4>
+                    
+                    <!-- Form starts here -->
+                    <form action="/web/login/verification_gender" method="post">
+                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                        <input type="hidden" name="redirect" t-att-value="redirect"/>
+                        <input type="hidden" name="uniq_id" t-att-value="uniq_id"/>
+                        <input type="hidden" id="gender" name="gender" value=""/>
+
+                        <div class="gender-options">
+                        <button type="button" id="male-option" class="gender-option" onclick="selectGender('male')">
+                            <i class="fas fa-mars gender-icon"></i>
+                            <span>Male</span>
+                        </button>
+                        
+                        <button type="button" id="female-option" class="gender-option" onclick="selectGender('female')">
+                            <i class="fas fa-venus gender-icon"></i>
+                            <span>Female</span>
+                        </button>
+                        </div>
+                        
+                        <button id="submit-btn" name="submit-btn" type="submit" value="True" class="action-btn" disabled="disabled" >Next</button>
+                    </form>
+
+                    <div class="faq-link mt-5 text-center">
+                        <a href="https://vanaesa.com/" target="_blank">What is VANAESA?</a>
+                    </div>
+                    </div>
+                    
+                    <!-- Footer -->
+                    <div class="footer">
+                    Copyright © Synapse Medical Pte Ltd
+                    </div>
+                </div>
+                </div>
+            </div>
+            </div>
+
+            <!-- JavaScript for gender selection -->
+            <script>
+                function selectGender(gender) {
+                    // Update UI
+                    const maleOption = document.getElementById('male-option');
+                    const femaleOption = document.getElementById('female-option');
+                    const submitBtn = document.getElementById('submit-btn');
+                    const genderInput = document.getElementById('gender');
+                    
+                    // Remove selected class from both options
+                    maleOption.classList.remove('selected');
+                    femaleOption.classList.remove('selected');
+                    
+                    // Add selected class to clicked option
+                    if (gender === 'male') {
+                    maleOption.classList.add('selected');
+                    } else {
+                    femaleOption.classList.add('selected');
+                    }
+                    
+                    // Update hidden input value
+                    genderInput.value = gender;
+                    
+                    // Enable submit button
+                    submitBtn.disabled = false;
+                }
+
+                // Initialize with existing value if available (for Odoo template)
+                document.addEventListener('DOMContentLoaded', function() {
+                    const genderInput = document.getElementById('gender');
+                    // This would be replaced with your Odoo template logic
+                    genderInput.value = "<t t-esc='user.partner_id.gender'/>";
+                    
+                    // If there's a pre-selected value, highlight it
+                    if (genderInput.value) {
+                    selectGender(genderInput.value);
+                    }
+                });
+            </script>
+        </template>
+
+        <!-- user verification page : dob -->
+        <template id="user_info_verification_template_dob" name="User Info Verification Page: DOB">
+            <meta charset="UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+            <title>VANAESA</title>
+            <link type="image/x-icon" rel="shortcut icon" href="/p7_patient_management/static/src/img/vanaesa.jpg"/>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+            <style>
+                .con-body {
+                    background-color: #d1e4e6;
+                    min-height: 100vh;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                }
+
+                .main-card {
+                    background-color: white;
+                    border-radius: 0.75rem;
+                    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+                    padding: 2rem;
+                    width: 100%;
+                    max-width: 450px;
+                    margin: 1rem auto;
+                }
+
+                .back-btn {
+                    color: #94a3b8;
+                    border: none;
+                    background: transparent;
+                    padding: 0;
+                    font-size: 20px;
+                    cursor: pointer;
+                }
+
+                .back-btn:hover {
+                    color: #64748b;
+                }
+
+                .step-indicator {
+                    color: #94a3b8;
+                    font-size: 0.875rem;
+                }
+
+                .card-header {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                }
+
+
+                .logo {
+                    height: 60px;
+                    width: 60px;
+                    background-color: #25b7d3;
+                    border-radius: 10%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: white;
+                    font-weight: bold;
+                    font-size: 1.5rem;
+                    margin: 0 auto 1.5rem;
+                }
+
+                .form-control {
+                    margin-bottom: 1rem;
+                    padding: 0.75rem;
+                    font-size: 1rem;
+                }
+
+                .action-btn {
+                    width: 100%;
+                    background-color: #25b7d3;
+                    color: white;
+                    border: none;
+                    padding: 0.75rem;
+                    border-radius: 0.375rem;
+                    margin-top: 1rem;
+                    transition: background-color 0.2s;
+                    font-weight: 500;
+                }
+
+                .action-btn:hover {
+                    background-color: #1da1bb;
+                }
+
+                .faq-link {
+                    text-align: right;
+                    font-size: 0.875rem;
+                }
+                    
+                .faq-link a {
+                    color: #25b7d3;
+                    text-decoration: none;
+                }
+                    
+                .faq-link a:hover {
+                    color: #1da1bb;
+                }
+
+                .footer {
+                    text-align: center;
+                    padding: 1rem;
+                    color: #9ca3af;
+                    font-size: 0.75rem;
+                    margin-top: 1rem;
+                }
+
+                
+            </style>
+
+            <div class="con-body">
+                <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-12">
+                    <!-- Main card -->
+                    <div class="main-card">
+                        <!-- Logo -->
+                        <div class="card-header mb-3">
+                            <form action="/web/login/verification_gender">
+                                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                <input type="hidden" name="redirect" t-att-value="redirect"/>
+                                <input type="hidden" name="uniq_id" t-att-value="uniq_id"/>
+                                <button class="back-btn" type="submit">
+                                    <i class="fas fa-arrow-left"></i>
+                                </button>
+                            </form>
+                            <div class="logo-container" style="margin-left: 4rem;">
+                                <img t-att-src="'/p7_patient_management/static/src/img/vanaesa.jpg'" alt="Vanaesa Logo" class="logo"/>
+                            </div>
+                            <div t-if="user.partner_id.user_type == 'patient'" class="step-indicator">Step 6 of 7</div>
+                            <div t-else="" class="step-indicator">Step 5 of 6</div>
+
+                        </div>
+                        <h4 class="text-center mb-4">Date of Birth</h4>
+                        
+                        <!-- Form starts here -->
+                        <form action="/web/login/verification_dob" method="post">
+                            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                            <input type="hidden" name="redirect" t-att-value="redirect"/>
+                            <input type="hidden" name="uniq_id" t-att-value="uniq_id"/>
+
+                        <div class="form-outline form-white mt-4 mb-1">
+                                <input type="date" class="form-control form-control-lg" id="date_of_birth" name="date_of_birth" required="True" t-att-value="user.partner_id.dob"/>
+                            </div>
+                        
+                        <button id="submit-btn" name="submit-btn" type="submit" value="True" class="action-btn">Next</button>
+                        </form>
+
+                        <div class="faq-link mt-5 text-center">
+                            <a href="https://vanaesa.com/" target="_blank">What is VANAESA?</a>
+                            </div>
+                    </div>
+                    
+                    <!-- Footer -->
+                    <div class="footer">
+                        Copyright © Synapse Medical Pte Ltd
+                    </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </template>
+
+        <!-- user verification page : confirmation -->
+        <template id="user_info_verification_template_confirmation" name="User Info Verification Page: Submit">
+            <meta charset="UTF-8" />
+                <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                <title>VANAESA</title>
+                <link type="image/x-icon" rel="shortcut icon" href="/p7_patient_management/static/src/img/vanaesa.jpg"/>
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+                <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+                <style>
+                    .con-body {
+                        background-color: #d1e4e6;
+                        min-height: 100vh;
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: center;
+                        align-items: center;
+                    }
+
+                    .main-card {
+                        background-color: white;
+                        border-radius: 0.75rem;
+                        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+                        padding: 2rem;
+                        width: 100%;
+                        max-width: 450px;
+                        margin: 1rem auto;
+                    }
+
+                    .back-btn {
+                        color: #94a3b8;
+                        border: none;
+                        background: transparent;
+                        padding: 0;
+                        font-size: 20px;
+                        cursor: pointer;
+                    }
+
+                    .back-btn:hover {
+                        color: #64748b;
+                    }
+
+                    .step-indicator {
+                        color: #94a3b8;
+                        font-size: 0.875rem;
+                    }
+
+                    .card-header {
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                    }
+
+
+                    .logo {
+                        height: 60px;
+                        width: 60px;
+                        background-color: #25b7d3;
+                        border-radius: 10%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        color: white;
+                        font-weight: bold;
+                        font-size: 1.5rem;
+                        margin: 0 auto 1.5rem;
+                    }
+
+                    .form-control {
+                        margin-bottom: 1rem;
+                        padding: 0.75rem;
+                        font-size: 1rem;
+                    }
+
+                    .gender-options {
+                        display: flex;
+                        justify-content: center;
+                        gap: 20px;
+                        margin-bottom: 50px;
+                    }
+
+                    .action-btn {
+                        width: 100%;
+                        background-color: #25b7d3;
+                        color: white;
+                        border: none;
+                        padding: 0.75rem;
+                        border-radius: 0.375rem;
+                        margin-top: 1rem;
+                        transition: background-color 0.2s;
+                        font-weight: 500;
+                    }
+
+                    .action-btn:hover {
+                        background-color: #1da1bb;
+                    }
+
+                    .faq-link {
+                        text-align: right;
+                        font-size: 0.875rem;
+                    }
+                        
+                    .faq-link a {
+                        color: #25b7d3;
+                        text-decoration: none;
+                    }
+                    
+                    .faq-link a:hover {
+                        color: #1da1bb;
+                    }
+
+                    .footer {
+                        text-align: center;
+                        padding: 1rem;
+                        color: #9ca3af;
+                        font-size: 0.75rem;
+                        margin-top: 1rem;
+                    }
+
+                </style>
+
+                    <div class="con-body">
+                        <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="col-12">
+                            <!-- Main card -->
+                            <div class="main-card">
+                                <!-- Logo -->
+                                <div class="card-header mb-3">
+                                    <form action="/web/login/verification_dob">
+                                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                        <input type="hidden" name="redirect" t-att-value="redirect"/>
+                                        <input type="hidden" name="uniq_id" t-att-value="uniq_id"/>
+                                        <button class="back-btn" type="submit">
+                                            <i class="fas fa-arrow-left"></i>
+                                        </button>
+                                    </form>
+                                    <div class="logo-container" style="margin-left: 4rem;">
+                                        <img t-att-src="'/p7_patient_management/static/src/img/vanaesa.jpg'" alt="Vanaesa Logo" class="logo"/>
+                                    </div>
+                                    <div t-if="user.partner_id.user_type == 'patient'" class="step-indicator">Step 7 of 7</div>
+                                    <div t-else="" class="step-indicator">Step 6 of 6</div>
+
+                                </div>
+                                <div class="text-center mb-4">
+
+                                    <p class="text-secondary">Please review and update your information below</p>
+                                    </div>
+                                <h4 class="text-center mb-5">Preferred Language</h4>
+                                
+                                <!-- Form starts here -->
+                                <form id="verification-form" action="/web/login/verification_confirmation" method="post">
+                                    <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                    <input type="hidden" name="redirect" t-att-value="redirect"/>
+                                    <input type="hidden" name="uniq_id" t-att-value="uniq_id"/>
+
+                                    <div class="form-outline form-white my-4 px-3">
+                                        <select class="form-control" id="language" name="language" required="required" t-att-value="user.partner_id.language" disabled="disabled">
+                                        <option value="English">English</option>
+                                        
+                                        </select>
+                                        <div class="my-4">
+                                            <label style="font-size: 14px; color: #555;">
+                                                <input type="checkbox" id="agree_terms" name="agree_terms" required="True" style="margin-right: 5px;"/>
+                                                I confirm that the above information is correct and I have reviewed the
+                                                <a href="/terms-and-conditions" target="_blank" id="terms-link" style="color: #007bff; text-decoration: none;">Terms &amp; Conditions</a>
+                                            </label>
+                                        </div>
+                                    </div>
+                                
+                                    <button id="submit-btn" name="submit-btn" type="submit" value="True" class="action-btn">Submit</button>
+                                </form>
+
+                                <div class="faq-link mt-5 text-center">
+                                    <a href="https://vanaesa.com/" target="_blank">What is VANAESA?</a>
+                                    </div>
+                            </div>
+                            
+                            <!-- Footer -->
+                            <div class="footer">
+                                Copyright © Synapse Medical Pte Ltd
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+
+                    <script>
+                        document.addEventListener("DOMContentLoaded", function() {
+                         
+                            let termsClicked = false;
+                            let submitBtn = document.getElementById("submit-btn");
+ 
+                            document.getElementById("terms-link").addEventListener("click", function () {
+                                termsClicked = true;
+                            });
+ 
+                            document.getElementById("verification-form").addEventListener("submit", function (event) {
+                                    if (!termsClicked) {
+                                        event.preventDefault();
+                                        alert("Please review the Terms and Conditions before submitting.");
+                                    }
+                            });
+                        });
+
+                    </script>
+        </template>
+
+        <template id="remove_frontend_to_backend_nav" inherit_id="website.layout">
+            <xpath expr="//div[contains(@class, 'o_frontend_to_backend_nav')]" position="replace"/>
+        </template>
+    </data>
+</odoo>

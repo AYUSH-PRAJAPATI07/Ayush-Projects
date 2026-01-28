@@ -1,0 +1,198 @@
+<?xml version="1.0"?>
+<odoo>
+    <!-- <data noupdate="0"> -->
+        <!-- Define the category for Patient Case Management -->
+        <record model="ir.module.category" id="module_category_user">
+            <field name="name">Patient Case Managemaent</field>
+        </record>
+
+        <!-- Patient Group -->
+        <record model="res.groups" id="group_user_patient">
+            <field name="name">Patient</field>
+            <field name="category_id" ref="module_category_user"/>
+        </record>
+
+        <!-- Doctor Group -->
+        <record model="res.groups" id="group_user_doctor">
+            <field name="name">Doctor</field>
+            <field name="category_id" ref="module_category_user"/>
+        </record>
+
+        <!-- Administrator Group -->
+        <record model="res.groups" id="group_user_admin">
+            <field name="name">Administrator</field>
+            <field name="category_id" ref="module_category_user"/>
+        </record>
+
+        <!-- Associate Group -->
+        <record model="res.groups" id="group_user_associate">
+            <field name="name">Associate</field>
+            <field name="category_id" ref="module_category_user"/>
+        </record>
+
+        <record model="res.groups" id="group_user_doctor_premium">
+            <field name="name">Premium Doctor</field>
+            <field name="category_id" ref="module_category_user"/>
+        </record>
+
+        <record model="res.groups" id="group_user_super_admin">
+            <field name="name">System Admin</field>
+            <field name="category_id" ref="module_category_user"/>
+        </record>
+
+        <record id="res_partner_custom_rule_admin" model="ir.rule">
+            <field name="name">Administrator Access</field>
+            <field name="model_id" ref="base.model_res_partner"/>
+            <field name="groups" eval="[(4, ref('p7_patient_management.group_user_admin'))]"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+        </record>
+
+        <record id="res_partner_custom_rule_doctor" model="ir.rule">
+            <field name="name">Doctor Access</field>
+            <field name="model_id" ref="base.model_res_partner"/>
+            <field name="groups" eval="[(4, ref('p7_patient_management.group_user_doctor')), (4, ref('p7_patient_management.group_user_doctor_premium'))]"/>
+            <field name="domain_force">['|','|','|',('create_uid', '=', user.id),('id','=',user.partner_id.id),('user_type','=','admin'),('company_id', '=', user.company_id.id)]</field>
+        </record>
+
+        <record id="res_user_custom_rule_doctor" model="ir.rule">
+            <field name="name">Doctor Access Users</field>
+            <field name="model_id" ref="base.model_res_users"/>
+            <field name="groups" eval="[(4, ref('p7_patient_management.group_user_doctor')), (4, ref('p7_patient_management.group_user_doctor_premium'))]"/>
+            <field name="domain_force">['|','|',('create_uid', '=', user.id),('partner_id.user_type','=','admin'),('id','=',user.id)]</field>
+        </record>
+
+        <record id="patient_case_custom_rule_admin" model="ir.rule">
+            <field name="name">Admin Patient Case Access</field>
+            <field name="model_id" ref="p7_patient_management.model_patient_case"/>
+            <field name="groups" eval="[(4, ref('p7_patient_management.group_user_admin'))]"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+        </record>
+
+        <record id="patient_case_custom_rule_doctor" model="ir.rule">
+            <field name="name">Doctor Patient Case Access</field>
+            <field name="model_id" ref="p7_patient_management.model_patient_case"/>
+            <field name="groups" eval="[(4, ref('p7_patient_management.group_user_doctor')), (4, ref('p7_patient_management.group_user_doctor_premium'))]"/>
+            <field name="domain_force">[('create_uid', '=', user.id)]</field>
+        </record>
+
+        <record id="survey_custom_rule_doctors" model="ir.rule">
+            <field name="name">Doctor Custom Survey Access</field>
+            <field name="model_id" ref="survey.model_survey_survey"/>
+            <field name="groups" eval="[(4, ref('p7_patient_management.group_user_doctor')), (4, ref('p7_patient_management.group_user_doctor_premium'))]"/>
+            <field name="domain_force">['|', ('template_type', '=', 'reference'), ('create_uid', '=', user.id)]</field>
+        </record>
+
+        <record id="reminder_custom_rule_admin" model="ir.rule">
+            <field name="name">Admin Custom Reminder Access</field>
+            <field name="model_id" ref="p7_patient_management.model_res_reminder"/>
+            <field name="groups" eval="[(4, ref('p7_patient_management.group_user_admin'))]"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+        </record>
+
+        <record id="reminder_custom_rule_doctors" model="ir.rule">
+            <field name="name">Doctor Custom Reminder Access</field>
+            <field name="model_id" ref="p7_patient_management.model_res_reminder"/>
+            <field name="groups" eval="[(4, ref('p7_patient_management.group_user_doctor')), (4, ref('p7_patient_management.group_user_doctor_premium'))]"/>
+            <field name="domain_force">[('user_id', '=', user.id),('created_by','=','doctor')]</field>
+        </record>
+
+        <record id="anaesthesia_custom_rule_admin" model="ir.rule">
+            <field name="name">Admin Custom Anaesthesia Access</field>
+            <field name="model_id" ref="p7_patient_management.model_anaesthesia_type"/>
+            <field name="groups" eval="[(4, ref('p7_patient_management.group_user_admin'))]"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+        </record>
+
+        <record id="anaesthesia_custom_rule_doctors" model="ir.rule">
+            <field name="name">Doctor Custom Anaesthesia Access</field>
+            <field name="model_id" ref="p7_patient_management.model_anaesthesia_type"/>
+            <field name="groups" eval="[(4, ref('p7_patient_management.group_user_doctor')), (4, ref('p7_patient_management.group_user_doctor_premium'))]"/>
+            <field name="domain_force">[('user_id', '=', user.id),('created_by','=','doctor')]</field>
+        </record>
+
+        <record id="res_dislocation_user_own_rule" model="ir.rule">
+            <field name="name">Disposition - Only show own records</field>
+            <field name="model_id" ref="model_res_dislocation"/>
+            <field name="domain_force">[('user_id', '=', user.id)]</field>
+            <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+
+        <record id="rule_show_own_additional_info" model="ir.rule">
+            <field name="name">Additional Information - Only show own records</field>
+            <field name="model_id" ref="model_additional_information"/>
+            <field name="domain_force">[('user_id', '=', user.id)]</field>
+            <field name="groups" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+
+        <record id="rule_show_all_additional_info_admin" model="ir.rule">
+            <field name="name">Additional Information - Admin Access</field>
+            <field name="model_id" ref="model_additional_information"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('base.group_system'))]"/>
+        </record>
+
+        <record id="patient_case_custom_rule_associate" model="ir.rule">
+            <field name="name">Associate Patient Case Access</field>
+            <field name="model_id" ref="p7_patient_management.model_patient_case"/>
+            <field name="groups" eval="[(4, ref('p7_patient_management.group_user_associate'))]"/>
+            <field name="domain_force">['|', ('video_call_assign_status', '=', 'to_assign'), ('associate_id', '=', user.id)]</field>
+        </record>
+
+        <record id="contact_attempt_read_rule_associate" model="ir.rule">
+            <field name="name">Contact Attempt read access for associates</field>
+            <field name="model_id" ref="p7_patient_management.model_contact_attempt"/>
+            <field name="domain_force">['|', ('associate_id', '=', False), ('associate_id', '=', user.id)]</field>
+            <field name="groups" eval="[(4, ref('p7_patient_management.group_user_associate'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
+        <record id="contact_attempt_write_rule_associate" model="ir.rule">
+            <field name="name">Contact Attempt to write access for own bookings</field>
+            <field name="model_id" ref="p7_patient_management.model_contact_attempt"/>
+            <field name="domain_force">[('associate_id', '=', user.id)]</field>
+            <field name="groups" eval="[(4, ref('p7_patient_management.group_user_associate'))]"/>
+            <field name="perm_read" eval="False"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
+    <!-- Can WRITE own bookings -->
+    <record id="rule_contact_attempt_write_own" model="ir.rule">
+        <field name="name">Contact Attempt: write own</field>
+        <field name="model_id" ref="model_contact_attempt"/>
+        <field name="domain_force">[('associate_id', '=', user.id)]</field>
+        <field name="groups" eval="[(4, ref('p7_patient_management.group_user_associate'))]"/>
+        <field name="perm_write" eval="True"/>
+    </record>
+
+    <!-- Can WRITE to claim unassigned/to-assign bookings -->
+    <record id="rule_contact_attempt_write_claim" model="ir.rule">
+        <field name="name">Contact Attempt: claimable write</field>
+        <field name="model_id" ref="model_contact_attempt"/>
+        <field name="domain_force">
+            [('associate_id','=',False),
+            ('video_call_assign_status','in',('unassigned','to_assign'))]
+        </field>
+        <field name="groups" eval="[(4, ref('p7_patient_management.group_user_associate'))]"/>
+        <field name="perm_write" eval="True"/>
+    </record>
+
+    <!-- (If needed) ensure READ rule lets them see unassigned/to-assign, plus own -->
+    <record id="rule_contact_attempt_read" model="ir.rule">
+        <field name="name">Contact Attempt: read own or claimable</field>
+        <field name="model_id" ref="model_contact_attempt"/>
+        <field name="domain_force">
+            ['|', ('associate_id','=',user.id),
+            '&amp;', ('associate_id','=',False),
+            ('video_call_assign_status','in',('unassigned','to_assign'))]
+        </field>
+        <field name="groups" eval="[(4, ref('p7_patient_management.group_user_associate'))]"/>
+        <field name="perm_read" eval="True"/>
+    </record>
+
+
+</odoo>

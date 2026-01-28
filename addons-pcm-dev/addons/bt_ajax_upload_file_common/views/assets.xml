@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="upload_file" name="File Upload">
+            <div class="form-group col-sm mt16">
+                <p t-if="show_delete!='false'"><span class="custom-label"><strong></strong> </span>Note: Total file size allowed <t t-esc="max_file_size and max_file_size or 10"/>MB max</p>
+                <div class="form-group upload-files">
+                    <input type="hidden" class="form-control" t-att-name="file_input_name"/>
+                    <div class="input-file" t-att-data-name="file_input_name" t-att-res-model="res_model" t-att-data-res-id="res_id" t-att-show-delete="show_delete" t-att-show-download="show_download" t-att-max-file-size="max_file_size" t-att-multi-file="allow_multi_file"/>
+                </div>
+            </div>
+        </template>
+    </data>
+</odoo>

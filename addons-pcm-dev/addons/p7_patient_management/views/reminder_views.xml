@@ -1,0 +1,105 @@
+<odoo>
+    <data>
+
+        <!-- Reminder view -->
+        <record id="view_reminder_form" model="ir.ui.view">
+            <field name="name">res.reminder.form</field>
+            <field name="model">res.reminder</field>
+            <field name="arch" type="xml">
+                <form string="Reminder Setup">
+                    <sheet>
+                        <group>
+                            <field name="name" required="1"/>
+                            <field name="anaesthesia_type_ids" widget="many2many_tags"/>
+                            <field name="medication_id"/>
+                            <field name="medication_class_id"/>
+                            <field name="reminder_hour" required="1"/>
+                            <field name="preparation_steps" required="1" placeholder="Write here..." class="oe-bordered-editor o_example_note"/>
+                            <field name="created_by" readonly="1"/>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="activity_ids"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_reminder_tree" model="ir.ui.view">
+            <field name="name">res.reminder.tree</field>
+            <field name="model">res.reminder</field>
+            <field name="arch" type="xml">
+                <tree string="Reminder Setup">
+                    <field name="name"/>
+                    <field name="anaesthesia_type_ids"/>
+                    <field name="medication_class_id"/>
+                    <field name="reminder_hour"/>
+                    <field name="created_by"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_reminder_search" model="ir.ui.view">
+            <field name="name">reminder.select</field>
+            <field name="model">res.reminder</field>
+            <field name="arch" type="xml">
+                <search string="Search Reminders">
+                    <field name="name"/>
+                    <field name="anaesthesia_type_ids"/>
+                    <field name="medication_id"/>
+                    <field name="medication_class_id"/>
+                    <field name="created_by"/>
+                    <group expand="0" string="Group By...">
+                        <filter string="Anaesthesia Types" name="anaesthesia_type_ids" domain="[]" context="{'group_by': 'anaesthesia_type_ids'}"/><separator/>
+                        <filter string="Medication Class" name="medication_class_id" domain="[]" context="{'group_by': 'medication_class_id'}"/><separator/>
+                        <filter string="Created By" name="created_by" domain="[]" context="{'group_by': 'created_by'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_reminder_details" model="ir.actions.act_window">
+            <field name="name">Reminder Setup</field>
+            <field name="res_model">res.reminder</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_reminder_tree"/>
+            <field name="domain">[]</field>
+            <field name="context"></field>
+            <field name="help" type="html">
+                <p>
+                    This is the list of reminder setup.
+                </p>
+            </field>
+        </record>
+
+        <!-- Reminder line view -->
+        <record id="view_reminder_line_form" model="ir.ui.view">
+            <field name="name">res.reminder.line.form</field>
+            <field name="model">res.reminder.line</field>
+            <field name="arch" type="xml">
+                <form string="Reminder Line Setup">
+                    <sheet>
+                        <group>
+                            <field name="name" required="1"/>
+                            <field name="reminder_hour" required="1"/>
+                            <field name="preparation_steps" required="1" placeholder="Write here..." class="oe-bordered-editor o_example_note"/>
+                            <div class="o_horizontal_group" style="display: flex; align-items: center; gap: 8px; margin-top: 8px;">
+                                <button name="action_formatted_datetime" string="Get Operation Datetime" class="btn btn-primary text-nowrap" type="object"/>
+                            </div>
+                            <div class="o_horizontal_group" style="display: flex; align-items: center; gap: 8px; margin-top: 8px;">
+                                <field name="operation_hour" class="o_field_integer" nolabel="1" style="width: 60px; text-align: center;"/>
+                                <label for="operation_hour" string="Hours before Procedure" class="text-nowrap"/>
+                            </div>
+                        </group>
+                    </sheet>
+                    <footer>
+                        <button string="Save &amp; Close" special="save" class="btn-primary"/>
+                        <button string="Discard" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+    </data>
+</odoo>

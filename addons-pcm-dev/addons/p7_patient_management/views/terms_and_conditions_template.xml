@@ -1,0 +1,695 @@
+<odoo>
+    <data>
+        <template id="terms_and_conditions_template" name="Terms and Conditions Page">
+            <t t-set="no_header" t-value="True"/>
+            <t t-set="no_footer" t-value="True"/>
+            <t t-call="website.layout">
+            <meta charset="UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+            <title>VANAESA</title>
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+            <link rel="stylesheet" href="https://unpkg.com/bootstrap@5.3.3/dist/css/bootstrap.min.css"/>
+            <style type="text/css">
+                body {
+                    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                    line-height: 1.6;
+                    max-width: 1000px;
+                    margin: 0 auto;
+                    background-color: #d1e4e6;
+                    color: #333;
+                }
+                .container {
+                    background: white;
+                    padding: 40px;
+                    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+                }
+                h1 {
+                    color: #2c3e50;
+                    border-bottom: 3px solid #3498db;
+                    padding-bottom: 10px;
+                    margin-bottom: 30px;
+                }
+                h2 {
+                    color: #34495e;
+                    margin-top: 30px;
+                    margin-bottom: 15px;
+                    font-size: 1.3em;
+                }
+                h3 {
+                    color: #7f8c8d;
+                    margin-top: 20px;
+                    margin-bottom: 10px;
+                    font-size: 1.1em;
+                }
+                .clause {
+                    margin-bottom: 20px;
+                }
+                .sub-clause {
+                    margin-left: 20px;
+                    margin-bottom: 10px;
+                    text-align: justify;
+                }
+                .definition {
+                    background-color: #ecf0f1;
+                    padding: 10px;
+                    border-left: 4px solid #3498db;
+                    margin-bottom: 15px;
+                    text-align: justify;
+                }
+                .definition-term {
+                    font-weight: bold;
+                    color: #2c3e50;
+                }
+                ol {
+                    counter-reset: clause-counter;
+                }
+                .main-clause {
+                    counter-increment: clause-counter;
+                    margin-bottom: 25px;
+                }
+                .clause-number {
+                    font-weight: bold;
+                    color: #3498db;
+                }
+                ul {
+                    margin-left: 20px;
+                }
+                li {
+                    margin-bottom: 5px;
+                }
+                .highlight {
+                    background-color: #fff3cd;
+                    padding: 2px 4px;
+                    border-radius: 3px;
+                }
+                .contact-info {
+                    background-color: #e8f4fd;
+                    padding: 15px;
+                    border-radius: 5px;
+                    margin: 10px 0;
+                }
+
+                @media (max-width: 450px) {
+                    .sub-clause { 
+                        margin-left: 0px;
+                    }
+                    ul {
+                        margin-left: 0px;
+                    }
+                }
+            </style>
+            <div class="container">
+                <h1 class="text-center">Terms and Conditions</h1>
+
+                <!-- Terms and Conditions of Patient’s Use of Platform -->
+                <div class="clause">
+                    <h2>1. Terms and Conditions of Patient's Use of Platform</h2>
+                    <div class="sub-clause">
+                        <span class="clause-number">1.1.</span> These Terms govern your use of the Platform. All definitions used in these Terms have been defined under clause 2 below.
+                    </div>
+                    <div class="sub-clause">
+                        <span class="clause-number">1.2.</span> As part of your use of the Platform and Service, you agree to be legally bound by these Terms. Your access to the Platform and use of the Services is conditional on your acceptance of and compliance with these Terms. If you do not accept these Terms or any part of them, please do not use the Platform or engage in the Services and exit the Platform immediately.
+                    </div>
+                    <div class="sub-clause">
+                        <span class="clause-number">1.3.</span> The Company may amend, modify or vary any of these Terms at any time. Any use or continued use of the Service on the Platform shall be deemed to be an acceptance of amended Terms by you. If you do not agree to these Terms as amended or varied, you must discontinue your use of the Service and exit the Platform immediately.
+                    </div>
+                </div>
+
+                <div class="clause">
+                    <h2>2. Definitions</h2>
+                    <div class="sub-clause">
+                        <span class="clause-number">2.1.</span> The definitions and rules of interpretation in this clause shall apply in this Agreement.
+                    </div>
+                    
+                    <div class="definition">
+                        <span class="definition-term">Anaesthetist:</span> shall mean the anaesthetist referred to you by the Clinic, and is also the anaesthetist connecting with you on the Platform;
+                    </div>
+                    
+                    <div class="definition">
+                        <span class="definition-term">Company:</span> shall refer to Synapse Medical Pte. Ltd. (UEN.: 202241195H);
+                    </div>
+                    
+                    <div class="definition">
+                        <span class="definition-term">Confidential Information:</span> shall mean information received by you (in whatever form relating to the Company, the Platform, the Company's Service Providers and/or the Services, which are confidential to the Company, whether or not such information (if in anything other than oral form) is marked as confidential;
+                    </div>
+                    
+                    <div class="definition">
+                        <span class="definition-term">Clinic:</span> shall mean the clinic and/or hospital who matched you to the Anaesthetist and referred the Anaesthetist to connect with you via the Platform;
+                    </div>
+                    
+                    <div class="definition">
+                        <span class="definition-term">Intellectual Property:</span> shall mean patents, rights to inventions, copyright and related rights, moral rights, trade marks, trade names and domain names, rights in get-up, rights in goodwill or to sue for passing off, rights in designs, rights in computer software, database rights, rights in Confidential Information (including know-how and trade secrets) and any other intellectual property rights, in each case whether registered or unregistered and including all applications (or rights to apply) for, and renewals or extensions of, such rights and all similar or equivalent rights or forms of protection which may now or in the future subsist in any part of the world;
+                    </div>
+                    
+                    <div class="definition">
+                        <span class="definition-term">Platform:</span> shall mean an online platform named Virtual Anaesthesia Assessment, accessible at the domain, <a href="https://vanaesa.com/"><strong>Vanaesa.com</strong></a>, as well as on the mobile app operated by the Company and known as "Vanaesa" or such other name as given by the Company from time to time, as downloaded from either Apple Store, Google Play Store or any other application store;
+                    </div>
+                    
+                    <div class="definition">
+                        <span class="definition-term">Platform Interaction:</span> shall mean the interaction on the Platform which provides you with direct access to the Service Providers, such as access to chat rooms with video calling capabilities;
+                    </div>
+                    
+                    <div class="definition">
+                        <span class="definition-term">Personal Data:</span> shall mean personal data as defined under the Personal Data Protection Act 2012 of Singapore;
+                    </div>
+                    
+                    <div class="definition">
+                        <span class="definition-term">Services:</span> shall mean the services provided by the Anaesthetist to you on the Platform, which may include but are not limited to any or all of the following, whether in whole or in part:
+                        <ul>
+                            <li>providing you with general information about anaesthesia;</li>
+                            <li>conducting a pre-anaesthetic assessment on you;</li>
+                            <li>providing you with a proposed anaesthetic plan; and</li>
+                            <li>any other incidental work in connection thereof;</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="definition">
+                        <span class="definition-term">Service Provider:</span> shall mean any independent contractor providing their services to you and/or the Company on the Platform, including but not limited to the Anaesthetists, medical professionals, agents and/or any representatives of the Company;
+                    </div>
+                    
+                    <div class="definition">
+                        <span class="definition-term">Terms:</span> shall mean these Terms &amp; Conditions governing your use of the Platform and the Services by the Anaesthetist; and
+                    </div>
+                    
+                    <div class="definition">
+                        <span class="definition-term">You:</span> shall refer to you, a patient likely to be undergoing surgery in the foreseeable future, who is using the Platform and engaging the Services by the Anaesthetist.
+                    </div>
+
+                    <div class="sub-clause">
+                        <span class="clause-number">2.2.</span> Clause, schedule and paragraph headings shall not affect the interpretation of this Agreement.
+                    </div>
+                    <div class="sub-clause">
+                        <span class="clause-number">2.3.</span> The schedule to this Agreement forms part of and is incorporated to this Agreement.
+                    </div>
+                    <div class="sub-clause">
+                        <span class="clause-number">2.4.</span> A reference to a <strong>person</strong> includes a natural person, a corporate body and an unincorporated body (whether or not having separate legal personality) and that person's personal representatives, successors or permitted assigns.
+                    </div>
+                    <div class="sub-clause">
+                        <span class="clause-number">2.5.</span> A reference to a Party shall include that Party's successors, permitted assigns and permitted transferees.
+                    </div>
+                    <div class="sub-clause">
+                        <span class="clause-number">2.6.</span> Unless the context otherwise requires, words in the singular shall include the plural and in the plural shall include the singular, and a reference to one gender shall include a reference to the other genders.
+                    </div>
+                    <div class="sub-clause">
+                        <span class="clause-number">2.7.</span> A reference to a statute, statutory provision or any subsidiary legislation made under a statute is to such statute, provision or subsidiary legislation as amended or re-enacted from time to time and, in the case of a statute, includes any subsidiary legislation made under that statute from time to time.
+                    </div>
+                    <div class="sub-clause">
+                        <span class="clause-number">2.8.</span> A reference to <strong>writing</strong> or <strong>written</strong> includes email and other forms of electronic communication, but shall not include facsimile transmission.
+                    </div>
+                    <div class="sub-clause">
+                        <span class="clause-number">2.9.</span> Where the words <strong>include(s)</strong>, <strong>including</strong> or <strong>in particular</strong> or any similar expression are used in this Agreement, they are deemed to have the words "without limitation" following them.
+                    </div>
+                    <div class="sub-clause">
+                        <span class="clause-number">2.10.</span> Any obligation on a Party not to do something includes an obligation not to allow that thing to be done.
+                    </div>
+                </div>
+
+                <div class="clause">
+                    <h2>3. Services</h2>
+                    <div class="sub-clause">
+                        <span class="clause-number">3.1.</span> <strong>No guarantee:</strong> The Company guarantees to provide the Platform for the Anaesthetists to provide the Services to you. The Company does not guarantee or warrant any desired outcome(s) of your surgery, and/or the delivery, performance and/or standards of Services provided by the Anaesthetist whom you have been matched with by the Clinic.
+                    </div>
+                    <div class="sub-clause">
+                        <span class="clause-number">3.2.</span> <strong>No substitute for medical diagnosis or treatment:</strong> You understand and acknowledge that not all of the Company's Service Providers are qualified anaesthesia professionals and may thus not be qualified to perform or provide medical diagnosis or treatment, including administering anaesthesia to you. The Services shall not at any time be taken or perceived by you to constitute medical diagnosis or treatment, except where the Service is directly provided to you by the Anaesthetist.
+                    </div>
+                </div>
+
+                <div class="clause">
+                    <h2>4. Your Warranties and Undertakings</h2>
+                    <div class="sub-clause">
+                        <span class="clause-number">4.1.</span> In relation to your access to the Platform and enjoyment of the Service, you warrant and undertake:
+                        <ul>
+                            <li>that you are twenty-one (21) years old and above;</li>
+                            <li>that you are engaging the Services for legitimate means and that you will not misuse or abuse any drugs administered and/or prescribed by the Anaesthetist;</li>
+                            <li>that any information provided by you to the Clinic and/or the Service Providers are accurate, factual and honest, and that you will make full and frank disclosures to the Service Providers of any material information relevant to the provision of the Services;</li>
+                            <li>that you will inform the Company immediately if there has been a change of your mobile number or loss of mobile device, to ensure the security of your personal information;</li>
+                            <li>that you will safeguard your login credentials to the Platform, and that you will inform the Company immediately if your access credentials and/or device(s) from which you have access to the Platform becomes compromised in any way, or if you have any reason to suspect the same;</li>
+                            <li>to comply with these Terms and any notices, guidelines and/or amendments to the Terms as provided at any time by the Company on the Platform, which are deemed to be incorporated into these Terms, including but not limited to any data policies and cyber security policies which the Company may implement and amend from time to time;</li>
+                            <li>to comply with all applicable laws and regulations, as may be informed by the Company to you from time to time;</li>
+                            <li>not to license, sublicense, sell, resell, transfer, assign or otherwise commercially exploit or make available to any third party any content on the Platform in any way;</li>
+                            <li>not to modify or make derivative works based off any content on the Platform, or reverse engineer or access the underlying software of the Platform for any reason; and</li>
+                            <li>not to interfere with or disrupt the Platform or the servers or networks of the Platform, and not to do or attempt to do or permit any other person to do or attempt any act that interferes with, or disrupt the integrity or the Platform and/or Service.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="clause">
+                    <h2>5. Platform Interaction</h2>
+                    <div class="sub-clause">
+                        <span class="clause-number">5.1.</span> As part of the Services, it is likely that you will engage in Platform Interaction. You acknowledge and agree that the Platform merely serves as a platform for the Platform Interaction with the Service Providers and you acknowledge that you are solely responsible for your Platform Interaction with the Service Providers and/or other parties that you may encounter through the Platforms.
+                    </div>
+                    <div class="sub-clause">
+                        <span class="clause-number">5.2.</span> You acknowledge that the Company is unable to exert control or influence over the actions, speech or otherwise of the Service Providers and are therefore under no obligation to oversee, monitor or moderate any Platform Interaction, and the Company expressly excludes its liability for any loss or damage arising from your Platform Interaction with the Service Providers.
+                    </div>
+                </div>
+
+                <div class="clause">
+                    <h2>6. Waiver, Release and Discharge</h2>
+                    <div class="sub-clause">
+                        <span class="clause-number">6.1.</span> You agree and acknowledge that you are voluntarily choosing to use the Platform and engage the Services of the Anaesthetist and expressly assume and accept all risks in relation thereto.
+                    </div>
+                    <div class="sub-clause">
+                        <span class="clause-number">6.2.</span> To the greatest extent permitted by law, you hereby waive, release and discharge the Company from any and all claims, causes of action, demands, damages, costs or any other actions for any liability for any personal injury or death in any way whatsoever caused by or relating to the Service Providers, the Service and/or the Platform, howsoever caused.
+                    </div>
+                    <div class="sub-clause">
+                        <span class="clause-number">6.3.</span> For the avoidance of doubt, the Company's failure or delay to act on any infringement, non-compliance and/or breach of the Terms or to exercise in any respect any right provided in these Terms shall not be deemed a waiver of any of the Company's rights or remedy to which it is entitled.
+                    </div>
+                </div>
+
+                <div class="clause">
+                    <h2>7. Indemnity</h2>
+                    <div class="sub-clause">
+                        <span class="clause-number">7.1.</span> You agree to wholly indemnify and hold harmless the Company and any of its Service Providers, personnel, representatives, employees, officers and/or subcontractors from and against any and all loss, costs, damages, claims, demands, actions, proceedings, judgments, liabilities and expenses (including but not limited to all legal costs or attorney's fees on a full indemnity basis) which the Company may incur or suffer in connection with or arising from:
+                        <ul>
+                            <li>Your use of the Platform;</li>
+                            <li>The Company's provision of the Services to you;</li>
+                            <li>Any dispute you may have against the Company's Service Providers and/or the Clinic;</li>
+                            <li>Your negligence, omission, act, conduct, behaviour or otherwise in the course of the Services of the Services Providers and/or Company; and/or</li>
+                            <li>Any false and/or inaccurate information provided by you to the Clinic, Services Providers and/or Company.</li>
+                        </ul>
+                    </div>
+                    <div class="sub-clause">
+                        <span class="clause-number">7.2.</span> The Company shall not be liable for any consequential, indirect or special losses suffered by you.
+                    </div>
+                </div>
+
+                <div class="clause">
+                    <h2>8. Breach of these Terms</h2>
+                    <div class="sub-clause">
+                        <span class="clause-number">8.1.</span> The Company may in its sole discretion determine that a breach of these Terms has occurred by you. Where the Company considers a breach of these Terms has occurred, the Company reserves the right to take such action as it deems appropriate. Where the Company determined that a breach is capable of remedy, you may be notified of the breach and given 7 days remedy or rectify it within the prescribed time, where time is of essence. A material breach of these Terms may result in the Company taking all or any of the following actions against you:
+                        <ul>
+                            <li>immediate temporary or permanent withdrawal of your right to the provision of the Service;</li>
+                            <li>immediate temporary or permanent removal of your account on the Platform;</li>
+                            <li>issuance of a warning to you;</li>
+                            <li>where applicable, the Company reserves its right to commencing legal proceedings against you for all loss and/or damages resulting from your breach of these Terms, including but not limited to legal costs; and/or</li>
+                            <li>disclosure of such information to law enforcement authorities as the Company determines necessary.</li>
+                        </ul>
+                    </div>
+                    <div class="sub-clause">
+                        <span class="clause-number">8.2.</span> For the avoidance of doubt, this clause is without prejudice to any other actions that the Company may take against you, including but not limited to its absolute discretion to ban you from the Platform.
+                    </div>
+                </div>
+
+                <div class="clause">
+                    <h2>9. Personal Data</h2>
+                    <div class="sub-clause">
+                        <span class="clause-number">9.1.</span> You represent and warrant that you have full authority to give such consent and authorisation as required under this clause 9.
+                    </div>
+                    <div class="sub-clause">
+                        <span class="clause-number">9.2.</span> You consent to the Company accessing data your Personal Data, including but not limited to your contact information and/or your medical information, obtained from:
+                        <ul>
+                            <li>The Clinic, including any employee and/or authorised agents thereof;</li>
+                            <li>Your use of the Platform; and/or</li>
+                            <li>You.</li>
+                        </ul>
+                    </div>
+                    <div class="sub-clause">
+                        <span class="clause-number">9.3.</span> You acknowledge and agree to your contact information being shared by the Clinic with the Company. You further acknowledge and agree that your contact information will be used by the Company as needed in connection with the Services, including but not limited to connecting you with the Anaesthetist, and to onboard you as a patient on the Platform.
+                    </div>
+                    <div class="sub-clause">
+                        <span class="clause-number">9.4.</span> You acknowledge and consent to the Company to collecting, using, disclosing, processing, and/or transmitting your Personal Data for the purposes of facilitating the provision of Services to you and any other such ancillary purposes connected thereto, including for the purposes of providing you with updates, notifications and marketing, advertising and promotional information, materials and/or documents relating to products, services or otherwise that the Company may have now or may create in the future.
+                    </div>
+                    <div class="sub-clause">
+                        <span class="clause-number">9.5.</span> If you wish to withdraw your consent to the collection, use, disclosure or processing of your Personal Data as set out above, or if you have any questions relating to your Personal Data, or if you would like to obtain access or make corrections to your Personal Data, please contact our data protection officer in writing at: <a href="mailto:admin@vanaesa.com"><strong>admin@vanaesa.com</strong></a>
+                        Please note that any access request may be subject to an administrative fee at the Company's rates then in force to meet the costs in providing you with details of the information the Company holds about you.
+                    </div>
+                </div>
+
+                <div class="clause">
+                    <h2>10. Intellectual Property</h2>
+                    <div class="sub-clause">
+                        <span class="clause-number">10.1.</span> You acknowledge that all Intellectual Property rights to or in the Platform belongs to the Company absolutely or has been licensed to the Company, and that you have no rights in them.
+                    </div>
+                    <div class="sub-clause">
+                        <span class="clause-number">10.2.</span> You shall promptly give notice in writing to the Company if you become aware of:
+                        <ul>
+                            <li>any infringement or suspected infringement of the Marks or any Intellectual Property Rights that belong to the Company or any misuse or attempted misuse or any unauthorized use of the domain name or any of the Company's other Intellectual Property Rights; or</li>
+                            <li>any claim or notice arising from the use of the Service or Platform that infringes the rights of any third party.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="clause">
+                    <h2>11. Third Party Software, Viruses and Malware</h2>
+                    <div class="sub-clause">
+                        <span class="clause-number">11.1.</span> The Company shall not be liable for any electronic viruses, spyware, or other malware that you may encounter in accessing third-party linked websites as provided to you by any of the Company's service providers. You are encouraged to routinely scan your computer, mobile device or other electronic devices as applicable using a reliable anti-malware/anti-virus product and resolve any discovered issues. If your computer, mobile device or other electronic devices from which you access the Platform has been compromised, or if you have to reason to suspect as such, please inform the Company immediately by contacting the Company at: <a href="mailto:admin@vanaesa.com"><strong>admin@vanaesa.com</strong></a>
+                    </div>
+                    <div class="sub-clause">
+                        <span class="clause-number">11.2.</span> The Platform may contain information, content, tools, or services provided by third parties. The Company does not control, verify, endorse, or assume responsibility for the accuracy, reliability, or suitability of information from such third parties. To the fullest extent permitted by law, the Company disclaims all liability for any loss, damage, or injury, whether direct, indirect, incidental, or consequential, arising from or in connection with your use of, or reliance upon, any third-party content, services, or information accessible through this website.
+                    </div>
+                </div>
+
+                <div class="clause">
+                    <h2>12. Disclaimers of warranties and exclusion of liability</h2>
+                    <div class="sub-clause">
+                        <span class="clause-number">12.1.</span> The data and information available on the Platform are general in nature and do not propose and shall not in any way be deemed to constitute an offer or provision of any professional, expert or medical advice by the Service Providers, except where it is provided directly to you by the Anaesthetist. You should at all times consult your own professional and independent medical advisor for verification of the information and data before acting and relying on any professional, expert or medical advice by the Service Providers, except where it is provided directly to you by the Anaesthetist.
+                    </div>
+                    <div class="sub-clause">
+                        <span class="clause-number">12.2.</span> Any arrangement made between you and a third-party service provider of the Company, including the Service Providers are at your own risk. You are deemed to have made an informed decision on the recommendations and diagnosis of the Service Providers based on any inquiries you have made to them and effort you have taken to independently verify their qualifications, medical opinion, diagnosis and/or prescriptions. The Company does not sponsor, endorse, promote and/or advertise for any of the Service Providers.
+                    </div>
+                    <div class="sub-clause">
+                        <span class="clause-number">12.3.</span> To the greatest extent permitted by law, the Company shall not be liable to you in contract, tort including, without limitation, negligence or medical negligence in respect of any damage, loss, cost or expense of whatsoever nature suffered or incurred by you in the provision of the Service.
+                    </div>
+                    <div class="sub-clause">
+                        <span class="clause-number">12.4.</span> The Company shall not be responsible for any problems you may face with the Platform. As soon as the Company is informed of any issues of the Platform, the Company may at its discretion attempt to remedy such issues as soon as practicable and to the best extent possible, on a no admission of liability basis.
+                    </div>
+                </div> 
+
+                <div class="clause">
+                    <h2>13. Events beyond the Company's control</h2>
+                    <div class="sub-clause">
+                        <span class="clause-number">13.1.</span> You accept and acknowledges that in your use and access of the Platform and the Service, there are events, situations and circumstances beyond the control of the Company. To this end, the Company shall not be liable for any claims, losses, expenses, damages and costs (including but not limited to direct, incidental, consequential, exemplary and indirect damages) related to such events including but not limited to the following:
+                        <ul>
+                            <li>the behaviour, actions and/or omissions of the Service Providers;</li>
+                            <li>Medical negligence of the Service Providers;</li>
+                            <li>the soundness of any medical advice, recommendation, prognosis and/diagnosis given by the Service Providers;</li>
+                            <li>any acts and/or omissions from third party Service Providers engaged by the Company; and/or</li>
+                            <li>a data breach due to a third-party's actions, including where your Personal Data is compromised from such attack.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="clause">
+                    <h2>14. Termination</h2>
+                    <div class="sub-clause">
+                        <span class="clause-number">14.1.</span> The Company may terminate the Services with immediate effect at any time if you:
+                        <ul>
+                            <li>commit any misconduct affecting the reputation of the Company, Platform, other patients of the Company, and/or the Service Providers;</li>
+                            <li>commit any serious or repeated breach or non-observance of any of the provisions of these Terms or refuses or neglects to comply with any reasonable and lawful directions of the Company and/or the Service Providers;</li>
+                            <li>the Company and/or the Service Providers suspect that you may be using the Services for illegitimate means and/or that you are at risk of abusing the drugs which may be prescribed as part of the Services; and/or</li>
+                            <li>harass or threaten to harass the Company, other Patients, and/or any of the Service Providers.</li>
+                        </ul>
+                    </div>
+                    <div class="sub-clause">
+                        <span class="clause-number">14.2.</span> You may terminate the Services and cease your use of the Platform with immediate effect at any time by providing notice to the Company at: <a href="mailto:admin@vanaesa.com"><strong>admin@vanaesa.com</strong></a>
+                    </div>
+                </div>
+
+                <div class="clause">
+                    <h2>15. General</h2>
+                    <div class="sub-clause">
+                        <span class="clause-number">15.1.</span> <strong>Severability:</strong> Each of the clauses and sub-clauses of these Terms operates separately. If any court or relevant authority decides that any of them are invalid, illegal or incapable of being enforced by any rule or law, or public policy, the remaining clauses shall nevertheless remain in full force and effect. Where any clauses and sub-Clauses of these Terms is or becomes invalid, unenforceable or illegal but would be valid, enforceable or legal if some part of the clause were deleted or modified, the clause or part thereof shall apply with such deletions and modifications as may be necessary to give effect to make it valid, enforceable and legal.
+                    </div>
+                    <div class="sub-clause">
+                        <span class="clause-number">15.2.</span> <strong>Variation:</strong> The Company reserves the right, at its sole and absolute discretion, to modify these Terms from time to time.
+                    </div>
+                    <div class="sub-clause">
+                        <span class="clause-number">15.3.</span> <strong>No Partnership:</strong> Nothing in these Terms shall constitute or be deemed to constitute a partnership, joint venture or employment relationship between you and the Company and neither of them shall have any authority to bind the other in any way.
+                    </div>
+                    <div class="sub-clause">
+                        <span class="clause-number">15.4.</span> <strong>Transfer:</strong> The Company reserves the right to assign, transfer or novate or otherwise deal with any of its rights or obligations under these Terms to any other third party.
+                    </div>
+                    <div class="sub-clause">
+                        <span class="clause-number">15.5.</span> <strong>Third Party Rights:</strong> A person who is not a party to these Terms shall not have any rights under or in connection with it by virtue of the Contracts (Rights of Third Parties) Act 2001.
+                    </div>
+                    <div class="sub-clause">
+                        <span class="clause-number">15.6.</span> <strong>Governing Law and Jurisdiction:</strong> Disputes shall be governed by and construed in accordance with the law of Singapore. Any Dispute shall be subject to the exclusive jurisdiction of the courts of Singapore.
+                    </div>
+                </div>
+
+                <hr style="height:3px; background-color:rgb(11, 107, 172); border-radius: 3px;"/>
+
+                <!-- Terms and Conditions of the Anaesthetist's Services -->
+
+                <div class="clause">
+                    <h2>1. Terms and Conditions of the Anaesthetist's Services</h2>
+                    <div class="sub-clause">
+                        <span class="clause-number">1.1.</span> These Terms govern the engagement of Services offered to you by the Anaesthetist through the Platform. All definitions used in these Terms have been defined under clause 2 below.
+                    </div>
+                    <div class="sub-clause">
+                        <span class="clause-number">1.2.</span> As part of the provision of the Anaesthetist's Services to you, you agree to be legally bound by these Terms. Your access to the Platform and use of the Service are conditional on your acceptance of and compliance with these Terms. If you do not accept these Terms or any part of them, please do not use the Platform or the Services and exit the Platform immediately.
+                    </div>
+                    <div class="sub-clause">
+                        <span class="clause-number">1.3.</span> The Anaesthetist may amend, vary or modify any of these Terms at any time. Any use or continued use of the Service shall be deemed to be an acceptance of amended Terms by you. If you do not agree to these Terms as amended or varied, you must discontinue your engagement with the Anaesthetist's Service and exit the Platform immediately.
+                    </div>
+                </div>
+
+                <div class="clause">
+                    <h2>2. Definitions</h2>
+                    <div class="sub-clause">
+                        <span class="clause-number">2.1.</span> The definitions and rules of interpretation in this clause shall apply in this Agreement.
+                    </div>
+                    
+                    <div class="definition">
+                        <span class="definition-term">Anaesthetist:</span> shall mean the Anaesthetist referred to you by the Clinic, and is also the Anaesthetist connecting with you on the Platform;
+                    </div>
+                    
+                    <div class="definition">
+                        <span class="definition-term">Company:</span> shall refer to Synapse Medical Pte. Ltd. (UEN.: 202241195H);
+                    </div>
+                    
+                    <div class="definition">
+                        <span class="definition-term">Confidential Information:</span> shall mean information in whatever form relating to the Anaesthetist, the Company, Platform, Service Providers, Services, and/or other patients of the Company, which are confidential to the Company, whether or not such information (if in anything other than oral form) is marked as confidential;
+                    </div>
+                    
+                    <div class="definition">
+                        <span class="definition-term">Clinic:</span> shall mean the clinic and/or hospital who matched you to the Anaesthetist and referred the Anaesthetist to connect with you via the Platform;
+                    </div>
+                    
+                    <div class="definition">
+                        <span class="definition-term">Fees:</span> shall have the meaning given to it at Clause 3.2 below;
+                    </div>
+                    
+                    <div class="definition">
+                        <span class="definition-term">Dispute(s):</span> shall mean any dispute or claim arising out of or in connection with these Terms or its subject matter or formation (including non-contractual disputes or claims);
+                    </div>
+                    
+                    <div class="definition">
+                        <span class="definition-term">Intellectual Property:</span> shall mean patents, rights to inventions, copyright and related rights, moral rights, trade marks, trade names and domain names, rights in get-up, rights in goodwill or to sue for passing off, rights in designs, rights in computer software, database rights, rights in Confidential Information (including know-how and trade secrets) and any other intellectual property rights, in each case whether registered or unregistered and including all applications (or rights to apply) for, and renewals or extensions of, such rights and all similar or equivalent rights or forms of protection which may now or in the future subsist in any part of the world;
+                    </div>
+                    
+                    <div class="definition">
+                        <span class="definition-term">Platform:</span> shall mean an online platform named Virtual Anaesthesia Assessment, accessible at the domain, <a href="https://vanaesa.com/"><strong>Vanaesa.com</strong></a>, as well as on the mobile app operated by the Company and known as “Vanaesa” or such other name as given by the Company from time to time, as downloaded from either Apple Store, Google Play Store or any other application store;
+                    </div>
+                                        
+                    <div class="definition">
+                        <span class="definition-term">Platform Interaction:</span> shall mean the interaction on the Platform which provides you with direct access to connect with the Anaesthetist, such as access to chat rooms with video calling capabilities;
+                    </div>
+                    
+                    <div class="definition">
+                        <span class="definition-term">Personal Data:</span> shall mean personal data as defined under the Personal Data Protection Act 2012 of Singapore;
+                    </div>
+                    
+                    <div class="definition">
+                        <span class="definition-term">Services:</span> shall have the meaning given to it at Clause 3.1 below;
+                    </div>
+
+                    <div class="definition">
+                        <span class="definition-term">Service Provider:</span> shall mean any independent contractor providing their services to the Patients and/or the Company on the Platform, including but not limited to the Anaesthetists, medical professionals, agents and/or any representatives of the Company;
+                    </div>
+
+                    <div class="definition">
+                        <span class="definition-term">Terms:</span> shall mean these Terms &amp; Conditions governing the Services; and
+                    </div>
+
+                    <div class="definition">
+                        <span class="definition-term">You:</span> shall refer to you, a patient likely to be undergoing surgery in the foreseeable future, who is using the Platform and engaging the Services.
+                    </div>
+
+                    <div class="sub-clause">
+                        <span class="clause-number">2.2.</span> Clause, schedule and paragraph headings shall not affect the interpretation of this Agreement.
+                    </div>
+                    <div class="sub-clause">
+                        <span class="clause-number">2.3.</span> The schedule to this Agreement forms part of and is incorporated to this Agreement.
+                    </div>
+                    <div class="sub-clause">
+                        <span class="clause-number">2.4.</span> A reference to a <strong>person</strong> includes a natural person, a corporate body and an unincorporated body (whether or not having separate legal personality) and that person’s personal representatives, successors or permitted assigns.
+                    </div>
+                    <div class="sub-clause">
+                        <span class="clause-number">2.5.</span> A reference to a Party shall include that Party’s successors, permitted assigns and permitted transferees.
+                    </div>
+                    <div class="sub-clause">
+                        <span class="clause-number">2.6.</span> Unless the context otherwise requires, words in the singular shall include the plural and in the plural shall include the singular, and a reference to one gender shall include a reference to the other genders.
+                    </div>
+                    <div class="sub-clause">
+                        <span class="clause-number">2.7.</span> A reference to a statute, statutory provision or any subsidiary legislation made under a statute is to such statute, provision or subsidiary legislation as amended or re-enacted from time to time and, in the case of a statute, includes any subsidiary legislation made under that statute from time to time.
+                    </div>
+                    <div class="sub-clause">
+                        <span class="clause-number">2.8.</span> A reference to <strong>writing</strong> or <strong>written</strong> includes email and other forms of electronic communication, but shall not include facsimile transmission.
+                    </div>
+                    <div class="sub-clause">
+                        <span class="clause-number">2.9.</span> Where the words <strong>include(s)</strong>, <strong>including</strong> or <strong>in particular</strong> or any similar expression are used in this Agreement, they are deemed to have the words “without limitation” following them.
+                    </div>
+                    <div class="sub-clause">
+                        <span class="clause-number">2.10.</span> Any obligation on a Party not to do something includes an obligation not to allow that thing to be done.
+                    </div>
+                </div>
+
+                <div class="clause">
+                    <h2>3. Services</h2>
+                    <div class="sub-clause">
+                        <span class="clause-number">3.1.</span> The Anaesthetist shall provide you with “<strong>Service(s)</strong>”, which may include but are not limited to any or all of the following, whether in whole or in part:
+                        <ul>
+                            <li>conducting your pre-anaesthetic assessment;</li>
+                            <li>providing you with general information about anaesthesia on the Platform;</li>
+                            <li>providing you with a proposed anaesthetic plan; and</li>
+                            <li>any other incidental work in connection with preparing you to undergo anaesthesia prior to your surgery date.</li>
+                        </ul>
+                    </div>
+                    <div class="sub-clause">
+                        <span class="clause-number">3.2.</span> In consideration for the Services, you will pay a “<strong>Fee</strong>” as determined by the Anaesthetist and/or the Clinic, the details of which will be communicated to you.
+                    </div>
+                </div>
+
+                <div class="clause">
+                    <h2>4. Patient’s Warranties and Undertakings:</h2>
+                    <div class="sub-clause">
+                        <span class="clause-number">4.1.</span> You warrant and undertake:
+                        <ul>
+                            <li>That you are twenty-one (21) years old and above;</li>
+                            <li>That you are engaging the Services for legitimate means and that you will not misuse or abuse any drugs administered and/or prescribed by the Anaesthetist;</li>
+                            <li>That any information provided by you to the Anaesthetist is accurate, factual and honest, and that you will make full and frank disclosures to the Anaesthetist of any material information relevant to the provision of the Services; and</li>
+                            <li>To comply with all the terms and conditions of the Platform, the Companies’ policies, laws, and/or regulations as may be informed by the Company to you from time to time.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="clause">
+                    <h2>5. Waiver, Release and Discharge</h2>
+                    <div class="sub-clause">
+                        <span class="clause-number">5.1.</span> You agree and acknowledge that you are voluntarily choosing to engage the Services and expressly assume and accept all risks in relation thereto.
+                    </div>
+                    <div class="sub-clause">
+                        <span class="clause-number">5.2.</span> To the greatest extent permitted by law, you hereby waive, release and discharge the Anaesthetist from any and all claims, causes of action, demands, damages, costs or any other actions for any liability in any way whatsoever caused by or relating to the Service, howsoever caused.
+                    </div>
+                    <div class="sub-clause">
+                        <span class="clause-number">5.3.</span> For the avoidance of doubt, the Anaesthetist’s failure or delay to act on any infringement, non-compliance and/or breach of the Terms or to exercise in any respect any right provided in these Terms shall not be deemed a waiver of any of the Anaesthetist’s rights or remedy to which it is entitled.
+                    </div>
+                </div>
+
+                <div class="clause">
+                    <h2>6. Indemnity</h2>
+                    <div class="sub-clause">
+                        <span class="clause-number">6.1.</span> You agree to indemnify and hold harmless the Anaesthetist and any of its personnel, representatives, employees, officers and/or subcontractors from and against any and all loss, costs, damages, claims, demands, actions, proceedings, judgments, liabilities and expenses (including but not limited to all legal costs or attorney's fees on a full indemnity basis) which the Anaesthetist may incur or suffer in connection with or arising from:
+                        <ul>
+                            <li>False or inaccurate information provided by you to the Clinic, Anaesthetist, Services Providers and/or Company, which was relied on by the Anaesthetist in the provision of the Services;</li>
+                            <li>Your use of the Platform;</li>
+                            <li>The Anaesthetist’s provision of the Services to you;</li>
+                            <li>Any dispute you may have against the Company, the Company’s Service Providers other than the Anaesthetist, and/or the Clinic; and/or</li>
+                            <li>Your negligence, omission, act, conduct, behaviour or otherwise in the course of the Services of the Anaesthetist.</li>
+                        </ul>
+                    </div>
+                    <div class="sub-clause">
+                        <span class="clause-number">6.2.</span> Nothing in these Terms limits or excludes either party’s liability death or personal injury caused by negligence, or any other liability which cannot be limited or excluded by applicable law.
+                    </div>
+                    <div class="sub-clause">
+                        <span class="clause-number">6.3.</span> The Anaesthetist shall not be liable for any consequential, indirect or special losses suffered by you.
+                    </div>
+                </div>
+
+                <div class="clause">
+                    <h2>7. Breach of these Terms</h2>
+                    <div class="sub-clause">
+                        <span class="clause-number">7.1.</span> The Anaesthetist may in its sole discretion determine that a breach of these Terms has occurred by you. Where the Anaesthetist considers a breach of these Terms has occurred, the Anaesthetist reserves the right to take such action as it deems appropriate. Where the Anaesthetist determined that a breach is capable of remedy, you may be notified of the breach and given 7 days remedy or rectify it within the prescribed time, where time is of essence. A material breach of these Terms may result in the Anaesthetist taking any actions against you as it determines to be necessary.
+                    </div>
+                    <div class="sub-clause">
+                        <span class="clause-number">7.2.</span> For the avoidance of doubt, this clause is without prejudice to any other actions that the Company may take against you, including but not limited to the Company’s absolute discretion to ban you from the Platform.
+                    </div>
+                </div>
+
+                <div class="clause">
+                    <h2>8. Personal Data</h2>
+                    <div class="sub-clause">
+                        <span class="clause-number">8.1.</span> You represent and warrant that you have full authority to give such consent and authorisation as required under this clause 8.
+                    </div>
+                    <div class="sub-clause">
+                        <span class="clause-number">8.2.</span> You consent to the Anaesthetist accessing data your Personal Data, including but not limited to your contact information and/or your medical information, obtained from:
+                        <ul>
+                            <li>The Clinic, including any employee and/or authorised agents thereof;</li>
+                            <li>Publicly available health databases and/or records (i.e., the National Electronic Health Record Singapore);</li>
+                            <li>Your use of the Platform; and/or</li>
+                            <li>You.</li>
+                        </ul>
+                    </div>
+                    <div class="sub-clause">
+                        <span class="clause-number">8.3.</span> You acknowledge and agree to your contact information being shared by the Clinic with the Anaesthetist and will be used as needed to provide you with the Services.
+                    </div>
+                    <div class="sub-clause">
+                        <span class="clause-number">8.4.</span> You acknowledge and consent to the Anaesthetist to collecting, using, disclosing, processing, and/or transmitting your Personal Data for the purposes of providing the Services to you and any other such ancillary purposes connected thereto, including for the purposes of providing you with updates, notifications and marketing, advertising and promotional information, materials and/or documents relating to products, services or otherwise that the Company may have now or may create in the future.
+                    </div>
+                    <div class="sub-clause">
+                        <span class="clause-number">8.5.</span> If you wish to withdraw your consent to the collection, use, disclosure or processing of your Personal Data as set out above, or if you have any questions relating to your Personal Data, or if you would like to obtain access or make corrections to your Personal Data, please contact the Company’s data protection officer in writing at: admin@vanaesa.com. Please note that any access request may be subject to an administrative fee at the Company’s rates then in force to meet the costs in providing you with details of the information the Company holds about you.
+                    </div>
+                    <div class="sub-clause">
+                        <span class="clause-number">8.6.</span> In order for the Anaesthetist and Company to ensure the security of your personal information, you agree to inform the Anaesthetist and Company immediately if there has been a change of your mobile number or loss of mobile device. You also agree to safeguard your login credentials to the Platform, and that you will inform the Anaesthetist and Company immediately if your access credentials and/or device(s) from which you have access to the Platform becomes compromised in any way, or if you have any reason to suspect the same.
+                    </div>
+                </div>
+
+                <div class="clause">
+                    <h2>9. Disclaimers and exclusion of liability</h2>
+                    <div class="sub-clause">
+                        <span class="clause-number">9.1.</span> Any arrangement made between you and the Anaesthetist is at your own risk. You are deemed to have made an informed decision on any recommendations of the Anaesthetist based on inquiries you have made to them and effort you have taken to independently verify the Anaesthetist’s recommendations and advice.
+                    </div>
+                    <div class="sub-clause">
+                        <span class="clause-number">9.2.</span> You understand that you may receive medical advice by the Anaesthetist via remote consultations, such as via audio and video regardless to the location of yourself or the Anaesthetist. You understand the benefits and the limitations of remote consultations, such that it is unequal to face-to-face mode of treatment and that delays may incur due to possible cases of intermittent communication that may arise through no fault of the Anaesthetist or the Company. You acknowledge and accept such limitations of remote consultations and release the Anaesthetist from any claims you may have arising from such limitations.
+                    </div>
+                    <div class="sub-clause">
+                        <span class="clause-number">9.3.</span> To the greatest extent permitted by law, the Anaesthetist shall not be liable to you in contract, tort, including, without limitation, negligence or medical negligence in respect of any damage, loss, cost or expense of whatsoever nature suffered or incurred by you in the provision of the Service.
+                    </div>
+                    <div class="sub-clause">
+                        <span class="clause-number">9.4.</span> The Anaesthetist shall not be responsible for any problems you may face with the Platform. As soon as the Anaesthetist is informed of any issues of the Platform, the Anaesthetist may at its discretion attempt to remedy such issues as soon as practicable and to best extent possible, on a no admission of liability basis.
+                    </div>
+                </div>
+
+                <div class="clause">
+                    <h2>10. Events beyond the Anaesthetist’s control</h2>
+                    <div class="sub-clause">
+                        <span class="clause-number">10.1.</span> You accept and acknowledge that in your use and access of the Platform and the Service, there are events, situations and circumstances beyond the control of the Anaesthetist. To this end, the Anaesthetist shall not be liable for any claims, losses, expenses, damages and costs (including but not limited to direct, incidental, consequential, exemplary and indirect damages) related to such events including but not limited to the following:
+                        <ul>
+                            <li>the behaviour, actions and/or omissions of Service Providers other than the Anaesthetist; and/or</li>
+                            <li>a data breach due to a third-party’s actions, including where your Personal Data is compromised from such attack.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="clause">
+                    <h2>11. Termination</h2>
+                    <div class="sub-clause">
+                        <span class="clause-number">11.1.</span> The Anaesthetist may terminate the Services with immediate effect at any time if you:
+                        <ul>
+                            <li>commit any misconduct affecting the reputation of the Anaesthetist, Company, Platform and/or Service Providers other than the Anaesthetist;</li>
+                            <li>commit any serious or repeated breach or non-observance of any of the provisions of these Terms or refuses or neglects to comply with any reasonable and lawful directions of the Anaesthetist;</li>
+                            <li>the Anaesthetist suspect that you may be using the Services for illegitimate means and/or that you are at risk of abusing the drugs which may be prescribed as part of the Services;</li>
+                            <li>harass or threaten to harass the Anaesthetist or any other Patients of the Anaesthetist; and/or</li>
+                            <li>the Anaesthetist decides for any reason that s/he is unable to offer you the Services.</li>
+                        </ul>
+                    </div>
+                    <div class="sub-clause">
+                        <span class="clause-number">11.2.</span> You may terminate the Services with immediate effect at any time by providing notice to the Company and the Anaesthetist at <a href="mailto:admin@vanaesa.com"><strong>admin@vanaesa.com</strong></a>.
+                    </div>
+                </div>
+
+                <div class="clause">
+                    <h2>12. General</h2>
+                    <div class="sub-clause">
+                        <span class="clause-number">12.1.</span> <strong>Severability:</strong> Each of the clauses and sub-clauses of these Terms operates separately. If any court or relevant authority decides that any of them are invalid, illegal or incapable of being enforced by any rule or law, or public policy, the remaining clauses shall nevertheless remain in full force and effect. Where any clauses and sub-Clauses of these Terms is or becomes invalid, unenforceable or illegal but would be valid, enforceable or legal if some part of the clause were deleted or modified, the clause or part thereof shall apply with such deletions and modifications as may be necessary to give effect to make it valid, enforceable and legal.
+                    </div>
+                    <div class="sub-clause">
+                        <span class="clause-number">12.2.</span> <strong>Variation:</strong> The Anaesthetist reserves the right, at its sole and absolute discretion, to modify these Terms from time to time.
+                    </div>
+                    <div class="sub-clause">
+                        <span class="clause-number">12.3.</span> <strong>No Partnership:</strong> Nothing in these Terms shall constitute or be deemed to constitute a partnership, joint venture or employment relationship between you and the Anaesthetist and neither of them shall have any authority to bind the other in any way.
+                    </div>
+                    <div class="sub-clause">
+                        <span class="clause-number">12.4.</span> <strong>Transfer:</strong> The Anaesthetist reserves the right to assign, transfer or novate or otherwise deal with any of its rights or obligations under these Terms to any other third party.
+                    </div>
+                    <div class="sub-clause">
+                        <span class="clause-number">12.5.</span> <strong>Third Party Rights:</strong> A person who is not a party to these Terms shall not have any rights under or in connection with it by virtue of the Contracts (Rights of Third Parties) Act 2001.
+                    </div>
+                    <div class="sub-clause">
+                        <span class="clause-number">12.6.</span> <strong>Third Party Softwares:</strong> As part of the Services which are carried out on the Platform, you may be exposed to information, content, tools, or services provided by third parties. The Anaesthetist does not control, verify, endorse, or assume responsibility for the accuracy, reliability, or suitability of information from such third parties. To the fullest extent permitted by law, the Anaesthetist disclaims all liability for any loss, damage, or injury, whether direct, indirect, incidental, or consequential, arising from or in connection with your use of, or reliance upon, any third-party content, services, or information accessible through this website.
+                    </div>
+                    <div class="sub-clause">
+                        <span class="clause-number">12.7.</span> <strong>Governing Law and Jurisdiction:</strong> Disputes shall be governed by and construed in accordance with the law of Singapore. Any Dispute shall be subject to the exclusive jurisdiction of the courts of Singapore.
+                    </div>
+                </div>
+            </div>
+                <script src="https://unpkg.com/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+                <script src="/web/static/lib/jquery/jquery.js"></script>
+               
+            </t>
+        </template>
+
+
+</data>
+</odoo>

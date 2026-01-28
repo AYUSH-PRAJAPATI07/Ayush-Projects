@@ -1,0 +1,681 @@
+<odoo>
+    <data>
+
+        <!-- Associate menus -->
+        <record id="action_associate_video_status" model="ir.actions.act_window">
+            <field name="name">Video Call Status</field>
+            <field name="res_model">patient.case</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[]</field>
+            <field name="views" eval="[(ref('p7_patient_management.view_patient_case_associate_status_tree'), 'tree'), (ref('p7_patient_management.view_patient_case_form'), 'form')]"/>
+        </record>
+
+        <record id="action_associate_bookings_for_calling" model="ir.actions.act_window">
+            <field name="name">Bookings for Calling</field>
+            <field name="res_model">contact.attempt</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">
+                 [('associate_id','=',False),
+                 ('video_call_assign_status','=','to_assign')]
+            </field>
+            <field name="view_id" ref="p7_patient_management.view_contact_attempt_bookings_tree"/>
+            <field name="views" eval="[
+                (ref('p7_patient_management.view_contact_attempt_bookings_tree'), 'tree'),
+                (ref('p7_patient_management.view_contact_attempt_form'), 'form')
+            ]"/>
+            <field name="context">{'form_view_ref': 'p7_patient_management.view_contact_attempt_form'}</field>
+        </record>
+
+        <record id="action_associate_my_bookings" model="ir.actions.act_window">
+            <field name="name">My Bookings</field>
+            <field name="res_model">contact.attempt</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('associate_id','=',uid),
+                ('video_call_assign_status','in',['assigned','in_progress'])]
+            </field>
+
+            <!-- pin the correct tree view -->
+            <field name="view_id" ref="p7_patient_management.view_contact_attempt_my_tree"/>
+
+            <field name="views" eval="[
+                (ref('p7_patient_management.view_contact_attempt_my_tree'), 'tree'),
+                (ref('p7_patient_management.view_contact_attempt_my_booking_form'), 'form')
+            ]"/>
+            <field name="context">
+                {
+                'tree_view_ref': 'p7_patient_management.view_contact_attempt_my_tree',
+                'form_view_ref': 'p7_patient_management.view_contact_attempt_my_booking_form'
+                }
+            </field>
+        </record>
+
+
+        <!-- reference template -->
+        <record id="view_survey_survey_reference_tree_custom" model="ir.ui.view">
+            <field name="name">survey.survey.reference.tree.custom</field>
+            <field name="model">survey.survey</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="title" string="Survey Title"/>
+                    <field name="state" widget="badge" decoration-info="state == 'draft'" decoration-success="state == 'release'"/>
+                    <field name="version"/>
+                    <field name="released_date"/>
+                    <button string="Use this Template"
+                        type="object" name="create_personel_template" class="btn btn-primary"
+                        invisible="state != 'release'"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="survey_user_input_view_kanban_custom" model="ir.ui.view">
+            <field name="name">survey.user_input.view.kanban.custom</field>
+            <field name="model">survey.user_input</field>
+            <field name="arch" type="xml">
+                <kanban create="false" group_create="false">
+                    <field name="survey_id"/>
+                    <field name="create_date"/>
+                    <field name="partner_id"/>
+                    <field name="email"/>
+                    <field name="state"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div t-attf-class="oe_kanban_global_click">
+                                <div class="o_kanban_record_top">
+                                    <div class="o_kanban_record_headings oe_kanban_top_left">
+                                        <strong class="o_kanban_record_title"><t t-esc="record.survey_id.value"/></strong>
+                                    </div>
+                                    <div class="oe_kanban_bottom_right mr4">
+                                        <button name="open_survey" string="Open" type="object" class="btn btn-primary" style="font-size: 10px; padding: 2px 4px;" />
+                                    </div>
+                                </div>
+                                <div class="o_kanban_record_bottom">
+                                    <div class="oe_kanban_bottom_left">
+                                        <field name="create_date"/>
+                                    </div>
+                                    <div class="oe_kanban_bottom_right mr4">
+                                        <field name="state" widget="label_selection" options="{'classes': {'new': 'default', 'done': 'success', 'in_progress':'warning'}}"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <!-- personal template -->
+        <record id="view_survey_survey_personal_tree_custom" model="ir.ui.view">
+            <field name="name">survey.survey.personal.tree.custom</field>
+            <field name="model">survey.survey</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="title" string="Survey Title"/>
+                    <field name="state" widget="badge" decoration-info="state == 'draft'" decoration-success="state == 'release'"/>
+                    <field name="version"/>
+                    <field name="released_date"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_medic_history_reference_custom_admin" model="ir.actions.act_window">
+            <field name="name">Reference Templates</field>
+            <field name="res_model">survey.survey</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('type_of_survey', '=', 'medical_history'),('template_type', '=', 'reference')]</field>
+            <field name="context">{'create':True, 
+                                    'default_type_of_survey': 'medical_history', 
+                                    'default_template_type': 'reference', 
+                                    'default_questions_layout': 'page_per_question',
+                                    'default_progression_mode':'percent',
+                                    'default_users_login_required': True, 
+                                    'default_is_attempts_limited': True,
+                                    'default_is_surgery_ques_enabled': False,
+                                    'default_is_medic_ques_enabled': False,
+                                    'default_access_mode':'public',
+                                    'default_is_time_limited': False,
+                                    'default_scoring_type': 'no_scoring',
+                                    'default_questions_selection':'all'}
+            </field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                                  (0, 0, {'view_mode': 'tree', 'view_id': ref('p7_patient_management.view_survey_survey_reference_tree_custom')}),
+                                  (0, 0, {'view_mode': 'form'})]"/>
+        </record>
+
+        <record id="action_medic_history_reference_custom_doctor" model="ir.actions.act_window">
+            <field name="name">Reference Templates</field>
+            <field name="res_model">survey.survey</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('type_of_survey', '=', 'medical_history'),('template_type', '=', 'reference'),('state', '=', 'release')]</field>
+            <field name="context">{'create':False, 
+                                    'default_type_of_survey': 'medical_history', 
+                                    'default_template_type': 'reference', 
+                                    'default_questions_layout': 'page_per_question',
+                                    'default_progression_mode':'percent',
+                                    'default_users_login_required': True, 
+                                    'default_is_attempts_limited': True,
+                                    'default_is_surgery_ques_enabled': False,
+                                    'default_is_medic_ques_enabled': False,
+                                    'default_access_mode':'public',
+                                    'default_is_time_limited': False,
+                                    'default_scoring_type': 'no_scoring',
+                                    'default_questions_selection':'all'}
+            </field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                                  (0, 0, {'view_mode': 'tree', 'view_id': ref('p7_patient_management.view_survey_survey_reference_tree_custom')}),
+                                  (0, 0, {'view_mode': 'form'})]"/>
+        </record>
+
+        <record id="action_medic_history_template_custom" model="ir.actions.act_window">
+            <field name="name">My Templates</field>
+            <field name="res_model">survey.survey</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('type_of_survey', '=', 'medical_history'),('template_type', '=', 'personal'),('user_id', '=', uid)]</field>
+            <field name="context">{'create':True,
+                                    'default_type_of_survey': 'medical_history', 
+                                    'default_template_type': 'personal',
+                                    'default_questions_layout': 'page_per_question',
+                                    'default_progression_mode':'percent',
+                                    'default_users_login_required': True, 
+                                    'default_is_attempts_limited': True,
+                                    'default_is_surgery_ques_enabled': False,
+                                    'default_is_medic_ques_enabled': False,
+                                    'default_access_mode':'public',
+                                    'default_is_time_limited': False,
+                                    'default_scoring_type': 'no_scoring',
+                                    'default_questions_selection':'all'}
+            </field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                                  (0, 0, {'view_mode': 'tree', 'view_id': ref('p7_patient_management.view_survey_survey_personal_tree_custom')}),
+                                  (0, 0, {'view_mode': 'form'})]"/>
+        </record>
+
+        <record id="action_feedback_reference_custom_admin" model="ir.actions.act_window">
+            <field name="name">Feedback Templates</field>
+            <field name="res_model">survey.survey</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('type_of_survey', '=', 'feedback'),('template_type', '=', 'reference')]</field>
+            <field name="context">{'create':True, 
+                                    'default_type_of_survey': 'feedback', 
+                                    'default_template_type': 'reference',
+                                    'default_questions_layout': 'page_per_question',
+                                    'default_progression_mode':'percent',
+                                    'default_users_login_required': True, 
+                                    'default_is_attempts_limited': True,
+                                    'default_is_surgery_ques_enabled': False,
+                                    'default_is_medic_ques_enabled': False,
+                                    'default_access_mode':'public',
+                                    'default_is_time_limited': False,
+                                    'default_scoring_type': 'no_scoring',
+                                    'default_questions_selection':'all'}
+            </field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                                  (0, 0, {'view_mode': 'tree', 'view_id': ref('p7_patient_management.view_survey_survey_reference_tree_custom')}),
+                                  (0, 0, {'view_mode': 'form'})]"/>
+        </record>
+
+        <record id="action_feedback_reference_custom_doctor" model="ir.actions.act_window">
+            <field name="name">Feedback Templates</field>
+            <field name="res_model">survey.survey</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('type_of_survey', '=', 'feedback'),('template_type', '=', 'reference'),('state', '=', 'release')]</field>
+            <field name="context">{'create':False,
+                                    'default_type_of_survey': 'feedback', 
+                                    'default_template_type': 'reference',
+                                    'default_questions_layout': 'page_per_question',
+                                    'default_progression_mode':'percent',
+                                    'default_users_login_required': True, 
+                                    'default_is_attempts_limited': True,
+                                    'default_is_surgery_ques_enabled': False,
+                                    'default_is_medic_ques_enabled': False,
+                                    'default_access_mode':'public',
+                                    'default_is_time_limited': False,
+                                    'default_scoring_type': 'no_scoring',
+                                    'default_questions_selection':'all'}
+            </field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                                  (0, 0, {'view_mode': 'tree', 'view_id': ref('p7_patient_management.view_survey_survey_reference_tree_custom')}),
+                                  (0, 0, {'view_mode': 'form'})]"/>
+        </record>
+
+        <record id="action_feedback_template_custom" model="ir.actions.act_window">
+            <field name="name">My Templates</field>
+            <field name="res_model">survey.survey</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('type_of_survey', '=', 'feedback'),('template_type', '=', 'personal'),('user_id', '=', uid)]</field>
+            <field name="context">{'create':True, 
+                                    'default_type_of_survey': 'feedback', 
+                                    'default_template_type': 'personal',
+                                    'default_questions_layout': 'page_per_question',
+                                    'default_progression_mode':'percent',
+                                    'default_users_login_required': True, 
+                                    'default_is_attempts_limited': True,
+                                    'default_is_surgery_ques_enabled': False,
+                                    'default_is_medic_ques_enabled': False,
+                                    'default_access_mode':'public',
+                                    'default_is_time_limited': False,
+                                    'default_scoring_type': 'no_scoring',
+                                    'default_questions_selection':'all'}
+            </field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                                  (0, 0, {'view_mode': 'tree', 'view_id': ref('p7_patient_management.view_survey_survey_personal_tree_custom')}),
+                                  (0, 0, {'view_mode': 'form'})]"/>
+        </record>
+
+        <record id="action_all_partner_view_patient_custom" model="ir.actions.act_window">
+            <field name="name">All Patients</field>
+            <field name="res_model">res.partner</field>
+            <field name="view_mode">tree,form,pivot</field>
+            <field name="domain">[('user_type', '=', 'patient')]</field>
+            <field name="context">{'create': True, 'default_user_type': 'patient'}</field>
+        </record>
+
+        <record id="action_all_partner_view_doctor_custom" model="ir.actions.act_window">
+            <field name="name">All Doctors</field>
+            <field name="res_model">res.partner</field>
+            <field name="view_mode">tree,form,pivot</field>
+            <field name="domain">[('user_type', '=', 'doctor')]</field>
+            <field name="context">{'create': True, 'default_user_type': 'doctor'}</field>
+        </record>
+
+        <record id="action_all_partner_view_admin_custom" model="ir.actions.act_window">
+            <field name="name">All Administrators</field>
+            <field name="res_model">res.partner</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('user_type', '=', 'admin')]</field>
+            <field name="context">{'create': True, 'default_user_type': 'admin'}</field>
+        </record>
+
+        <record id="action_all_partner_view_associate_custom" model="ir.actions.act_window">
+            <field name="name">All Associates</field>
+            <field name="res_model">res.partner</field>
+            <field name="view_mode">tree,form,pivot</field>
+            <field name="domain">[('user_type', '=', 'associate')]</field>
+            <field name="context">{'create': True, 'default_user_type': 'associate'}</field>
+        </record>
+
+        <record id="action_medic_submission_custom" model="ir.actions.act_window">
+            <field name="name">Medic History Submission</field>
+            <field name="res_model">survey.user_input</field>
+            <field name="view_mode">kanban</field>
+            <field name="context">{'create':False}</field>
+            <field name="domain">[('partner_id.user_id', '=', uid)]</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                                  (0, 0, {'view_mode': 'kanban', 'view_id': ref('p7_patient_management.survey_user_input_view_kanban_custom')})]"/>
+        </record>
+
+        <record id="action_medic_history_collection" model="ir.actions.act_window">
+            <field name="name">Pre-Anaesthetic Questionnaire</field>
+            <field name="res_model">survey.user_input</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('partner_id.user_type', '=', 'patient'),('survey_id.type_of_survey', '=', 'medical_history')]</field>
+            <field name="context">{'create': False}</field>
+        </record>
+
+        <record id="action_medic_feedback_collection" model="ir.actions.act_window">
+            <field name="name">Post-Anaesthetic Feedback</field>
+            <field name="res_model">survey.user_input</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('partner_id.user_type', '=', 'patient'),('survey_id.type_of_survey', '=', 'feedback')]</field>
+            <field name="context">{'create': False}</field>
+        </record>
+
+        <record id="action_mail_log_custom" model="ir.actions.act_window">
+            <field name="name">Email Logs</field>
+            <field name="res_model">mail.mail</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('is_custom_log', '=', True)]</field>
+            <field name="context">{'create': False, 'edit': False, 'copy': False, 'delete': False}</field>
+        </record>
+
+        <record id="action_sms_log_custom" model="ir.actions.act_window">
+            <field name="name">SMS Logs</field>
+            <field name="res_model">sms.sms</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('is_custom_log', '=', True)]</field>
+            <field name="context">{'create': False, 'edit': False, 'copy': False, 'delete': False}</field>
+        </record>
+
+        <record id="action_doctor_profile_dash" model="ir.actions.server">
+            <field name="name">My Profile</field>
+            <field name="model_id" ref="model_res_partner"/>
+            <field name="binding_model_id" ref="base.model_res_partner"/>
+            <field name="state">code</field>
+            <field name="code">
+                action = model.get_doctor_profile_action()
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_patient_management">
+            <field name="name">Patient Management</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">patient.management</field>
+            <field name="view_mode">tree,form,kanban,pivot,graph</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                Patient Management
+                </p><p>
+                Patient Management
+                </p>
+            </field>
+        </record>
+
+        <record id="ir_actions_dashboard_custom" model="ir.actions.client">
+            <field name="name">Dashboard</field>
+            <field name="tag">action_spreadsheet_dashboard</field>
+        </record>
+
+        <record id="action_patient_dashboard" model="ir.actions.act_url">
+            <field name="name">Patient Dashboard</field>
+            <field name="type">ir.actions.act_url</field>
+            <field name="url">/patient-dashboard</field>
+            <field name="target">self</field>
+        </record>
+    
+        <menuitem id="menu_patient_management"
+                name="VANAESA"
+                action="action_patient_management"
+                sequence="20"/>
+
+            <menuitem name="Dashboard"
+                id="p7_dashboard_menu"
+                action="p7_patient_management.ir_actions_dashboard_custom"
+                groups="p7_patient_management.group_user_admin,p7_patient_management.group_user_doctor,p7_patient_management.group_user_doctor_premium"
+                parent="menu_patient_management"
+                sequence="10"/>
+
+            <menuitem name="Dashboard"
+                id="p7_dashboard_menu_patient"
+                action="p7_patient_management.action_patient_dashboard"
+                groups="p7_patient_management.group_user_patient"
+                parent="menu_patient_management"
+                sequence="20"/>
+
+            <menuitem name="Administrators"
+                id="p7_admin_menu"
+                groups="p7_patient_management.group_user_admin"
+                parent="menu_patient_management"
+                sequence="30"/>
+
+                <menuitem name="All Administrators"
+                    id="p7_all_admin_menu"
+                    action="p7_patient_management.action_all_partner_view_admin_custom"
+                    parent="p7_admin_menu"
+                    sequence="10"/>
+
+            <menuitem name="Associate"
+                id="p7_associate_menu"
+                parent="menu_patient_management"
+                groups="p7_patient_management.group_user_admin,p7_patient_management.group_user_associate"
+                sequence="35"/>
+
+                <menuitem name="All Associates"
+                        id="p7_all_associate_menu"
+                        action="p7_patient_management.action_all_partner_view_associate_custom"
+                        groups="p7_patient_management.group_user_admin"
+                        parent="p7_associate_menu"
+                        sequence="10"/>
+
+                <menuitem name="Video Call Status"
+                    id="p7_associate_video_status_menu"
+                    action="p7_patient_management.action_associate_video_status"
+                    groups="p7_patient_management.group_user_admin"
+                    parent="p7_associate_menu"
+                    sequence="20"/>
+
+                <menuitem name="Bookings for Calling"
+                    id="p7_associate_bookings_calling_menu"
+                    action="p7_patient_management.action_associate_bookings_for_calling"
+                    groups="p7_patient_management.group_user_associate,p7_patient_management.group_user_admin"
+                    parent="p7_associate_menu"
+                    sequence="30"/>
+
+                <menuitem name="My Bookings"
+                    id="p7_associate_my_bookings_menu"
+                    action="p7_patient_management.action_associate_my_bookings"
+                    groups="p7_patient_management.group_user_associate"
+                    parent="p7_associate_menu"
+                    sequence="40"/>
+
+            <menuitem name="Doctors"
+                id="p7_doctor_menu"
+                groups="p7_patient_management.group_user_admin"
+                parent="menu_patient_management"
+                sequence="40"/>
+
+                <menuitem name="All Doctors"
+                    id="p7_all_doctor_menu"
+                    action="p7_patient_management.action_all_partner_view_doctor_custom"
+                    parent="p7_doctor_menu"
+                    sequence="10"/>
+            
+            <menuitem name="Patients"
+                id="p7_patient_menu"
+                groups="p7_patient_management.group_user_admin,p7_patient_management.group_user_doctor,p7_patient_management.group_user_doctor_premium"
+                parent="menu_patient_management"
+                sequence="50"/>
+
+                <menuitem name="Bookings"
+                    id="p7_patient_case_menu"
+                    action="p7_patient_management.action_patient_case"
+                    parent="p7_patient_menu"
+                    sequence="10"/>
+
+                <menuitem name="All Patients"
+                    id="p7_all_patient_menu"
+                    action="p7_patient_management.action_all_partner_view_patient_custom"
+                    parent="p7_patient_menu"
+                    sequence="20"/>
+
+                <menuitem name="Pre-Anaesthetic Questionnaire"
+                    id="p7_patient_history_menu"
+                    action="action_medic_history_collection"
+                    groups="p7_patient_management.group_user_admin"
+                    parent="p7_patient_menu"
+                    sequence="30"/>
+
+                <menuitem name="Post-Anaesthetic Feedback"
+                    id="p7_patient_feedback_menu"
+                    action="action_medic_feedback_collection"
+                    groups="p7_patient_management.group_user_admin"
+                    parent="p7_patient_menu"
+                    sequence="40"/>
+
+            <menuitem name="Pre-Anaesthetic Questionnaire"
+                id="p7_medical_history_menu"
+                groups="p7_patient_management.group_user_admin,p7_patient_management.group_user_doctor,p7_patient_management.group_user_doctor_premium"
+                parent="menu_patient_management"
+                sequence="60"/>
+
+                <menuitem name="Reference Templates"
+                    id="p7_medical_history_reference_menu_admin"
+                    action="action_medic_history_reference_custom_admin"
+                    groups="p7_patient_management.group_user_admin"
+                    parent="p7_medical_history_menu"
+                    sequence="10"/>
+
+                <menuitem name="Reference Templates"
+                    id="p7_medical_history_reference_menu_doctor"
+                    action="action_medic_history_reference_custom_doctor"
+                    groups="p7_patient_management.group_user_doctor,p7_patient_management.group_user_doctor_premium"
+                    parent="p7_medical_history_menu"
+                    sequence="20"/>
+
+                <menuitem name="My Templates"
+                    id="p7_medical_history_my_menu"
+                    action="action_medic_history_template_custom"
+                    groups="p7_patient_management.group_user_doctor,p7_patient_management.group_user_doctor_premium"
+                    parent="p7_medical_history_menu"
+                    sequence="30"/>
+
+            <menuitem name="Post-Anaesthetic Feedback"
+                id="p7_medical_feedback_survey_menu"
+                groups="p7_patient_management.group_user_admin,p7_patient_management.group_user_doctor,p7_patient_management.group_user_doctor_premium"
+                parent="menu_patient_management"
+                sequence="70"/>
+
+                <menuitem name="Reference Templates"
+                    id="p7_medical_feedback_reference_menu_admin"
+                    action="action_feedback_reference_custom_admin"
+                    groups="p7_patient_management.group_user_admin"
+                    parent="p7_medical_feedback_survey_menu"
+                    sequence="10"/>
+
+                <menuitem name="Reference Templates"
+                    id="p7_medical_feedback_reference_menu_doctor"
+                    action="action_feedback_reference_custom_doctor"
+                    groups="p7_patient_management.group_user_doctor,p7_patient_management.group_user_doctor_premium"
+                    parent="p7_medical_feedback_survey_menu"
+                    sequence="20"/>
+
+                <menuitem name="My Templates"
+                    id="p7_medical_feedback_my_menu_own"
+                    action="action_feedback_template_custom"
+                    groups="p7_patient_management.group_user_doctor,p7_patient_management.group_user_doctor_premium"
+                    parent="p7_medical_feedback_survey_menu"
+                    sequence="30"/>
+
+            <menuitem name="Information Guides"
+                id="p7_information_guide_menu"
+                groups="p7_patient_management.group_user_admin,p7_patient_management.group_user_doctor_premium"
+                parent="menu_patient_management"
+                sequence="80"/>
+
+                <menuitem name="Reference Guides"
+                    id="p7_information_reference_menu_admin"
+                    action="action_information_guides_reference"
+                    groups="p7_patient_management.group_user_admin"
+                    parent="p7_information_guide_menu"
+                    sequence="10"/>
+
+                <menuitem name="Reference Guides"
+                    id="p7_information_reference_menu_doctor"
+                    action="action_information_guides_reference_doctor"
+                    groups="p7_patient_management.group_user_doctor,p7_patient_management.group_user_doctor_premium"
+                    parent="p7_information_guide_menu"
+                    sequence="20"/>
+
+                <menuitem name="All Doctor Guides"
+                    id="p7_information_all_menu"
+                    action="action_information_guides_all_doctor"
+                    groups="p7_patient_management.group_user_admin"
+                    parent="p7_information_guide_menu"
+                    sequence="30"/>
+
+                <menuitem name="My Guides"
+                    id="p7_information_my_menu"
+                    action="action_information_guides_personel"
+                    groups="p7_patient_management.group_user_doctor_premium"
+                    parent="p7_information_guide_menu"
+                    sequence="40"/>
+
+            <menuitem name="Chats"
+                id="p7_chat_menu"
+                groups="p7_patient_management.group_user_admin,p7_patient_management.group_user_doctor_premium"
+                parent="menu_patient_management"
+                sequence="90"/>
+
+                <menuitem name="Inbox"
+                    id="p7_inbox_menu"
+                    action="mail.action_discuss"
+                    parent="p7_chat_menu"
+                    sequence="10"/>
+            
+            <menuitem name="Billing"
+                id="p7_billing_menu"
+                action="action_patient_management"
+                groups="p7_patient_management.group_user_doctor,p7_patient_management.group_user_admin,p7_patient_management.group_user_doctor_premium"
+                parent="menu_patient_management"
+                sequence="100"/>
+
+            <menuitem name="Configuration"
+                id="p7_config_menu"
+                groups="p7_patient_management.group_user_doctor,p7_patient_management.group_user_admin,p7_patient_management.group_user_doctor_premium"
+                parent="menu_patient_management"
+                sequence="110"/>
+
+                <menuitem name="Medication Database"
+                    id="p7_all_medication_menu"
+                    action="p7_patient_management.action_medication_detail"
+                    groups="p7_patient_management.group_user_admin"
+                    parent="p7_config_menu"
+                    sequence="10"/>
+                
+                <menuitem name="Medication Database Update"
+                    id="p7_all_medication_update_menu"
+                    action="p7_patient_management.action_medication_update_detail"
+                    groups="p7_patient_management.group_user_admin"
+                    parent="p7_config_menu"
+                    sequence="20"/>
+
+                <menuitem name="Billing"
+                    id="p7_billing_menu"
+                    action="action_patient_management"
+                    groups="p7_patient_management.group_user_doctor,p7_patient_management.group_user_admin,p7_patient_management.group_user_doctor_premium"
+                    parent="p7_config_menu"
+                    sequence="30"/>
+
+                <menuitem name="My Profile"
+                    id="p7_profile_menu"
+                    action="action_doctor_profile_dash"
+                    groups="p7_patient_management.group_user_doctor,p7_patient_management.group_user_doctor_premium"
+                    parent="p7_config_menu"
+                    sequence="40"/>
+
+                <menuitem name="Setup Operation Locations"
+                    id="p7_location_menu_admin"
+                    action="action_location_details"
+                    groups="p7_patient_management.group_user_admin"
+                    parent="p7_config_menu"
+                    sequence="50"/>
+
+                <menuitem name="Setup Anaesthesia Options"
+                    id="p7_anaesthesia_menu"
+                    action="action_anaesthesia_details"
+                    groups="p7_patient_management.group_user_admin,p7_patient_management.group_user_doctor,p7_patient_management.group_user_doctor_premium"
+                    parent="p7_config_menu"
+                    sequence="60"/>
+                
+                <menuitem name="Setup Reminders"
+                    id="p7_reminder_menu"
+                    action="action_reminder_details"
+                    groups="p7_patient_management.group_user_admin,p7_patient_management.group_user_doctor,p7_patient_management.group_user_doctor_premium"
+                    parent="p7_config_menu"
+                    sequence="70"/>
+
+                <menuitem name="Setup Additional Info"
+                    id="p7_additional_info_menu"
+                    action="action_additional_info"
+                    groups="p7_patient_management.group_user_admin,p7_patient_management.group_user_doctor,p7_patient_management.group_user_doctor_premium"
+                    parent="p7_config_menu"
+                    sequence="75"/>
+
+                <menuitem name="Setup Disposition Locations"
+                    id="p7_dislocation_menu"
+                    action="action_dislocation_details"
+                    groups="p7_patient_management.group_user_admin,p7_patient_management.group_user_doctor,p7_patient_management.group_user_doctor_premium"
+                    parent="p7_config_menu"
+                    sequence="80"/>
+
+                <menuitem name="FAQ Setup"
+                    id="p7_faq_menu"
+                    action="p7_patient_management.action_verification_faq_detail"
+                    groups="p7_patient_management.group_user_admin"
+                    parent="p7_config_menu"
+                    sequence="90"/>
+
+                <menuitem name="Email Logs"
+                    id="p7_email_log"
+                    action="p7_patient_management.action_mail_log_custom"
+                    groups="p7_patient_management.group_user_admin"
+                    parent="p7_config_menu"
+                    sequence="100"/>
+                
+                <menuitem name="SMS Logs"
+                    id="p7_sms_log"
+                    action="p7_patient_management.action_sms_log_custom"
+                    groups="p7_patient_management.group_user_admin"
+                    parent="p7_config_menu"
+                    sequence="110"/>
+
+    </data>
+</odoo>

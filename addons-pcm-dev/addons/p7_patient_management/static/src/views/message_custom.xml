@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<templates xml:space="preserve">
+    <t t-inherit="mail.Message" t-inherit-mode="extension">
+        <xpath expr="//span[@class='o-mail-Message-author']/strong[@class='me-1']/t[@t-if='message.author']" position="replace">
+            <span t-if="message.author" class="custom-author">
+                <t t-if="message.author.user_type"> <t t-esc="message.author.user_type"/> - </t>
+                <t t-esc="message.author.name"/>
+            </span>
+        </xpath>
+
+        <xpath expr="//span[@class='o-mail-Message-author']/strong[@class='me-1']/t[@t-else='']" position="replace">
+            <span t-else="" class="custom-email">
+                <t t-if="message.author and message.author.user_type"> <t t-esc="message.author.user_type"/> - </t>
+                <t t-esc="message.email_from"/>
+            </span>
+        </xpath>
+    </t>
+</templates>

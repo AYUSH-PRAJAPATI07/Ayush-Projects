@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_survey_confirm_popup_form" model="ir.ui.view">
+        <field name="name">survey.confirm.popup.form</field>
+        <field name="model">survey.confirm.popup</field>
+        <field name="arch" type="xml">
+            <form string="Confirmation">
+                <div class="oe_structure" style="padding: 10px;">
+                    <p style="white-space: normal; width: 100%; text-align: justify;">
+                        Teleconsult Mode will be activated for this patient. Additional charges will apply.
+                        Please confirm this action.
+                    </p>
+                </div>
+                <footer>
+                    <button name="confirm_action" string="Yes" type="object" class="btn-primary" data-hotkey="q"/>
+                    <button name="cancel_action" string="No" type="object" class="btn-secondary" data-hotkey="x"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_survey_confirm_popup" model="ir.actions.act_window">
+        <field name="name">Confirmation</field>
+        <field name="res_model">survey.confirm.popup</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_survey_confirm_popup_form"/>
+        <field name="target">new</field>
+    </record>
+
+</odoo>

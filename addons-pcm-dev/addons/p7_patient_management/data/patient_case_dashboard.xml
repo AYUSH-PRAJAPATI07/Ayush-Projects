@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="spreadsheet_dashboard_group_p7_patient_management" model="spreadsheet.dashboard.group">
+        <field name="name">Patient Cases</field>
+        <field name="sequence">900</field>
+    </record>
+
+    <record id="spreadsheet_dashboard_p7_patient_management_admin" model="spreadsheet.dashboard">
+        <field name="name">Patient Cases</field>
+        <field name="spreadsheet_binary_data" type="base64" file="p7_patient_management/data/files/patient_case_admin.json"/>
+        <field name="dashboard_group_id" ref="p7_patient_management.spreadsheet_dashboard_group_p7_patient_management"/>
+        <field name="group_ids" eval="[Command.link(ref('p7_patient_management.group_user_admin'))]"/>
+        <field name="sequence">100</field>
+    </record>
+
+    <record id="spreadsheet_dashboard_p7_patient_management_doctor" model="spreadsheet.dashboard">
+        <field name="name">Patient Cases</field>
+        <field name="spreadsheet_binary_data" type="base64" file="p7_patient_management/data/files/patient_case_doctor.json"/>
+        <field name="dashboard_group_id" ref="p7_patient_management.spreadsheet_dashboard_group_p7_patient_management"/>
+        <field name="group_ids" eval="[Command.link(ref('p7_patient_management.group_user_doctor'))]"/>
+        <field name="sequence">200</field>
+    </record>
+</odoo>

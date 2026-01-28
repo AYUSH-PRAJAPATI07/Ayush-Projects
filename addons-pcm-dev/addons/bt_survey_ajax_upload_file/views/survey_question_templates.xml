@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="question_upload_file" name="File Upload">
+        <div class="form-group col-sm mt16">
+            <p t-if="show_delete!='false'"><span class="custom-label"><strong></strong> </span>Note: Total file size allowed <t t-esc="max_file_size and max_file_size or 10"/>MB max</p>
+            <div class="form-group survey-upload-files">
+                <input type="hidden"
+                    class="form-control o_survey_question_text_box bg-transparent text-dark rounded-0 p-0"
+                    t-att-name="question.id"
+                    t-att-value="answer_lines[0].value_file if answer_lines else None"
+                    t-att-data-question-type="question.question_type"/>
+                <div class="input-file" t-att-data-name="question.id" t-att-res-model="res_model" t-att-data-res-id="res_id" t-att-show-delete="show_delete" t-att-show-download="show_download" t-att-max-file-size="max_file_size" t-att-multi-file="allow_multi_file"/>
+            </div>
+        </div>
+    </template>
+    <template id="survey_question_upload_file" inherit_id="survey.question_container">
+        <xpath expr="//div[hasclass('text-muted', 'oe_no_empty')]" position="after">
+            <t t-if="question.question_type == 'file'">
+                <t t-call="bt_survey_ajax_upload_file.question_upload_file">
+                    <t t-set="res_model" t-value="'survey.user_input.line'"/>
+                    <t t-set="res_id" t-value="'%s_%s_%s' % (survey.id, answer.id, question.id)"/>
+                    <t t-set="max_file_size" t-value="question.max_file_size"/>
+                    <t t-set="allow_multi_file" t-value="question.allow_multi_file and 'true' or 'false'"/>
+                    <t t-set="show_delete" t-value="'true'"/>
+                    <t t-set="show_download" t-value="'false'"/>
+                </t>
+            </t>
+        </xpath>
+    </template>
+
+    <template id="survey_print_upload_file" inherit_id="survey.survey_page_print">
+        <xpath expr="//div[hasclass('js_question-wrapper')]" position="after">
+            <t t-if="question.question_type == 'file'">
+                <t t-call="bt_survey_ajax_upload_file.question_upload_file">
+                    <t t-set="file_input_name" t-value="question.id"/>
+                    <t t-set="res_model" t-value="'survey.user_input.line'"/>
+                    <t t-if="answer" t-set="res_id" t-value="'%s_%s_%s' % (survey.id, answer.id, question.id)"/>
+                    <t t-set="max_file_size" t-value="question.max_file_size"/>
+                    <t t-set="allow_multi_file" t-value="question.allow_multi_file and 'true' or 'false'"/>
+                    <t t-set="show_delete" t-value="'false'"/>
+                    <t t-set="show_download" t-value="'false'"/>
+                </t>
+            </t>
+        </xpath>
+    </template>
+</odoo>

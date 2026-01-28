@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <template id="question_file" name="Question: File">
+            <t t-set="file_value" t-value="question.attachment_id"/>
+            <div class="o_survey_comment_container p-0">
+                <t t-if="file_value.mimetype == 'application/pdf' and file_value.pdf_image_ids">
+                    <h3><span t-field="file_value.name" class="text-break" style="color:#ff5c33;" /></h3>
+                    <t t-foreach="file_value.pdf_image_ids" t-as="page_img">
+                        <img t-att-src="image_data_uri(page_img.image_data)" style="width:100%;" alt="Page not available"/>
+                    </t>
+                </t>
+ 
+                <t t-elif="file_value.mimetype.startswith('image/') and file_value.datas">
+                    <h3><span t-field="file_value.name" class="text-break" style="color:#ff5c33;" /></h3>
+                    <img t-att-src="image_data_uri(file_value.datas)" style="width:100%;" alt="Image not available"/>
+                </t>
+ 
+                <t t-else="">
+                    <h5 class="text-muted">Preview not available for this file type.</h5>
+                </t>
+            </div>
+        </template>
+
+        <template id="question_numeric_box" name="Question: Numeric">
+                <t t-set="answer" t-value="question.get_answer_value()"/>
+                    <t t-if="answer.answer_type">
+                        <div class="o_survey_answer_wrapper p-1 rounded">
+                            <span t-if="answer.value_numerical_box" t-field='answer.value_numerical_box' class="text-break" />
+                        </div>
+                    </t>
+        </template>
+
+        <template id="question_simp_choice" name="Question: Simple">
+                <t t-set="answer" t-value="question.get_answer_value()"/>
+                    <t t-if="answer.answer_type">
+                        <div class="o_survey_answer_wrapper p-1 rounded">
+                            <span t-if="answer.suggested_answer_id" t-field='answer.suggested_answer_id.value' class="text-break" />
+                        </div>
+                    </t>
+        </template>
+
+        <template id="ques_date" name="Question: date">
+                <t t-set="answer" t-value="question.get_answer_value()"/>
+                    <t t-if="answer.answer_type">
+                        <div class="o_survey_answer_wrapper p-1 rounded">
+                            <span t-if="answer.value_date" t-field='answer.value_date' class="text-break" />
+                        </div>
+                    </t>
+        </template>
+
+        <template id="ques_datetime" name="Question: datetime">
+                <t t-set="answer" t-value="question.get_answer_value()"/>
+                    <t t-if="answer.answer_type">
+                        <div class="o_survey_answer_wrapper p-1 rounded">
+                            <span t-if="answer.value_datetime" t-field='answer.value_datetime' class="text-break" />
+                        </div>
+                    </t>
+        </template>
+
+        <template id="question_multi_choice" name="Question: Multiple">
+                <t t-set="answer" t-value="question.get_answer_value()"/>
+                    <t t-if="answer.answer_type">
+                        <div class="o_survey_answer_wrapper p-1 rounded">
+                            <span t-if="answer.suggested_answer_id" t-field='answer.suggested_answer_id.value' class="text-break" />
+                        </div>
+                    </t>
+        </template>
+
+        <template id="ques_text_box" name="Question: free text">
+                <t t-set="answer" t-value="question.get_answer_value()"/>
+                    <t t-if="answer.answer_type">
+                        <div class="o_survey_answer_wrapper p-1 rounded">
+                            <span t-if="answer.value_text_box" t-field='answer.value_text_box' class="text-break" />
+                        </div>
+                    </t>
+        </template>
+
+        <template id="ques_matrix" name="Question: matrix">
+                <t t-set="answer" t-value="question.get_answer_value()"/>
+                    <t t-if="answer.answer_type">
+                        <div class="o_survey_answer_wrapper p-1 rounded">
+                            <span t-if="answer.suggested_answer_id" t-field='answer.suggested_answer_id.value' class="text-break" />
+                        </div>
+                    </t>
+        </template>
+
+        <template id="report_survey_form_download">
+            <t t-call="web.html_container">
+                <t t-set="survey_form_readonly" t-value="true"/>
+                <t t-set="answer" t-value="docs"/>
+                <t t-set="survey" t-value="answer.survey_id"/>
+                <meta charset="UTF-8"/>
+                <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+                <style>
+                    .page-break {
+                        page-break-before: always;
+                        page-break-after: always;
+                    }
+                </style>
+                <div class="wrap">
+                    <div class="o_survey_print o_container_small">
+                        <div class='py-5 mt32'>
+                            <h1 style="text-align:center;">
+                                <t t-if="survey.type_of_survey == 'feedback'">
+                                    Post-Anaesthetic Feedback
+                                </t>
+                                <t t-else="">
+                                    Medical History Questionnaire
+                                </t>
+                            </h1>
+                            <h2 t-if='answer.note' style="color:#e63900;"><span>Notes: </span><span t-field='answer.note' class="text-break"/></h2>
+                            <!-- <t t-if="survey.description"><div t-field='survey.description' class="oe_no_empty text-break"/></t> -->
+                        </div>
+                        <div class="mb-4" style="font-size: 18px;">
+                            <table style="width: 100%;">
+                                <tr>
+                                    <!-- Left Column -->
+                                    <td style="vertical-align: top; width: 50%;">
+                                        <p>
+                                            <strong>Patient Full Name:</strong>
+                                            <span style="margin-left: 8px;" t-esc="answer.partner_id.name"/>
+                                            <span t-esc="answer.partner_id.last_name"/>
+                                        </p>
+                                        <p>
+                                            <strong>Patient NRIC:</strong>
+                                            <span style="margin-left: 8px;" t-esc="answer.op_nric_number"/>
+                                        </p>
+                                        <p>
+                                            <strong>Procedure Details:</strong>
+                                            <span style="margin-left: 8px;" t-esc="answer.case_id.op_process_detail"/>
+                                        </p>
+                                        <p>
+                                            <strong>Surgeon Name:</strong>
+                                            <span style="margin-left: 8px;" t-esc="answer.op_surgeon"/>
+                                        </p>
+                                        <p>
+                                            <strong>Age:</strong>
+                                            <span style="margin-left: 8px;" t-esc="answer.age"/>
+                                        </p>
+                                    </td>
+
+                                    <!-- Right Column -->
+                                    <td style="vertical-align: top; width: 50%;">
+                                        <p>
+                                            <strong>Sex:</strong>
+                                            <span style="margin-left: 8px;"
+                                                  t-esc="answer.gender.capitalize() if answer.gender else ''"/>
+                                        </p>
+                                        <p>
+                                            <strong>BMI:</strong>
+                                            <span style="margin-left: 8px;" t-esc="answer.bmi"/>
+                                        </p>
+                                        <p>
+                                            <strong>Date of Procedure:</strong>
+                                            <span style="margin-left: 8px;" t-field="answer.op_datetime"
+                                                  t-options='{"widget": "date"}'/>
+                                        </p>
+                                        <p>
+                                            <strong>Time of Procedure:</strong>
+                                            <span style="margin-left: 8px;"
+                                                  t-esc="answer.localized_op_datetime.split(' ')[1] if answer.localized_op_datetime else ''"/>
+                                        </p>
+                                        <p>
+                                            <strong>Location of Procedure:</strong>
+                                            <span style="margin-left: 8px;" t-esc="answer.location"/>
+                                        </p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <div>
+                            <t t-foreach='answer.user_input_line_ids' t-as='question'>
+                                <!-- <div style="white-space: nowrap;overflow: hidden;" class="js_question-wrapper" t-att-id="question.question_id.id" t-att-style="question.question_id.question_type == 'file' and 'page-break-before: always;page-break-after: always;' or ''"> -->
+                                <div class="js_question-wrapper" t-att-id="question.question_id.id"
+                                     t-attf-class="js_question-wrapper #{'page-break' if question.question_id.question_type == 'file' else ''}"
+                                     style="page-break-inside: avoid; margin-bottom: 20px;">
+                                    <h2 class="fs-4" style="margin-bottom: 8px;">
+                                        <span t-field='question.question_id.title' class="text-break"/>
+                                        <span t-if="question.question_id.constr_mandatory" class="text-danger">*</span>
+                                    </h2>
+                                    <div t-if='question.note' style="background-color: #ff8566; font-size:14px; padding: 4px;" class="text-break">
+                                        <strong>Note: </strong><span t-field='question.note'/>
+                                    </div>
+                                    <!-- <div class="text-muted oe_no_empty mt-1 text-break" t-if="not is_html_empty(question.question_id.description)" t-field='question.question_id.description'/> -->
+                                    <t t-if="question.question_id.question_type in ['numerical_box', 'date', 'datetime', 'text_box', 'char_box']">
+                                        <t t-if="question">
+                                            <t t-set="answer_line" t-value="question[0]"/>
+                                            <t t-if="answer_line.skipped">
+                                                <div class="row g-0">
+                                                    <div class="col-12 col-md-6 col-lg-4 rounded ps-4 o_survey_question_skipped">
+                                                        <input type="text"
+                                                            t-attf-class="form-control fst-italic o_survey_question_{{question.question_id.question_type}} bg-transparent rounded-0 p-0" value="Skipped"/>
+                                                    </div>
+                                                </div>
+                                            </t>
+                                            <t t-elif="answer_line.survey_id.scoring_type != 'no_scoring' and question.question_id.question_type in ['numerical_box', 'date', 'datetime'] and question.question_id['answer_%s' % question.question_id.question_type]">
+                                                <div class="row g-0">
+                                                    <div t-attf-class="col-12 col-md-6 col-lg-4 rounded ps-4 #{'bg-success' if answer_line.answer_is_correct else 'bg-danger'}">
+                                                        <t t-if="question.question_id.question_type == 'numerical_box'" t-call="p7_patient_management.question_numeric_box"/>
+                                                        <t t-if="question.question_id.question_type == 'date'" t-call="p7_patient_management.ques_date"/>
+                                                        <t t-if="question.question_id.question_type == 'datetime'" t-call="p7_patient_management.ques_datetime"/>
+                                                    </div>
+                                                </div>
+                                            </t>
+                                            <t t-else="">
+                                                <t t-if="question.question_id.question_type == 'text_box'" t-call="p7_patient_management.ques_text_box"/>
+                                                <t t-if="question.question_id.question_type == 'char_box'" class="o_survey_print o_survey_comment_container p-0">
+                                                    <span t-out="question[0].value_char_box or None"/>
+                                                </t>
+                                                <t t-if="question.question_id.question_type == 'numerical_box'" t-call="p7_patient_management.question_numeric_box"/>
+                                                <t t-if="question.question_id.question_type == 'date'" t-call="p7_patient_management.ques_date"/>
+                                                <t t-if="question.question_id.question_type == 'datetime'" t-call="p7_patient_management.ques_datetime"/>
+                                            </t>
+                                            <t t-if="question.survey_id.scoring_type != 'no_scoring'
+                                                and question.question_id.question_type in ['numerical_box', 'date', 'datetime']
+                                                and question.question_id['answer_%s' % question.question_id.question_type]
+                                                and not answer_line.answer_is_correct">
+                                                <div class="row g-0">
+                                                    <t t-set="correct_answer" t-value="question.question_id['answer_%s' % question.question_id.question_type ]"/>
+                                                    <div class="col-12 text-success mt-1">
+                                                        The correct answer was:
+                                                        <strong t-esc="correct_answer" t-if="question.question_id.question_type == 'numerical_box'"/>
+                                                        <strong t-esc="format_date(correct_answer)" t-if="question.question_id.question_type == 'date'"/>
+                                                        <strong t-esc="format_datetime(correct_answer)" t-if="question.question_id.question_type == 'datetime'"/>
+                                                    </div>
+                                                </div>
+                                            </t>
+                                        </t>
+                                        <t t-else="">
+                                            <t t-if="question.question_id.question_type == 'text_box'" t-call="p7_patient_management.ques_text_box"/>
+                                            <t t-if="question.question_id.question_type == 'char_box'" t-call="survey.question_char_box"/>
+                                            <t t-if="question.question_id.question_type == 'numerical_box'" t-call="p7_patient_management.question_numeric_box"/>
+                                            <t t-if="question.question_id.question_type == 'date'" t-call="p7_patient_management.ques_date"/>
+                                            <t t-if="question.question_id.question_type == 'datetime'" t-call="p7_patient_management.ques_datetime"/>
+                                        </t>
+                                    </t>
+                                    <t t-if="question.question_id.question_type == 'simple_choice'" t-call="p7_patient_management.question_simp_choice"/>
+                                    <t t-if="question.question_id.question_type == 'multiple_choice'" t-call="p7_patient_management.question_multi_choice"/>
+                                    <!-- <t t-if="question.question_id.question_type == 'matrix'" t-call="survey.question_matrix"/> -->
+                                    <t t-if="question.question_id.question_type == 'matrix'" t-call="p7_patient_management.ques_matrix"/>
+                                    <t t-if="question.question_id.question_type == 'file'" t-call="p7_patient_management.question_file"/>
+                                    <t t-if="question.question_id.question_type in ['simple_choice', 'multiple_choice','matrix']">
+                                        <t t-if="question">
+                                            <t t-if="question[0].skipped">
+                                                <div class="row g-0">
+                                                    <div class="col-12 o_survey_choice_question_skipped mt-1">
+                                                        This question was skipped
+                                                    </div>
+                                                </div>
+                                            </t>
+                                        </t>
+                                    </t>
+                                </div>
+                            </t>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </template>
+
+    </data>
+</odoo>

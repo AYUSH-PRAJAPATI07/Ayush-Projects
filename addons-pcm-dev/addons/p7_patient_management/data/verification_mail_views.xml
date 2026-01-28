@@ -1,0 +1,384 @@
+<odoo>
+    <data>
+        <record id="verification_email_template" model="mail.template">
+            <field name="name">User Verification Email Template</field>
+            <field name="model_id" ref="base.model_res_users"/>
+            <field name="email_from">VANAESA &lt;admin@vanaesa.com&gt;</field>
+            <field name="email_to">{{ object.email }}</field>
+            <field name="subject">Login Verification</field>
+            <field name="description">Sent to user who is not verified yet</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 15px;">
+                        Hello <span style="font-weight: bold;" t-out="object.name"/>,
+                    </p><br/>
+                    <p style="margin: 0px; color:black; padding: 0px; font-size: 15px;">
+                        Please find the url for the login verification below: 
+                    </p><br/>
+                    <a style="background-color:#54b1c9; padding:8px 16px 8px 16px; text-decoration:none; color:#fff; border-radius:5px;" t-attf-href="{{ctx.get('url')}}">Login Verification</a><br/><br/>
+                    <p style="margin: 0px; padding: 0px; font-size: 15px;">
+                        Have a great day!
+                    </p><br/><br/>
+                    <p style="margin: 0px; padding: 0px; font-size: 15px;">
+                        <span style="font-weight: bold;">The VANAESA team</span>
+                    </p>
+                </div>
+            </field>
+        </record>
+
+        <record id="email_verification_template" model="mail.template">
+            <field name="name">Email Verification Template</field>
+            <field name="model_id" ref="base.model_res_users"/>
+            <field name="email_from">VANAESA &lt;admin@vanaesa.com&gt;</field>
+            <field name="email_to">{{ ctx.get('email_to', '') }}</field>
+            <field name="subject">Email Verification</field>
+            <field name="description">Sent to user who is not verified the email yet</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 15px;">
+                        Hello <span style="font-weight: bold;" t-out="object.name"/>,
+                    </p><br/>
+                    <p style="margin: 0px; padding: 0px; font-size: 15px;">
+                        This is your OTP for the email verification : <t t-out="ctx.get('otp')"/>
+                    </p><br/>
+                    <p style="margin: 0px; padding: 0px; font-size: 15px;">
+                        Have a great day!
+                    </p><br/><br/>
+                    <p style="margin: 0px; padding: 0px; font-size: 15px;">
+                        <span style="font-weight: bold;">The VANAESA team</span>
+                    </p>
+                </div>
+            </field>
+        </record>
+
+        <record id="partial_survey_notification_template" model="mail.template">
+            <field name="name">Partial Survey Notification Template</field>
+            <field name="model_id" ref="base.model_res_users"/>
+            <field name="email_from">VANAESA &lt;admin@vanaesa.com&gt;</field>
+            <field name="email_to">{{ object.partner_id.email }}</field>
+            <field name="subject">An Important Reminder</field>
+            <field name="description">Sent to user who is not completed the form yet</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 15px;">
+                        Dear <span style="font-weight: bold;" t-out="object.partner_id.name"/> <span style="font-weight: bold;" t-out="object.partner_id.last_name"/>,
+                    </p><br/>
+                    <p style="margin: 0px; padding: 0px; font-size: 15px;">
+                        This is an important reminder from VANAESA (Virtual Anaesthesia Assessment)
+                    </p><br/>
+                    <p style="margin: 0px; padding: 0px; font-size: 15px;">
+                        In preparation for your upcoming surgery with Dr <t style="font-weight: bold;" t-out="ctx.get('surgeon')"/>, your Anaesthetist has specially prepared a Pre-Anaesthetic Questionnaire(PAQ) for you. This provides your Anaesthetist with important information about you and your health, in order to facilitate a safe and comfortable experience for you during your anaesthetic.
+                    </p><br/>
+                    <p style="margin: 0px; color:black; padding: 0px; font-size: 15px;">
+                        Please follow this link to complete your PAQ. It is important to complete it as soon as possible.
+                    </p><br/>
+                    <a style="background-color:#54b1c9; padding:8px 16px 8px 16px; text-decoration:none; color:#fff; border-radius:5px;" t-attf-href="{{ctx.get('url')}}">Pre-Anaesthetic Questionnaire</a><br/><br/>
+                    <p style="margin: 0px; padding: 0px; font-size: 15px;">
+                        For more information, please visit <a style="color:blue;" href="https://vanaesa.com/">vanaesa.com</a>
+                    </p><br/>
+                    <p style="margin: 0px; padding: 0px; font-size: 15px;">
+                        Have a great day!
+                    </p><br/><br/>
+                    <p style="margin: 0px; padding: 0px; font-size: 15px;">
+                        <span style="font-weight: bold;">The VANAESA team</span>
+                    </p>
+                </div>
+            </field>
+        </record>
+
+        <record id="partial_survey_notification_template_doctor" model="mail.template">
+            <field name="name">Partial Survey Notification Doctor</field>
+            <field name="model_id" ref="base.model_res_users"/>
+            <field name="email_from">VANAESA &lt;admin@vanaesa.com&gt;</field>
+            <field name="email_to">{{ object.partner_id.email }}</field>
+            <field name="subject">Partial Form Completion</field>
+            <field name="description">Sent to user who is the doctor</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 15px;">
+                        Hello <span style="font-weight: bold;" t-out="object.name"/>,
+                    </p><br/>
+                    <p style="margin: 0px; padding: 0px; font-size: 15px;">
+                        Your patient <t t-out="case.patient_first_name"/> <t t-out="case.patient_last_name"/> has partially completed the medical history questionnaire.
+                    </p><br/>
+                    <p style="margin: 0px; padding: 0px; font-size: 15px;">
+                        Have a great day!
+                    </p><br/><br/>
+                    <p style="margin: 0px; padding: 0px; font-size: 15px;">
+                        <span style="font-weight: bold;">The VANAESA team</span>
+                    </p>
+                </div>
+            </field>
+        </record>
+
+        <record id="survey_completion_template_doctor" model="mail.template">
+            <field name="name">Survey Completion Notification Doctor</field>
+            <field name="model_id" ref="base.model_res_users"/>
+            <field name="email_from">VANAESA &lt;admin@vanaesa.com&gt;</field>
+            <field name="email_to">{{ object.partner_id.email }}</field>
+            <field name="subject">Review your patient's Pre-Anaesthetic Questionnaire</field>
+            <field name="description">Sent to user who is the doctor</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 15px;">
+                        Dear Dr <span style="font-weight: bold;" t-out="object.name"/>,
+                    </p><br/>
+                    <p style="margin: 0px; color:black; padding: 0px; font-size: 15px;">
+                        Your patient <t style="font-weight: bold;" t-out="case.patient_first_name"/> <t style="font-weight: bold;" t-out="case.patient_last_name" /> has completed the PAQ. Please follow this link to view the responses
+                    </p><br/>
+                    <a style="background-color:#54b1c9; padding:8px 16px 8px 16px; text-decoration:none; color:#fff; border-radius:5px;" t-attf-href="{{ctx.get('url')}}">PAQ Responses</a><br/><br/>
+                    <p style="margin: 0px; padding: 0px; font-size: 15px;">
+                        <span style="font-weight: bold;" t-out="case.op_process_detail"/>,
+                    </p><br/>
+                    <p style="margin: 0px; padding: 0px; font-size: 15px;">
+                        <span style="font-weight: bold;" t-out="case.op_surgeon"/>,
+                    </p><br/>
+                    <p style="margin: 0px; padding: 0px; font-size: 15px;">
+                        <span style="font-weight: bold;" t-out="case.get_start_date()"/>,
+                    </p><br/>
+                    <p style="margin: 0px; padding: 0px; font-size: 15px;">
+                        <span style="font-weight: bold;" t-out="case.op_location_id.name"/>,
+                    </p><br/>
+                    <p style="margin: 0px; padding: 0px; font-size: 15px;">
+                        Have a great day!
+                    </p><br/><br/>
+                    <p style="margin: 0px; padding: 0px; font-size: 15px;">
+                        <span style="font-weight: bold;">The VANAESA team</span>
+                    </p>
+                </div>
+            </field>
+        </record>
+
+        <record id="guide_completion_template_patient" model="mail.template">
+            <field name="name">Guide Completion Notification Patient</field>
+            <field name="model_id" ref="base.model_res_users"/>
+            <field name="email_from">VANAESA &lt;admin@vanaesa.com&gt;</field>
+            <field name="email_to">{{ object.partner_id.email }}</field>
+            <field name="subject">Anaesthetic Plan Completion</field>
+            <field name="description">Sent to user who is the patient</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 15px;">
+                        Hello <span style="font-weight: bold;" t-out="object.name"/>,
+                    </p><br/>
+                    <p style="margin: 0px; padding: 0px; font-size: 15px;">
+                        Thank you for completing your  Pre-Anaesthetic Plan.
+                    </p><br/>
+                    <p style="margin: 0px; padding: 0px; font-size: 15px;">
+                        Have a great day!
+                    </p><br/><br/>
+                    <p style="margin: 0px; padding: 0px; font-size: 15px;">
+                        <span style="font-weight: bold;">The VANAESA team</span>
+                    </p>
+                </div>
+            </field>
+        </record>
+
+        <record id="patient_reminder_template" model="mail.template">
+            <field name="name">Patient Reminder Notification</field>
+            <field name="model_id" ref="base.model_res_users"/>
+            <field name="email_from">VANAESA &lt;admin@vanaesa.com&gt;</field>
+            <field name="email_to">{{ object.partner_id.email }}</field>
+            <field name="subject">An Important Reminder from VANAESA</field>
+            <field name="description">Sent to user who is the patient</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 15px;">
+                        Dear <span style="font-weight: bold;" t-out="object.name"/>,
+                    </p><br/>
+                    <p style="margin: 0px; padding: 0px; font-size: 15px;">
+                        This is a reminder to follow the instructions given by your Anaesthetist:
+                    </p><br/>
+                    <p style="margin: 0px; padding: 0px; font-size: 15px;">
+                        <t t-out="ctx.get('msg')"/>
+                    </p><br/>
+                    <p style="margin: 0px; padding: 0px; font-size: 15px;">
+                        Have a great day!
+                    </p><br/><br/>
+                    <p style="margin: 0px; padding: 0px; font-size: 15px;">
+                        <span style="font-weight: bold;">The VANAESA team</span>
+                    </p>
+                </div>
+            </field>
+        </record>
+
+        <record id="survey_collection_email_template" model="mail.template">
+            <field name="name">Survey Collection Email Template</field>
+            <field name="model_id" ref="base.model_res_users"/>
+            <field name="email_from">VANAESA &lt;admin@vanaesa.com&gt;</field>
+            <field name="email_to">{{ object.partner_id.email }}</field>
+            <field name="subject">Complete your Pre-Anaesthetic Questionnaire now</field>
+            <field name="description">Sent to the patient who is going for the operation</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 15px;">
+                        Dear <span style="font-weight: bold;" t-out="object.partner_id.name"/> <span style="font-weight: bold;" t-out="object.partner_id.last_name"/>,
+                    </p><br/>
+                    <p style="margin: 0px; padding: 0px; font-size: 15px;">
+                        Warm greetings from VANAESA (Virtual Anaesthesia Assessment)
+                    </p><br/>
+                    <p style="margin: 0px; padding: 0px; font-size: 15px;">
+                        In preparation for your upcoming surgery with Dr <t style="font-weight: bold;" t-out="ctx.get('surgeon')"/>, your Anaesthetist has specially prepared a Pre-Anaesthetic Questionnaire(PAQ) for you. This provides your Anaesthetist with important information about you and your health, in order to facilitate a safe and comfortable experience for you during your anaesthetic.
+                    </p><br/>
+                    <p style="margin: 0px; color:black; padding: 0px; font-size: 15px;">
+                        Please follow this link to complete your PAQ. It is important to complete it as soon as possible.
+                    </p><br/>
+                    <a style="background-color:#54b1c9; padding:8px 16px 8px 16px; text-decoration:none; color:#fff; border-radius:5px;" t-attf-href="{{ctx.get('url')}}">Pre-Anaesthetic Questionnaire</a><br/><br/>
+                    <p style="margin: 0px; padding: 0px; font-size: 15px;">
+                        For more information, please visit <a style="color:blue;" href="https://vanaesa.com/">vanaesa.com</a>
+                    </p><br/>
+                    <p style="margin: 0px; padding: 0px; font-size: 15px;">
+                        Have a great day!
+                    </p><br/><br/>
+                    <p style="margin: 0px; padding: 0px; font-size: 15px;">
+                        <span style="font-weight: bold;">The VANAESA team</span>
+                    </p>
+                </div>
+            </field>
+        </record>
+
+        <record id="survey_collection_reminder_email_template" model="mail.template">
+            <field name="name">Survey Collection Reminder Email Template</field>
+            <field name="model_id" ref="base.model_res_users"/>
+            <field name="email_from">VANAESA &lt;admin@vanaesa.com&gt;</field>
+            <field name="email_to">{{ object.partner_id.email }}</field>
+            <field name="subject">An Important Reminder</field>
+            <field name="description">Reminder sent to patient for incomplete survey</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px; font-size: 15px;">
+                    <p>
+                        Dear <strong t-out="object.partner_id.name"/>
+                        <strong t-out="object.partner_id.last_name"/>,
+                    </p>
+                    <br/>
+                    <p>This is an important reminder from <strong>VANAESA</strong> (Virtual Anaesthesia Assessment).
+                    </p>
+                    <br/>
+                    <p>
+                        In preparation for your upcoming surgery with Dr
+                        <strong t-out="ctx.get('surgeon')"/>, your Anaesthetist has specially prepared a
+                        Pre-Anaesthetic Questionnaire (PAQ) for you. This provides your Anaesthetist with important
+                        information about you and your health, in order to facilitate a safe and comfortable experience
+                        for you during your anaesthetic.
+                    </p>
+                    <br/>
+                    <p>Please follow this link to complete your PAQ. It is important to complete it as soon as
+                        possible.
+                    </p>
+                    <br/>
+                    <a t-attf-href="{{ctx.get('url')}}"
+                       style="background-color:#54b1c9; padding:8px 16px; text-decoration:none; color:#fff; border-radius:5px;">
+                        Complete your PAQ
+                    </a>
+                    <br/>
+                    <br/>
+                    <p>For more information, please visit
+                        <a style="color:blue;" href="https://vanaesa.com/">vanaesa.com</a>
+                    </p>
+                    <br/>
+                    <p>Have a great day!</p>
+                    <br/>
+                    <p>
+                        <strong>The VANAESA team</strong>
+                    </p>
+                    <hr/>
+                    <small>VANAESA (Virtual Anaesthesia Assessment)
+                        <br/>
+                        <a href="https://vanaesa.com/">vanaesa.com</a>
+                    </small>
+                </div>
+            </field>
+        </record>
+
+        <record id="guide_email_template" model="mail.template">
+            <field name="name">Information Guide Email Template</field>
+            <field name="model_id" ref="base.model_res_users"/>
+            <field name="email_from">VANAESA &lt;admin@vanaesa.com&gt;</field>
+            <field name="email_to">{{ object.partner_id.email }}</field>
+            <field name="subject">Your Anaesthesia Information Guide is Ready</field>
+            <field name="description">Sent to the patient who is going for the operation</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 15px;">
+                        Dear <span style="font-weight: bold;" t-out="object.partner_id.name"/> <span style="font-weight: bold;" t-out="object.partner_id.last_name"/>,
+                    </p><br/>
+                    <p style="margin: 0px; color:black; padding: 0px; font-size: 15px;">
+                        Your Anaesthesia Information Guide is ready. It contains important information about your upcoming anaesthetic. Please login to VANAESA to view the Guide.
+                    </p><br/>
+                    <a style="background-color:#54b1c9; padding:8px 16px 8px 16px; text-decoration:none; color:#fff; border-radius:5px;" t-attf-href="{{ctx.get('url')}}">VANAESA</a><br/><br/>
+                    <p style="margin: 0px; padding: 0px; font-size: 15px;">
+                        Have a great day!
+                    </p><br/><br/>
+                    <p style="margin: 0px; padding: 0px; font-size: 15px;">
+                        <span style="font-weight: bold;">The VANAESA team</span>
+                    </p>
+                </div>
+            </field>
+        </record>
+
+        <record id="feedback_collection_email_template" model="mail.template">
+            <field name="name">Feedback Collection Email Template</field>
+            <field name="model_id" ref="base.model_res_users"/>
+            <field name="email_from">VANAESA &lt;admin@vanaesa.com&gt;</field>
+            <field name="email_to">{{ object.partner_id.email }}</field>
+            <field name="subject">Medical Feedback Survey</field>
+            <field name="description">Sent to the patient who is undergone the operation</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 15px;">
+                        Hello <span style="font-weight: bold;" t-out="object.name"/>,
+                    </p><br/>
+                    <p style="margin: 0px; color:black; padding: 0px; font-size: 15px;">
+                        Please find the url for the medical feedback survey form below:
+                    </p><br/>
+                    <a style="background-color:#54b1c9; padding:8px 16px 8px 16px; text-decoration:none; color:#fff; border-radius:5px;" t-attf-href="{{ctx.get('url')}}">Medical Feedback Survey Form</a><br/><br/>
+                    <p style="margin: 0px; padding: 0px; font-size: 15px;">
+                        Have a great day!
+                    </p><br/><br/>
+                    <p style="margin: 0px; padding: 0px; font-size: 15px;">
+                        <span style="font-weight: bold;">The VANAESA team</span>
+                    </p>
+                </div>
+            </field>
+        </record>
+
+        <record id="feedback_survey_completion_template_doctor" model="mail.template">
+            <field name="name">Feedback Survey Completion Notification Doctor</field>
+            <field name="model_id" ref="base.model_res_users"/>
+            <field name="email_from">VANAESA &lt;admin@vanaesa.com&gt;</field>
+            <field name="email_to">{{ object.partner_id.email }}</field>
+            <field name="subject">Review your patient's Post-Anaesthetic Questionnaire</field>
+            <field name="description">Sent to user who is the doctor</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 15px;">
+                        Dear Dr <span style="font-weight: bold;" t-out="object.name"/>,
+                    </p><br/>
+                    <p style="margin: 0px; color:black; padding: 0px; font-size: 15px;">
+                        Your patient <t style="font-weight: bold;" t-out="case.patient_first_name"/> <t style="font-weight: bold;" t-out="case.patient_last_name" /> has completed the Post Anaesthetic Feedback. Please follow this link to view the responses.
+                    </p><br/>
+                    <a style="background-color:#54b1c9; padding:8px 16px 8px 16px; text-decoration:none; color:#fff; border-radius:5px;" t-attf-href="{{ctx.get('url')}}">PAQ Responses</a><br/><br/>
+                    <p style="margin: 0px; padding: 0px; font-size: 15px;">
+                        <span style="font-weight: bold;" t-out="case.op_process_detail"/>,
+                    </p><br/>
+                    <p style="margin: 0px; padding: 0px; font-size: 15px;">
+                        <span style="font-weight: bold;" t-out="case.op_surgeon"/>,
+                    </p><br/>
+                    <p style="margin: 0px; padding: 0px; font-size: 15px;">
+                        <span style="font-weight: bold;" t-out="case.get_start_date()"/>,
+                    </p><br/>
+                    <p style="margin: 0px; padding: 0px; font-size: 15px;">
+                        <span style="font-weight: bold;" t-out="case.op_location_id.name"/>,
+                    </p><br/>
+                    <p style="margin: 0px; padding: 0px; font-size: 15px;">
+                        Have a great day!
+                    </p><br/><br/>
+                    <p style="margin: 0px; padding: 0px; font-size: 15px;">
+                        <span style="font-weight: bold;">The VANAESA team</span>
+                    </p>
+                </div>
+            </field>
+        </record>
+
+    </data>
+</odoo>

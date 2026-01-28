@@ -1,0 +1,227 @@
+<odoo>
+    <record id="view_contact_attempt_tree" model="ir.ui.view">
+        <field name="name">contact.attempt.tree</field>
+        <field name="model">contact.attempt</field>
+        <field name="arch" type="xml">
+            <tree string="Contact Attempts">
+                <field name="case_id"/>
+                <field name="associate_id"/>
+                <field name="attempt_count"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_contact_attempt_form" model="ir.ui.view">
+        <field name="name">contact.attempt.form</field>
+        <field name="model">contact.attempt</field>
+        <field name="arch" type="xml">
+            <form string="Contact Attempt">
+                <header>
+                    <button name="action_take_video_call" type="object" string="Video Call by Me"
+                        class="oe_highlight" groups="p7_patient_management.group_user_associate"
+                        invisible="video_call_assign_status != 'to_assign'"/>
+                </header>
+                <sheet>
+                <group string="Patient Information" name="patient_info_section">
+                            <!-- Left side: First name, Last name, Mobile -->
+                            <group>
+                                <field name="case_id" readonly="1"/>
+                                <field name="patient_id" invisible="1"/>
+                                <label for="patient_first_name" class="required-label"/>
+                                <field name="patient_first_name" required="1" nolabel="1"/>
+                                <field name="patient_last_name"/>
+                                <label for="patient_mob" string="Mobile" class="required-label"/>
+                                <div class="d-flex flex-wrap align-items-center" style="gap: 8px;">
+                                    <field name="patient_phone_code"
+                                           placeholder="+XX"
+                                           required="1"
+                                           nolabel="1"
+                                           options="{'no_create': True, 'no_open': True}"
+                                           style="flex: 0 0 80px; min-width: 60px;"/>
+                                    <field name="patient_mob"
+                                           required="1"
+                                           nolabel="1"
+                                           placeholder="Enter phone number"
+                                           style="flex: 1; min-width: 0;"/>
+                                    <button name="action_whatsapp_call"
+                                            title="video"
+                                            type="object"
+                                            class="oe_highlight btn-success"
+                                            icon="fa-video-camera"/>
+                                    <button name="action_whatsapp_message"
+                                            title="message"
+                                            type="object"
+                                            class="oe_highlight btn-primary"
+                                            icon="fa-comment"/>
+                                </div>
+
+                            </group>
+
+                            <!-- Right side: NRIC, Gender, DOB -->
+                            <group>
+                                <field name="video_call_assign_status" readonly="1"/>
+                                <field name="patient_nric_number"/>
+                                <field name="patient_gender"/>
+                                <label for="patient_dob" string="Date of Birth" class="required-label"/>
+                                <field name="patient_dob" required="1" nolabel="1" placeholder="DDMMYYYY"/>
+                            </group>
+
+            </group>
+                </sheet>
+                <div class="oe_chatter">
+                        <field name="activity_ids"/>
+                        <field name="message_follower_ids" widget="many2many_tags"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_contact_attempt_bookings_tree" model="ir.ui.view">
+        <field name="name">contact.attempt.bookings.tree</field>
+        <field name="model">contact.attempt</field>
+        <field name="arch" type="xml">
+            <tree string="Bookings for Calling">
+                <field name="name" string="Video Call ID"/>
+                <field name="case_backend_id" string="Master ID"/>
+                <field name="booking_id"/>
+                <field name="doctor_id" string="Doctor Full Name"/>
+                <field name="op_date" string="Operation Date/Time"/>
+                <field name="attempt_count" string="Number of Calls Logged"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_contact_attempt_my_booking_form" model="ir.ui.view">
+        <field name="name">contact.attempt.my.booking.form</field>
+        <field name="model">contact.attempt</field>
+        <field name="arch" type="xml">
+            <form string="My Booking">
+                <header>
+                    <button name="action_release_video_call" type="object" string="Release Video Call"
+                        class="oe_highlight" groups="p7_patient_management.group_user_associate"
+                        invisible="video_call_assign_status != 'assigned'"/>
+                </header>
+                <sheet>
+                    <group string="Patient Information" name="patient_info_section">
+                        <!-- Left side: First name, Last name, Mobile -->
+                        <group>
+                            <field name="case_id" readonly="1"/>
+                            <field name="patient_id" invisible="1"/>
+                            <label for="patient_first_name" class="required-label"/>
+                            <field name="patient_first_name" required="1" nolabel="1"/>
+                            <field name="patient_last_name"/>
+                            <label for="patient_mob" string="Mobile" class="required-label"/>
+                            <div class="d-flex flex-wrap align-items-center" style="gap: 8px;">
+                                <field name="patient_phone_code"
+                                       placeholder="+XX"
+                                       required="1"
+                                       nolabel="1"
+                                       options="{'no_create': True, 'no_open': True}"
+                                       style="flex: 0 0 80px; min-width: 60px;"/>
+                                <field name="patient_mob"
+                                       required="1"
+                                       nolabel="1"
+                                       placeholder="Enter phone number"
+                                       style="flex: 1; min-width: 0;"/>
+                                <button name="action_whatsapp_call"
+                                        title="video"
+                                        type="object"
+                                        class="oe_highlight btn-success"
+                                        icon="fa-video-camera"/>
+                                <button name="action_whatsapp_message"
+                                        title="message"
+                                        type="object"
+                                        class="oe_highlight btn-primary"
+                                        icon="fa-comment"/>
+                            </div>
+
+                        </group>
+
+                        <!-- Right side: NRIC, Gender, DOB -->
+                        <group>
+                            <field name="video_call_assign_status" readonly="1"/>
+                            <field name="patient_nric_number"/>
+                            <field name="patient_gender"/>
+                            <label for="patient_dob" string="Date of Birth" class="required-label"/>
+                            <field name="patient_dob" required="1" nolabel="1" placeholder="DDMMYYYY"/>
+                        </group>
+
+                    </group>
+                    <group string="Contact Attempt Documentation" name="video_call_section" class="col-lg-12">
+                        <group>
+                            <field name="case_tier" invisible="1"/>
+                            <label for="video_call_datetime" string="Contact Attempt Date Time" class="required-label"/>
+                            <field name="video_call_datetime" nolabel="1"/>
+                            <label for="video_call_location" string="Patient Location" class="required-label"/>
+                            <field name="video_call_location" nolabel="1" required="0"/>
+                            <label for="contact_channel" string="Contact Channel" class="required-label"/>
+                            <field name="contact_channel" nolabel="1" required="0"/>
+                            <field name="video_call_contents" required="0" widget="text"/>
+                            <label for="associate_id" string="Associate" class="required-label"
+                                   invisible="video_call_assign_status != 'unassigned'"/>
+                            <field name="associate_id" nolabel="1" options="{'no_create':True}"
+                                   invisible="video_call_assign_status != 'unassigned'"/>
+                            <label for="attempt_count" string="Attempts"/>
+                            <field name="attempt_count" nolabel="1" readonly="1"/>
+                        </group>
+                        <group>
+                            <label for="video_call_performed_by" string="Contact Attempt Performed By"
+                                   class="required-label"/>
+                            <field name="video_call_performed_by" nolabel="1" required="0"/>
+                            <label for="video_call_outcome" string="Contact Attempt Outcome" class="required-label"/>
+                            <field name="video_call_outcome" nolabel="1" required="0"/>
+                            <label for="video_call_status" string="Video Call Status" class="required-label"/>
+                            <field name="video_call_status" nolabel="1" required="0" readonly="1"/>
+                            <div class="d-flex flex-column" style="gap:8px; width:200px;">
+                                <button name="action_video_call_complete" type="object" string="Log Contact Attempt" invisible="video_call_status == 'success'" class="oe_highlight"/>
+                                <button name="action_video_call_success" type="object" string="Video Call Success" invisible="video_call_status == 'success'" class="oe_highlight"/>
+                                <button name="action_video_call_fail" type="object" string="Video Call Failed" invisible="video_call_status == 'failed'" class="oe_highlight"/>
+                            </div>
+                            <group/>
+                        </group>
+                            <field name="video_call_assign_status" invisible="1"/>
+                            <field name="case_backend_id" invisible="1"/>
+                            <field name="booking_id" invisible="1"/>
+                            <field name="doctor_id" invisible="1"/>
+                            <field name="op_date" invisible="1"/>
+                            <field name="last_attempt_datetime" invisible="1"/>
+                    </group>
+                    <!--                <button name="action_video_call_complete" type="object" string="Video Call Complete"/>-->
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="activity_ids"/>
+                    <field name="message_follower_ids" widget="many2many_tags"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+
+    <record id="view_contact_attempt_my_tree" model="ir.ui.view">
+        <field name="name">contact.attempt.my.tree</field>
+        <field name="model">contact.attempt</field>
+        <field name="arch" type="xml">
+            <tree string="My Bookings">
+                <field name="name" string="Video Call ID"/>
+                <field name="case_backend_id" string="Master ID"/>
+                <!-- Show Booking ID only to doctors -->
+                <field name="booking_id" string="Booking ID"/>
+                <field name="doctor_id" string="Doctor Full Name"/>
+                <field name="op_date" string="Operation Date/Time"/>
+                <field name="video_call_status" string="Video Call Status"/>
+                <field name="attempt_count" string="Number of Calls Logged"/>
+                <field name="last_attempt_datetime" string="Last call logged" widget="datetime"/>
+            </tree>
+        </field>
+    </record>
+
+
+    <record id="action_contact_attempt" model="ir.actions.act_window">
+        <field name="name">Contact Attempts</field>
+        <field name="res_model">contact.attempt</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+</odoo>

@@ -1,0 +1,109 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <data>
+        <record id="ir_cron_patient_case_update_state" model="ir.cron">
+            <field name="name">Patient Cases Update</field>
+            <field name="model_id" ref="model_patient_case"/>
+            <field name="state">code</field>
+            <field name="code">model._cron_patient_case_state_update()</field>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">1</field>
+            <field name="interval_type">hours</field>
+            <field name="numbercall">-1</field>
+        </record>
+
+        <record id="ir_cron_patient_case_update_state_day" model="ir.cron">
+            <field name="name">Patient Cases Update Day</field>
+            <field name="model_id" ref="model_patient_case"/>
+            <field name="state">code</field>
+            <field name="code">model._cron_patient_case_state_update()</field>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+        </record>
+
+        <record forcecreate="True" id="ir_cron_phone_code_update" model="ir.cron">
+            <field name="name">Phone code Update</field>
+            <field name="model_id" ref="base.model_res_users"/>
+            <field name="state">code</field>
+            <field name="code">model.update_phone_code()</field>
+            <field name="interval_number">30</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="True"/>
+            <field name="active" eval="False"/>
+        </record>
+
+        <record forcecreate="True" id="ir_cron_res_medication_update" model="ir.cron">
+            <field name="name">Medication Update</field>
+            <field name="model_id" ref="p7_patient_management.model_res_medication"/>
+            <field name="state">code</field>
+            <field name="code">model.update_medication_data()</field>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">30</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="True"/>
+            <field name="active" eval="True"/>
+        </record>
+
+        <record forcecreate="True" id="ir_cron_res_reminder_update" model="ir.cron">
+            <field name="name">Reminder Update</field>
+            <field name="model_id" ref="p7_patient_management.model_patient_case"/>
+            <field name="state">code</field>
+            <field name="code">model.update_patient_reminder()</field>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="True"/>
+            <field name="active" eval="True"/>
+        </record>
+
+        <record id="ir_cron_survey_reminder" model="ir.cron">
+            <field name="name">Survey Daily Reminder</field>
+            <field name="model_id" ref="model_patient_case"/>
+            <field name="state">code</field>
+            <field name="code">model.cron_send_survey_reminders()</field>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">1</field>
+            <field name="interval_type">hours</field>
+            <field name="numbercall">-1</field>
+        </record>
+
+        <record id="ir_cron_guide_reminder" model="ir.cron">
+            <field name="name">Guide Daily Reminder</field>
+            <field name="model_id" ref="model_patient_case"/>
+            <field name="state">code</field>
+            <field name="code">model.cron_send_guide_reminders()</field>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">1</field>
+            <field name="interval_type">hours</field>
+            <field name="numbercall">-1</field>
+        </record>
+
+        <record forcecreate="True" id="ir_cron_convert_height_to_cm" model="ir.cron">
+            <field name="name">Convert Height to CM</field>
+            <field name="model_id" ref="p7_patient_management.model_survey_question"/>
+            <field name="state">code</field>
+            <field name="code">model.cron_convert_height_to_cm()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">1</field>
+            <field name="active">False</field>
+        </record>
+
+        <record id="ir_cron_assign_backend_ids_to_existing_cases"
+                model="ir.cron">
+            <field name="name">Assign Backend IDs to Existing Patient Cases</field>
+            <field name="model_id" ref="model_patient_case"/>
+            <field name="state">code</field>
+            <field name="code">model._assign_backend_ids_to_existing_cases()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">1</field>
+            <field name="active">False</field>
+        </record>
+    </data>
+</odoo>

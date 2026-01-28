@@ -1,0 +1,193 @@
+<odoo>
+    <data>
+        <!-- medication view -->
+        <record id="view_medication_form" model="ir.ui.view">
+            <field name="name">res.medication.form</field>
+            <field name="model">res.medication</field>
+            <field name="arch" type="xml">
+                <form string="Medication Details">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name" required="1"/>
+                                <field name="brand_name"/>
+                                <field name="pharma_name"/>
+                            </group>
+                            <group>
+                                <field name="descrip"/>
+                                <field name="ingredient_name"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_medication_tree" model="ir.ui.view">
+            <field name="name">res.medication.tree</field>
+            <field name="model">res.medication</field>
+            <field name="arch" type="xml">
+                <tree string="Medication Details">
+                    <field name="name"/>
+                    <field name="brand_name"/>
+                    <field name="pharma_name"/>
+                    <field name="ingredient_name"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_medication_search" model="ir.ui.view">
+            <field name="name">medication.select</field>
+            <field name="model">res.medication</field>
+            <field name="arch" type="xml">
+                <search string="Search Medication">
+                    <field name="name"/>
+                    <field name="brand_name"/>
+                    <field name="pharma_name"/>
+                    <field name="ingredient_name"/>
+                    <group expand="0" string="Group By...">
+                        <filter string="Name" name="name" domain="[]" context="{'group_by': 'name'}"/><separator/>
+                        <filter string="Brand Name" name="brand_name" domain="[]" context="{'group_by': 'brand_name'}"/><separator/>
+                        <filter string="Pharmacological Class" name="pharma_name" domain="[]" context="{'group_by': 'pharma_name'}"/><separator/>
+                        <filter string="Active Ingredient" name="ingredient_name" domain="[]" context="{'group_by': 'ingredient_name'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_medication_detail" model="ir.actions.act_window">
+            <field name="name">Medication Details</field>
+            <field name="res_model">res.medication</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('user_id','=',False)]</field>
+            <field name="view_id" ref="view_medication_tree"/>
+            <field name="help" type="html">
+                <p>
+                    This is the list of medication details.
+                </p>
+            </field>
+        </record>
+
+        <!-- medication update view -->
+        <record id="view_medication_update_form" model="ir.ui.view">
+            <field name="name">res.medication.update.form</field>
+            <field name="model">res.medication.update</field>
+            <field name="arch" type="xml">
+                <form string="Medication Dataset Update Details">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name" required="1" readonly="1"/>
+                                <field name="date_update" readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="rec_total" readonly="1"/>
+                                <field name="new_rec_total" readonly="1"/>
+                            </group>
+                        </group>
+                        <notebook colspan="4">
+                            <page name='new_medication' string="List of new Medications" autofocus="autofocus">
+                                <field name="medication_ids" context="{'tree_view_ref': 'p7_patient_management.view_medication_tree', 'form_view_ref': 'p7_patient_management.view_medication_form'}" readonly="1"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_medication_update_tree" model="ir.ui.view">
+            <field name="name">res.medication.update.tree</field>
+            <field name="model">res.medication.update</field>
+            <field name="arch" type="xml">
+                <tree string="Medication Dataset Update Details">
+                    <field name="name"/>
+                    <field name="rec_total"/>
+                    <field name="new_rec_total"/>
+                    <field name="date_update"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_medication_update_search" model="ir.ui.view">
+            <field name="name">medication.update.select</field>
+            <field name="model">res.medication.update</field>
+            <field name="arch" type="xml">
+                <search string="Search Medication Update">
+                    <field name="name"/>
+                    <field name="date_update"/>
+                    <group expand="0" string="Group By...">
+                        <filter string="Name" name="name" domain="[]" context="{'group_by': 'name'}"/><separator/>
+                        <filter string="Updated On" name="date_update" domain="[]" context="{'group_by': 'date_update'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_medication_update_detail" model="ir.actions.act_window">
+            <field name="name">Medication Dataset Update Details</field>
+            <field name="res_model">res.medication.update</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_medication_update_tree"/>
+            <field name="help" type="html">
+                <p>
+                    This is the list of medication dataset update details.
+                </p>
+            </field>
+        </record>
+
+        <!-- Verification faq view -->
+        <record id="view_verification_faq_form" model="ir.ui.view">
+            <field name="name">res.verification.faq.form</field>
+            <field name="model">res.faq</field>
+            <field name="arch" type="xml">
+                <form string="FAQs">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="sequence" required="1"/>
+                                <field name="name" required="1"/>
+                                <field name="value" required="1"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_verification_faq_tree" model="ir.ui.view">
+            <field name="name">res.verification.faq.tree</field>
+            <field name="model">res.faq</field>
+            <field name="arch" type="xml">
+                <tree string="FAQs">
+                    <field name="sequence"/>
+                    <field name="name"/>
+                    <field name="value"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_verification_faq_search" model="ir.ui.view">
+            <field name="name">verification.faq.select</field>
+            <field name="model">res.faq</field>
+            <field name="arch" type="xml">
+                <search string="Search FAQs">
+                    <field name="name"/>
+                    <field name="sequence"/>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_verification_faq_detail" model="ir.actions.act_window">
+            <field name="name">FAQs</field>
+            <field name="res_model">res.faq</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_verification_faq_tree"/>
+            <field name="help" type="html">
+                <p>
+                    This is the list of FAQs.
+                </p>
+            </field>
+        </record>
+
+    </data>
+</odoo>

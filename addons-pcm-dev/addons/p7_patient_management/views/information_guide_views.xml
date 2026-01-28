@@ -1,0 +1,177 @@
+<odoo>
+    <data>
+
+        <!-- Guide view -->
+        <record id="view_information_guide_form" model="ir.ui.view">
+            <field name="name">information.guide.form</field>
+            <field name="model">information.guide</field>
+            <field name="arch" type="xml">
+                <form string="Information Guides">
+                    <header>
+                        <button name="finalise" string="Finalise" type="object" invisible="state != 'draft'" class="oe_highlight" />
+                        <button name="reset_to_draft" string="Reset to Draft" type="object" groups="p7_patient_management.group_user_admin" invisible="state == 'draft' or reference_type != 'reference'" class="oe_highlight" />
+                        <button name="reset_to_draft" string="Reset to Draft" type="object" invisible="state == 'draft' or reference_type == 'reference'" class="oe_highlight" />
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <field name="reference_type" widget="radio" options="{'horizontal': True}" readonly="1"/>
+                            <field name="version" readonly="state != 'draft'"/>
+                            <field name="name" required="1" readonly="state != 'draft'"/>
+                            <field name="welcome_msg" placeholder="Write here..." class="oe-bordered-editor o_example_note" readonly="state != 'draft'"/>
+                            <field name="anaesthesia_intro" placeholder="Write here..." class="oe-bordered-editor o_example_note" readonly="state != 'draft'"/>
+                            <field name="anaesthesia_type_ids" widget="many2many_tags" readonly="state != 'draft'" required="1" options="{'no_create':True, 'no_open':True}" domain="[('user_id','=',uid)]"/>
+                            <field name="close_msg" placeholder="Write here..." class="oe-bordered-editor o_example_note" readonly="state != 'draft'"/>
+                            <field name="check_clos_msg" invisible="1" />
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="activity_ids"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_information_guide_reference_tree" model="ir.ui.view">
+            <field name="name">information.guide.tree</field>
+            <field name="model">information.guide</field>
+            <field name="arch" type="xml">
+                <tree string="Information Guides">
+                    <field name="name"/>
+                    <field name="version"/>
+                    <field name="released_date"/>
+                    <field name="state" widget="badge" decoration-info="state == 'draft'" decoration-success="state == 'release'"/>
+                    <field name="created_by" column_invisible="1"/>
+                    <button string="Use this Template"
+                        type="object" name="create_personel_guide" class="btn btn-primary"
+                        invisible="state != 'release' or created_by != 'admin'"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_guides_search" model="ir.ui.view">
+            <field name="name">guide.select</field>
+            <field name="model">information.guide</field>
+            <field name="arch" type="xml">
+                <search string="Search Guides">
+                    <field name="name"/>
+                    <field name="version"/>
+                    <field name="released_date"/>
+                    <group expand="0" string="Group By...">
+                        <!-- <filter string="Anaesthes" name="anaesthesia_type_ids" domain="[]" context="{'group_by': 'anaesthesia_type_ids'}"/><separator/>
+                        <filter string="Medication Class" name="medication_class_id" domain="[]" context="{'group_by': 'medication_class_id'}"/><separator/> -->
+                        <filter string="Status" name="state" domain="[]" context="{'group_by': 'state'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_information_guides_reference" model="ir.actions.act_window">
+            <field name="name">Information Guides</field>
+            <field name="res_model">information.guide</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_information_guide_reference_tree"/>
+            <field name="domain">[('reference_type', '=', 'reference')]</field>
+            <field name="context"></field>
+            <field name="help" type="html">
+                <p>
+                    This is the list of Information Guides.
+                </p>
+            </field>
+        </record>
+
+        <record id="action_information_guides_reference_doctor" model="ir.actions.act_window">
+            <field name="name">Information Guides</field>
+            <field name="res_model">information.guide</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_information_guide_reference_tree"/>
+            <field name="domain">[('reference_type', '=', 'reference'),('state', '=', 'release')]</field>
+            <field name="context">{'create':False}</field>
+            <field name="help" type="html">
+                <p>
+                    This is the list of Information Guides.
+                </p>
+            </field>
+        </record>
+
+        <record id="action_information_guides_personel" model="ir.actions.act_window">
+            <field name="name">My Guides</field>
+            <field name="res_model">information.guide</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_information_guide_reference_tree"/>
+            <field name="domain">[('reference_type', '=', 'personal'),('created_by', '=', 'doctor'),('create_uid', '=', uid)]</field>
+            <field name="context"></field>
+            <field name="help" type="html">
+                <p>
+                    This is the list of Information Guides.
+                </p>
+            </field>
+        </record>
+
+        <record id="action_information_guides_all_doctor" model="ir.actions.act_window">
+            <field name="name">All Doctor Guides</field>
+            <field name="res_model">information.guide</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_information_guide_reference_tree"/>
+            <field name="domain">[('created_by', '=', 'doctor')]</field>
+            <field name="context"></field>
+            <field name="help" type="html">
+                <p>
+                    This is the list of Information Guides.
+                </p>
+            </field>
+        </record>
+
+        <!-- Case Guide view -->
+        <record id="view_information_guide_case_form" model="ir.ui.view">
+            <field name="name">information.guide.case.form</field>
+            <field name="model">information.guide.case</field>
+            <field name="arch" type="xml">
+                <form string="Information Guide">
+                    <header>
+                        <!-- <button name="finalise" string="Finalise" type="object" invisible="state != 'draft'" class="oe_highlight" /> -->
+                        <button name="action_open_guide_preview" string="Preview" type="object" class="oe_highlight" icon="fa-eye" />
+                        <!-- <button name="reset_to_draft" string="Reset to Draft" type="object" invisible="state == 'draft'" class="oe_highlight" />
+                        <field name="state" widget="statusbar"/> -->
+                    </header>
+                    <sheet>
+                        <group>
+                            <!-- <field name="reference_type" widget="radio" options="{'horizontal': True}" readonly="1"/>
+                            <field name="version" readonly="state != 'draft'"/> -->
+                            <field name="state" required="1" invisible="1"/>
+                            <field name="name" required="1" readonly="state != 'draft'"/>
+                            <field name="welcome_msg" placeholder="Write here..." class="oe-bordered-editor o_example_note" readonly="state != 'draft'"/>
+                            <field name="anaesthesia_intro" placeholder="Write here..." class="oe-bordered-editor o_example_note" readonly="state != 'draft'"/>
+                            <field name="anaesthesia_type_ids" widget="many2many_tags" required="1" options="{'no_create':True, 'no_open':True}" readonly="state != 'draft'" domain="[('user_id','=',uid)]"/>
+                            <field name="additional_info_ids" widget="many2many_tags" options="{'no_create':True, 'no_open':True}" readonly="state != 'draft'" domain="[('user_id','=',uid)]"/>
+                            <field name="close_msg" placeholder="Write here..." readonly="state != 'draft'" class="oe-bordered-editor o_example_note"/>
+                            <field name="patient_case_id" required="1" invisible="1"/>
+                            <field name="guide_id" required="1" invisible="1"/>
+                            <field name="check_close_msg" invisible="1" />
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="activity_ids"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_information_guides_case" model="ir.actions.act_window">
+            <field name="name">Information Guide</field>
+            <field name="res_model">information.guide.case</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_information_guide_form"/>
+            <field name="domain">[]</field>
+            <field name="context"></field>
+            <field name="help" type="html">
+                <p>
+                    This is the list of Information Guides.
+                </p>
+            </field>
+        </record>
+
+    </data>
+</odoo>

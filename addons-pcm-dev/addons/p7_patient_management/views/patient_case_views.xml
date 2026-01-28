@@ -1,0 +1,460 @@
+<odoo>
+    <data>
+
+        <record id="view_patient_case_form" model="ir.ui.view">
+            <field name="name">patient.case.form</field>
+            <field name="model">patient.case</field>
+            <field name="priority" eval="1"/>
+            <field name="arch" type="xml">
+                <form string="Bookings">
+                    <header>
+                        <field name="state" widget="statusbar"/>
+                        <!-- <button type="object" name="date_wizard_view" class="btn btn-light mx-2" string="OP DATE"></button> -->
+                    </header>
+                    <sheet>
+                    <group class="o_row" groups="p7_patient_management.group_user_admin">
+                        <span>
+                            <label for="case_backend_id" string="Case ID" class="fw-bold"/>
+                            <field name="case_backend_id" readonly="1" required="1" class="m-2"/>
+                        </span>
+                        <span>
+                            <label for="name" string="Booking ID" class="fw-bold"/>
+                            <field name="name" required="1" readonly="1" class="m-2"/>
+                        </span>
+                    </group>
+                        <group string="Patient Information" name="patient_info_section">
+                            <!-- Left side: First name, Last name, Mobile -->
+                            <group>
+                                <field name="patient_id" invisible="1"/>
+                                <label for="patient_first_name" class="required-label"/>
+                                <field name="patient_first_name" required="1" nolabel="1"/>
+                                <field name="patient_last_name"/>
+                                <label for="patient_mob" string="Mobile" class="required-label"/>
+                                <div class="d-flex flex-wrap align-items-center" style="gap: 8px;">
+                                    <field name="patient_phone_code"
+                                           placeholder="+XX"
+                                           required="1"
+                                           nolabel="1"
+                                           options="{'no_create': True, 'no_open': True}"
+                                           style="flex: 0 0 80px; min-width: 60px;"/>
+                                    <field name="patient_mob"
+                                           required="1"
+                                           nolabel="1"
+                                           placeholder="Enter phone number"
+                                           style="flex: 1; min-width: 0;"/>
+                                    <button name="action_whatsapp_call"
+                                            title="video"
+                                            type="object"
+                                            class="oe_highlight btn-success"
+                                            icon="fa-video-camera"/>
+                                    <button name="action_whatsapp_message"
+                                            title="message"
+                                            type="object"
+                                            class="oe_highlight btn-primary"
+                                            icon="fa-comment"/>
+                                </div>
+
+                            </group>
+
+                            <!-- Right side: NRIC, Gender, DOB -->
+                            <group>
+                                <field name="patient_nric_number"/>
+                                <field name="patient_gender"/>
+                                <label for="patient_dob" string="Date of Birth" class="required-label"/>
+                                <field name="patient_dob" required="1" nolabel="1" placeholder="DDMMYYYY"/>
+                            </group>
+
+                        </group>
+
+                        <group string="Procedure Information" name="procedure_info_section" groups="p7_patient_management.group_user_admin,p7_patient_management.group_user_doctor">
+                            <!-- Left side: Procedure, Process, Location -->
+                            <group>
+                                <label for="op_process" string="Procedure" class="required-label"/>
+                                <field name="op_process" required="1" nolabel="1"/>
+                                <label for="op_process_detail" string="Procedure Details" class="required-label"/>
+                                <field name="op_process_detail" required="1" widget="text" nolabel="1"/>
+                                <label for="op_surgeon" string="Surgeon" class="required-label"/>
+                                <field name="op_surgeon" required="1" nolabel="1"/>
+                                <field name="medic_state" invisible="1"/>
+                                <field name="guide_state" invisible="1"/>
+                                <field name="feedback_state" invisible="1"/>
+                            </group>
+
+                            <!-- Right side: Surgeon, Anaesthesia Type, Case Tier -->
+                            <group>
+                                <label for="op_date" string="Date and Time" class="required-label"/>
+                                <div class="d-flex o_row">
+                                    <field name="op_date" required="1" nolabel="1"/>
+                                    <!-- <i class="fa fa-long-arrow-right mx-2" aria-label="Arrow icon" title="Arrow"/> -->
+                                    <field name="op_end_date" invisible="1" nolabel="1"/>
+                                    <div class="oe_button_box">
+                                        <button name="action_calender" type="object"
+                                                class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown">
+                                            Add to calendar
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <button name="get_google_calendar_url" type="object"
+                                                        class="dropdown-item">
+                                                    Google Calendar
+                                                </button>
+                                            </li>
+                                            <li>
+                                                <button name="get_ics_calendar_url" type="object" class="dropdown-item">
+                                                    iCal
+                                                </button>
+                                            </li>
+                                            <li>
+                                                <button name="get_outlook_calendar_url" type="object"
+                                                        class="dropdown-item">
+                                                    Outlook
+                                                </button>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <label for="op_duration_hrs" string="Duration"/>
+                                <div class="d-flex">
+                                    <field name="op_duration_hrs" required="1" nolabel="1" style="width:15%;"/>
+                                    <span>Hrs</span>
+                                    <field name="op_duration_mins" nolabel="1" style="width:15%;"/>
+                                    <span>Mins</span>
+                                </div>
+                                <label for="op_location_id" string="Location" class="required-label"/>
+                                <field name="op_location_id" required="1" nolabel="1" options="{'no_open':True}"
+                                       domain="[('user_id','=',uid)]"/>
+                            </group>
+                        </group>
+
+                        <group string="Pre-Anaesthetic" name="pre_anaesthetic_info_section" groups="p7_patient_management.group_user_admin,p7_patient_management.group_user_doctor">
+                            <group>
+                                <label for="medic_survey_id"/>
+                                <div class="d-flex">
+                                    <field name="medic_survey_id"
+                                           domain="[('type_of_survey', '=', 'medical_history'),('template_type', '=', 'personal'),('state', '=', 'release'),('user_id', '=', uid)]"
+                                           nolabel="1"/>
+                                </div>
+                            </group>
+                            <group>
+                                <button name="initiate_survey_collection" string="Initiate Collection" type="object"
+                                        invisible="medic_state in ['submit', 'review']" class="oe_highlight"/>
+                            </group>
+                        </group>
+
+                        <field name="case_tier" invisible="1"/>
+                        <group string="Video Call Documentation" name="video_call_section"
+                               invisible="case_tier != 'premium'">
+                            <group>
+                                <label for="video_call_status" string="Video Call Status" class="required-label"/>
+                                <field name="video_call_status" nolabel="1" required="0" readonly="1"/>
+                            </group>
+                            <group>
+                                <label for="video_call_assign_status" string="Video Call Assign Status"
+                                       class="required-label"/>
+                                <field name="video_call_assign_status" nolabel="1" required="0" readonly="1"/>
+                            </group>
+                            <group>
+                                <label for="attempt_count" string="Attempt Count" class="fw-bold required-label"/>
+                                <field name="attempt_count" readonly="1" nolabel="1"/>
+                            </group>
+                        </group>
+
+                        <group string="Anaesthetic Plan" name="anaesthetic_plan_section" invisible="case_tier != 'premium'" groups="p7_patient_management.group_user_admin,p7_patient_management.group_user_doctor">
+                            <group>
+                                <label for="case_tier" invisible="0"/>
+                                <div class="d-flex" invisible="0">
+                                    <field name="case_tier" readonly="1" nolabel="1"/>
+                                </div>
+                                <label invisible="case_tier == 'normal'" for="inform_guide_id"/>
+                                <div invisible="case_tier == 'normal'" class="d-flex">
+                                    <field name="inform_guide_id"
+                                           domain="[('state', '=', 'release'),('create_uid', '=', uid)]"
+                                           options="{'no_open':True, 'no_create':True}" readonly='1' nolabel="1"/>
+                                    <!-- <button name="send_guide" string="Send to Patient" type="object" invisible="not inform_guide_id or medic_state not in ('submit','review')" class="oe_highlight" /> -->
+                                </div>
+                                <field name="additional_info_ids" invisible="0"
+                                       options="{'no_create':True, 'no_open':True}"
+                                       domain="[('user_id', '=', uid)]"
+                                       widget="many2many_tags"/>
+                                <field name="location_id" invisible="0" options="{'no_open':True, 'no_create':True,}"
+                                       domain="[('user_id','=',uid)]"/>
+                            </group>
+                            <group>
+                                <button type="object" name="action_case_guide" class="btn btn-light mx-2" string=""
+                                        invisible="not inform_guide_id or guide_state != 'draft'">
+                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                </button>
+                                <button type="object" name="action_case_guide" class="btn btn-light mx-2" string=""
+                                        invisible="not inform_guide_id or guide_state not in ('sent','confirm')">
+                                    <i class="fa fa-arrow-right" aria-hidden="true"></i>
+                                </button>
+                                <button name="initiate_premium" string="Patient Anaesthetic Plan" invisible="1"
+                                        type="object" class="oe_highlight"/>
+                            </group>
+                        </group>
+                        <group string="Post-Anaesthetic" name="post_anaesthetic_info_section" groups="p7_patient_management.group_user_admin,p7_patient_management.group_user_doctor">
+                            <group>
+                                <label for="feedback_survey_id" string="Post-Anaesthetic Feedback"/>
+                                <div class="d-flex">
+                                    <field name="feedback_survey_id"
+                                           domain="[('type_of_survey', '=', 'feedback'),('template_type', '=', 'personal'),('state', '=', 'release'),('user_id', '=', uid)]"
+                                           nolabel="1"/>
+                                </div>
+                            </group>
+                            <group>
+                                <button name="initiate_feedback_collection" string="Initiate Feedback" type="object"
+                                        invisible="not feedback_survey_id or state != 'post-operation'"
+                                        class="oe_highlight"/>
+                            </group>
+                        </group>
+                        <notebook colspan="4" groups="p7_patient_management.group_user_admin,p7_patient_management.group_user_doctor">
+                            <page string="Questionnaire Submission" name="medical_details" autofocus="autofocus">
+                                <field name="case_ids" readonly="1">
+                                    <tree string="Submission List" editable="bottom" create="0" delete="0">
+                                        <field name="medic_survey_id" string="Questionnaire Name"/>
+                                        <field name="medic_survey_start_date" string="Start Date"/>
+                                        <field name="medic_survey_submit_date" string="Submit Date"/>
+                                        <field name="medic_state" string="Status" widget="badge" decoration-info="medic_state == 'draft'" decoration-danger="medic_state in ('confirm','in_progress')" decoration-warning="medic_state == 'submit'" decoration-success="medic_state == 'review'"/>
+                                        <button name="action_answer_form" invisible="medic_state not in ('submit','review')" string="View Form" class="btn-primary" type="object" title="Open answer form"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Feedback Submission" name="feedback_details">
+                                <field name="feedback_ids" readonly="1">
+                                    <tree string="Feedback List" editable="bottom" create="0" delete="0">
+                                        <field name="feedback_survey_id" string="Feedback Submission"/>
+                                        <field name="feedback_survey_start_date" string="Start Date"/>
+                                        <field name="feedback_survey_submit_date" string="Submit Date"/>
+                                        <field name="feedback_state" string="Status" widget="badge" decoration-info="feedback_state == 'draft'" decoration-warning="feedback_state == 'submit'" decoration-danger="feedback_state in ('confirm','in_progress')" decoration-success="feedback_state == 'review'"/>
+                                        <button name="action_feedback_form" invisible="feedback_state not in ('submit','review')" string="View Form" class="btn-primary" type="object" title="Open answer form"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Anaesthesia Selected" name="selected_anaesthesia">
+                                <field name="anaesthesia_line_ids" readonly="1">
+                                    <tree string="Anaesthesia Selected">
+                                        <field name="name" string="Name"/>
+                                        <field name="date_updated"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <!-- <page string="Reminders" name="reminder">
+                                <field name="reminder_line_ids" nolabel="1" context="{'default_patient_case_id': id, 'form_view_ref': 'p7_patient_management.view_reminder_line_form'}" mode="tree,form">
+                                    <tree string="Reminders">
+                                        <control>
+                                            <create name="add_line_control" string="Add a Reminder"/>
+                                        </control>
+                                        <field name="name" string="Name"/>
+                                        <field name="reminder_hour"/>
+                                        <field name="preparation_steps"/>
+                                    </tree>
+                                </field>
+                            </page> -->
+                            <page string="Reminders" name="reminder">
+                                <field name="reminder_line_ids" nolabel="1"
+                                    context="{'default_patient_case_id': id}"
+                                    options="{'reload_on_close': true}">
+                                    <tree string="Reminders" create="1" edit="1" delete="1">
+                                        <control>
+                                            <create name="add_line_control" string="Add a Reminder"/>
+                                        </control>
+                                        <field name="name" string="Name"/>
+                                        <field name="reminder_hour"/>
+                                        <field name="preparation_steps"/>
+                                    </tree>
+                                    <form string="Reminder Line Setup">
+                                        <sheet>
+                                            <group>
+                                                <field name="name" required="1"/>
+                                                <field name="reminder_hour" required="1"/>
+                                                <field name="preparation_steps" required="1" placeholder="Write here..." class="oe-bordered-editor o_example_note"/>
+                                                <div class="o_horizontal_group" style="display: flex; align-items: center; gap: 8px; margin-top: 8px;">
+                                                    <button name="action_formatted_datetime" string="Get Operation Datetime" class="btn btn-primary text-nowrap" type="object"/>
+                                                </div>
+                                                <div class="o_horizontal_group" style="display: flex; align-items: center; gap: 8px; margin-top: 8px;">
+                                                    <field name="operation_hour" class="o_field_integer" nolabel="1" style="width: 60px; text-align: center;"/>
+                                                    <label for="operation_hour" string="Hours before Procedure" class="text-nowrap"/>
+                                                </div>
+                                            </group>
+                                        </sheet>
+                                    </form>
+                                </field>
+                            </page>
+                            <page name='internal_notes' string="Internal Notes">
+                                <field name="comment" placeholder="Internal notes..."/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="activity_ids"/>
+                        <field name="message_follower_ids" widget="many2many_tags"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_patient_case_tree" model="ir.ui.view">
+            <field name="name">patient.case.tree</field>
+            <field name="model">patient.case</field>
+            <field name="arch" type="xml">
+                <tree string="Bookings">
+                    <field name="op_date" string="Date and Time"/>
+                    <field name="op_surgeon"/>
+                    <field name="op_process" string="Procedure (Abbreviated)"/>
+                    <field name="op_location_id" string="Location"/>
+                    <field name="patient_first_name" string="Patient"/>
+                    <field name="state" widget="badge" decoration-danger="state == 'pre-operation'" decoration-warning="state == 'operation'" decoration-success="state == 'post-operation'"/>
+                    <field name="medic_state" widget="badge" decoration-info="medic_state == 'draft'" decoration-danger="medic_state in ('confirm','in_progress')" decoration-warning="medic_state == 'submit'" decoration-success="medic_state == 'review'"/>
+                    <field name="guide_state" widget="badge" decoration-info="guide_state == 'draft'" decoration-warning="guide_state == 'sent'" decoration-success="guide_state == 'confirm'"/>
+                    <field name="feedback_state" widget="badge" decoration-info="feedback_state == 'draft'" decoration-warning="feedback_state == 'submit'" decoration-danger="feedback_state in ('confirm','in_progress')" decoration-success="feedback_state == 'review'"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_patient_case_search" model="ir.ui.view">
+            <field name="name">patient.case.select</field>
+            <field name="model">patient.case</field>
+            <field name="arch" type="xml">
+                <search string="Search Bookings">
+                    <field name="name"/>
+                    <field name="patient_id"/>
+                    <field name="medic_state"/>
+                    <field name="feedback_state"/>
+                    <field name="op_date"/>
+                    <filter string="Contact Attempts &gt;= 3" name="video_call_fail_count_gt3" domain="[('attempt_count','&gt;=',3)]"/>
+                    <filter string="Contact Status In Progress" name="video_call_status_in_progress" domain="[('video_call_status','=','in_progress')]"/>
+                    <group expand="0" string="Group By...">
+                        <filter string="Case ID" name="name" domain="[]" context="{'group_by': 'name'}"/><separator/>
+                        <filter string="Patient Name" name="patient_id" domain="[]" context="{'group_by': 'patient_id'}"/><separator/>
+                        <filter string="Status" name="state" domain="[]" context="{'group_by': 'state'}"/><separator/>
+                        <filter string="Medical History Collection Status" name="medic_state" domain="[]" context="{'group_by': 'medic_state'}"/><separator/>
+                        <filter string="Feedback Collection Status" name="feedback_state" domain="[]" context="{'group_by': 'feedback_state'}"/><separator/>
+                        <filter string="Upcoming 7 Days" name="upcoming_operation" 
+                            domain="[('op_date', '&gt;=', context_today().strftime('%Y-%m-%d 00:00:00')),
+                                    ('op_date', '&lt;=', (context_today() + relativedelta(days=7)).strftime('%Y-%m-%d 23:59:59'))]"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="view_patient_case_pivot" model="ir.ui.view">
+            <field name="name">patient.case.pivot</field>
+            <field name="model">patient.case</field>
+            <field name="arch" type="xml">
+                <pivot string="Bookings" sample="1">
+                    <!-- <field name="patient_id" type="row"/>
+                    <field name="status" type="measure"/> -->
+                </pivot>
+            </field>
+        </record>
+
+        <!-- Associate specific views -->
+        <record id="view_patient_case_associate_form" model="ir.ui.view">
+            <field name="name">patient.case.associate.form</field>
+            <field name="model">patient.case</field>
+            <field name="arch" type="xml">
+                <form string="Patient Case">
+                    <header>
+                        <field name="video_call_assign_status" widget="statusbar"/>
+                        <button name="action_take_video_call" string="Take Video Call" type="object" class="oe_highlight" invisible="video_call_assign_status != 'to_assign'"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <field name="name" readonly="1"/>
+                            <field name="patient_first_name" readonly="1"/>
+                            <field name="patient_last_name" readonly="1"/>
+                            <field name="patient_mob" readonly="1"/>
+                            <field name="op_date" readonly="1"/>
+                            <field name="video_call_outcome" string="Contact Attempt Outcome"/>
+                            <field name="attempt_count" string="Number of Contact Attempts Logged"/>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_patient_case_associate_status_tree" model="ir.ui.view">
+            <field name="name">patient.case.associate.status.tree</field>
+            <field name="model">patient.case</field>
+            <field name="arch" type="xml">
+                <tree string="Patient Cases" decoration-danger="video_call_assign_status == 'assigned' and video_call_outcome == 'failed' and attempt_count &gt;= 3">
+                    <field name="video_call_outcome" column_invisible="1"/>
+                    <field name="video_call_assign_status" column_invisible="1"/>
+                    <field name="case_backend_id" string="Master ID"/>
+                    <field name="name" string="Booking ID"/>
+                    <field name="create_uid" string="Doctor full name"/>
+                    <field name="op_date" string="Operation Date/Time"/>
+                    <field name="video_call_status" string="Video Call Status"/>
+                    <field name="associate_id" string="Associate Assigned"/>
+                    <field name="attempt_count" string="Number of Calls Logged"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_patient_case_associate_to_assign_tree" model="ir.ui.view">
+            <field name="name">patient.case.associate.to.assign.tree</field>
+            <field name="model">patient.case</field>
+            <field name="arch" type="xml">
+                <tree string="Bookings for Calling">
+                    <field name="case_backend_id" string="Backend Case ID"/>
+                    <field name="name" string="Booking ID"/>
+                    <field name="create_uid" string="Doctor"/>
+                    <field name="op_date" string="Operation Date/Time"/>
+                    <field name="attempt_count" string="Number of Calls Logged"/>
+                </tree>
+            </field>
+        </record>
+
+
+        <record id="view_patient_case_graph_date" model="ir.ui.view">
+            <field name="name">patient.case.graph</field>
+            <field name="model">patient.case</field>
+            <field name="arch" type="xml">
+                <graph string="Bookings" sample="1">
+                    <field name="op_date"/>
+                    <!-- <field name="balance" operator="+" type='measure'/> -->
+                </graph>
+            </field>
+        </record>
+
+        <record id="action_patient_case" model="ir.actions.act_window">
+            <field name="name">Bookings</field>
+            <field name="res_model">patient.case</field>
+            <field name="view_mode">tree,form,pivot,graph</field>
+            <field name="view_id" ref="view_patient_case_tree"/>
+            <field name="domain">[]</field>
+            <field name="context"></field>
+            <field name="help" type="html">
+                <p>
+                    This is the list of patient cases.
+                </p>
+            </field>
+        </record>
+
+        <!--Feedback Collection in action menu -->
+        <record id="model_patient_case_action_feedback_collection" model="ir.actions.server">
+            <field name="name">📝 Feedback Survey Collection</field>
+            <field name="model_id" ref="p7_patient_management.model_patient_case"/>
+            <field name="binding_model_id" ref="p7_patient_management.model_patient_case"/>
+            <field name="binding_view_types">list</field>
+            <field name="state">code</field>
+            <field name="code">
+                if records:
+                    for record in records:
+                        action = record.action_feedback_survey_collection()
+            </field>
+        </record>
+
+        <record id="action_custom_collect_history" model="ir.actions.act_window.view">
+            <field name="sequence" eval="3"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="view_patient_case_tree"/>
+            <field name="act_window_id" ref="action_patient_case"/>
+        </record>
+
+    </data>
+</odoo>

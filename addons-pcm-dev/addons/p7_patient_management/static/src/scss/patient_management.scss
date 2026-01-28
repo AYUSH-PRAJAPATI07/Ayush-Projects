@@ -1,0 +1,44 @@
+.timer-container {
+    display: flex;
+    align-items: center;
+    background-color: #f8f9fa;
+    font-size: 14px;
+    font-family: Arial, sans-serif;
+    color: #343a40;
+}
+
+.timer-count {
+    font-weight: bold;
+    color: #dc3545;
+    margin-right: 5px;
+    margin-left: 5px;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.btn-custom {
+    background-color: #00b33c;
+    color: black;
+    border: none;
+    padding: 3px 10px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.btn-custom:hover {
+    background-color: #80ffbf;
+}
+
+.o_list_renderer .o_list_table tbody > tr > td:not(.o_list_record_selector):not(.o_handle_cell):not(.o_list_button):not(.o_list_record_remove):not(.o_list_record_open_form_view) {
+    --fieldWidget-display: block;
+    display: table-cell;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+}
+
+.o_field_widget .o_input_dropdown .o_input, .o_field_widget .o_input_dropdown > input, .o_field_widget .o_datepicker .o_input, .o_field_widget .o_datepicker > input {
+    padding-right: 0px;
+}

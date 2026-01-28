@@ -1,0 +1,67 @@
+<odoo>
+    <data>
+        <record id="view_survey_user_input_video_call" model="ir.ui.view">
+            <field name="name">survey.user_input.video.call.form</field>
+            <field name="model">survey.user_input</field>
+            <!-- chain from our own modified view so the separator exists -->
+            <field name="inherit_id" ref="p7_patient_management.view_survey_user_input_inherit"/>
+            <field name="priority">20</field>
+            <field name="arch" type="xml">
+                <!-- match separator by its string label, NOT name -->
+                <xpath expr="//separator[@string='Anaesthetic Plan Details']/following-sibling::group[1]"
+                       position="after">
+                    <group string="Contact Attempt Documentation" name="video_call_section"
+                           attrs="{'invisible': [('case_tier','!=','premium')]}">
+                        <group>
+                            <label for="video_call_date" string="Contact Attempt Date" class="required-label"/>
+                            <field name="video_call_date" nolabel="1"/>
+                            <label for="video_call_time" string="Contact Attempt Time" class="required-label"/>
+                            <field name="video_call_time" nolabel="1" widget="float_time"/>
+                            <label for="attempt_count" string="Attempts"
+                                   groups="p7_patient_management.group_user_doctor,p7_patient_management.group_user_admin"/>
+                            <field name="attempt_count" nolabel="1" readonly="1"
+                                   groups="p7_patient_management.group_user_doctor,p7_patient_management.group_user_admin"/>
+                        </group>
+
+                        <!-- shown to admin/associate only -->
+                        <group groups="p7_patient_management.group_user_admin,p7_patient_management.group_user_associate">
+                            <label for="video_call_location" string="Patient Location" class="required-label"/>
+                            <field name="video_call_location" nolabel="1"/>
+                            <label for="contact_channel" string="Contact Channel" class="required-label"/>
+                            <field name="contact_channel" nolabel="1"/>
+                            <field name="video_call_contents" widget="text"/>
+                        </group>
+
+                        <!-- bypass reason read-only display for doctor/admin if set -->
+                        <group groups="p7_patient_management.group_user_doctor,p7_patient_management.group_user_admin"
+                               attrs="{'invisible': [('bypass_reason','=',False)]}">
+                            <label for="bypass_reason" string="Bypass Reason"/>
+                            <field name="bypass_reason" nolabel="1" readonly="1" widget="text"/>
+                        </group>
+                    </group>
+                </xpath>
+
+                <!-- header buttons -->
+                <xpath expr="//header" position="inside">
+                    <button name="action_assign_to_associate" type="object" string="Delegate to Associate"
+                            class="oe_highlight"
+                            groups="p7_patient_management.group_user_doctor,p7_patient_management.group_user_admin"
+                            confirm="Assign contact attempt to associate?"/>
+                    <button name="action_video_call_success" type="object" string="Video Call Successful"
+                            groups="p7_patient_management.group_user_doctor,p7_patient_management.group_user_admin"
+                            confirm="Mark video call successful?"/>
+                    <button name="action_video_call_fail" type="object" string="Video Call Fail"
+                            groups="p7_patient_management.group_user_doctor,p7_patient_management.group_user_admin"
+                            confirm="Mark video call failed?"/>
+                    <button name="action_open_bypass_wizard" type="object" string="Bypass"
+                            groups="p7_patient_management.group_user_doctor,p7_patient_management.group_user_admin"/>
+                    <button name="action_contact_attempt_complete" type="object" string="Contact Attempt Complete"
+                            class="oe_highlight"
+                            groups="p7_patient_management.group_user_associate"
+                            confirm="Mark contact attempt complete?"/>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

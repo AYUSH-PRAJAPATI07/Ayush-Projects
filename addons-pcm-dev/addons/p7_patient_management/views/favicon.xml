@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="favicon_icon" inherit_id="web.layout" name="Web layout">
+            <!-- change the title with reliance partner -->
+            <xpath expr="//head/title" position="replace">
+                <title>VANAESA</title>
+ 
+            </xpath>
+            <!-- change the default favicon icon with   -->
+            <xpath expr="//head//link[@rel='shortcut icon']" position="replace">
+                <link type="image/x-icon" rel="shortcut icon" href="/p7_patient_management/static/src/img/vanaesa.jpg"/>
+            </xpath>
+        </template>       
+    </data>
+</odoo>

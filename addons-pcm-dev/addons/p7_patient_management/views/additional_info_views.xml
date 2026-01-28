@@ -1,0 +1,57 @@
+<odoo>
+    <record id="view_additional_info_form" model="ir.ui.view">
+        <field name="name">view.additional.info.form</field>
+        <field name="model">additional.information</field>
+        <field name="arch" type="xml">
+            <form string="Setup Additional Information">
+                <sheet>
+                    <group>
+                        <field name="name" required="1"/>
+                        <field name="explanation" placeholder="Write here..." class="oe-bordered-editor o_example_note"/>
+                        <field name="created_by" readonly="1"/>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="activity_ids"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_additional_info_tree" model="ir.ui.view">
+        <field name="name">view.additional.info.tree</field>
+        <field name="model">additional.information</field>
+        <field name="arch" type="xml">
+            <tree string="Setup Additional Information">
+                <field name="name"/>
+                <field name="explanation"/>
+                <field name="created_by"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_additional_info_search" model="ir.ui.view">
+        <field name="name">view.additional.info.search</field>
+        <field name="model">additional.information</field>
+        <field name="arch" type="xml">
+            <search string="Search Additional Information">
+                <field name="name"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_additional_info" model="ir.actions.act_window">
+        <field name="name">Setup Additional Information</field>
+        <field name="res_model">additional.information</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_additional_info_tree"/>
+        <field name="domain">[]</field>
+        <field name="context"></field>
+        <field name="help" type="html">
+            <p>
+                This is the list of Additional Information.
+            </p>
+        </field>
+    </record>
+</odoo>

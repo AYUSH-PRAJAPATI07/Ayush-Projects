@@ -1,0 +1,370 @@
+<odoo>
+    <data>
+        <!-- Two-Factor Authentication Page -->
+        <template id="custom_2fa_template" name="Custom 2FA Setup">
+            <t t-set="no_header" t-value="True"/>
+            <t t-set="no_footer" t-value="True"/>
+            <t t-call="web.layout">
+                <meta charset="UTF-8" />
+                <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
+                <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+                <style>
+                    .con-body {
+                        background-color: #d1e4e6;
+                        min-height: 100vh;
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: center;
+                        align-items: center;
+                    }
+
+                    .main-card {
+                        background-color: white;
+                        border-radius: 0.75rem;
+                        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+                        padding: 2rem;
+                        width: 100%;
+                        max-width:700px;
+                        margin: 1rem auto;
+                    }
+
+                    .form-control {
+                        margin-bottom: 1rem;
+                        padding: 0.75rem;
+                        font-size: 1rem;
+                    }
+
+                    .auth-input:focus {
+                        border-color: #25b7d3;
+                        box-shadow: 0 0 0 2px rgba(37, 183, 211, 0.2);
+                    }
+
+                    .action-btn {
+                        width: 100%;
+                        background-color: #25b7d3;
+                        color: white;
+                        border: none;
+                        padding: 0.75rem;
+                        border-radius: 0.375rem;
+                        margin-top: 1rem;
+                        transition: background-color 0.2s;
+                        font-weight: 500;
+                    }
+
+                    .action-btn:hover {
+                        background-color: #1da1bb;
+                    }
+
+                    .qr-con {
+                        width: 10rem;
+                        height: 10rem;
+                        background-color: #000000;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        margin: 0 auto; /* ← this centers it horizontally */
+                        border-radius: 0.5rem; /* optional: to make it a bit nicer */
+                    }
+
+
+                    .footer {
+                        text-align: center;
+                        padding: 1rem;
+                        color: #9ca3af;
+                        font-size: 0.75rem;
+                        margin-top: 1rem;
+                    }
+
+                
+                </style>
+
+                <div class="con-body">
+                    <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="col-12">
+                                <!-- Main card -->
+                                <div class="main-card">
+                                    <!-- Logo -->
+                                    
+                                    <h4 class="text-center my-4">Two-Factor Authentication (2FA) Setup</h4>
+                                    <p class="text-center mb-3" style="font-size: 18px;">Scan the QR code below using an Authenticator app (Google Authenticator, Authy, etc.).</p>
+                                    <div class="form-outline form-white my-4 px-3">
+                                        <div class="qr-con">
+                                            <t t-if="wizard.qrcode">
+                                                <img t-att-src="image_data_uri(wizard.qrcode)" style="max-height: 200px;" alt="QR Code"/>
+                                            </t>
+                                        </div>
+                                            <p class="mt-3" style="font-size: 18px;">Or manually enter this key: <strong><t t-esc="wizard.secret"/></strong></p>
+                                            <form action="/web/login/enable_2fa" method="post">
+                                                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                                <input type="hidden" name="wizard_id" t-att-value="wizard.id"/>
+
+                                                <label style="font-size: 18px;" for="otp_code">Enter the 6-digit code from your Authenticator app:</label>
+                                                <input class="auth-input text-center form-control mt-4" type="text" id="otp_code" name="code" required="True" pattern="\d{6}" maxlength="6"/>
+
+                                                <button type="submit" class="action-btn">Activate 2FA</button>
+                                                <t t-if="error">
+                                                    <div class="text-danger mt-2 text-center small">
+                                                        <t t-esc="error"/>
+                                                    </div>
+                                                </t>
+                                            </form>
+                                    </div>
+                                </div>
+                            
+                                <!-- Footer -->
+                                <div class="footer">
+                                    Copyright © Synapse Medical Pte Ltd
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </template>
+
+        <template id="2fa_confirmation_page" name="Survey: 2FA Thank You">
+            <meta charset="UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+            <style>
+                .con-body {
+                    background-color: #d1e4e6;
+                    min-height: 100vh;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                }
+
+                .main-card {
+                    background-color: white;
+                    border-radius: 0.75rem;
+                    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+                    padding: 2rem;
+                    width: 100%;
+                    height: 100%;
+                    margin: 1rem auto;
+                }
+
+                .card-header {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    }
+
+                .pulse-icon {
+                    animation: pulse 1.5s infinite;
+                }
+                    @keyframes pulse {
+                        0% {
+                            transform: scale(1);
+                            opacity: 1;
+                        }
+                        50% {
+                            transform: scale(1.1);
+                            opacity: 0.8;
+                        }
+                        100% {
+                            transform: scale(1);
+                            opacity: 1;
+                        }
+                    }
+
+                .faq-link {
+                    text-align: right;
+                    font-size: 0.875rem;
+                    }
+                    
+                    .faq-link a {
+                    color: #25b7d3;
+                    text-decoration: none;
+                    }
+                    
+                    .faq-link a:hover {
+                    color: #1da1bb;
+                }
+
+                .footer {
+                    text-align: center;
+                    padding: 1rem;
+                    color: #9ca3af;
+                    font-size: 0.75rem;
+                    margin-top: 1rem;
+                }   
+            </style>
+                <div class="con-body">
+                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                    <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-xl-8 col-lg-10 col-md-12">
+                            <!-- Main card -->
+                            <div class="main-card">
+                            <!-- Logo -->
+                                <div class="text-center mt-4 mb-3">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="pulse-icon text-info bi bi-check-circle" width="75" height="75"
+                                        fill="currentColor" viewBox="0 0 16 16">
+                                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+                                        <path
+                                            d="M10.97 4.97a.235.235 0 0 0-.02.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05z" />
+                                    </svg>
+                                </div>
+                                <div class="text-center my-4">
+                                    <h3 class="my-4">Thank you for completing your enrolment process. </h3>
+                                    <h4 class="fs-6 text-secondary lh-base px-4">You will now be redirected to the login page to continue logging into the system.</h4>
+                                </div>
+                                <div class="faq-link mt-5 text-center">
+                                    <a href="https://vanaesa.com/" target="_blank">What is VANAESA?</a>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Footer -->
+                        <div class="footer">
+                            Copyright © Synapse Medical Pte Ltd
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            
+                <script>
+                    setTimeout(() => {
+                        window.location.href = "/web/session/logout?redirect=/";
+                    },5000);
+                </script>
+        </template>
+
+        <!-- Login Two-Factor Authentication Page -->
+        <template id="auth_totp.auth_totp_form" name="Two-Factor Authentication">
+            <t t-set="no_header" t-value="True"/>
+            <t t-set="no_footer" t-value="True"/>
+            <t t-call="web.login_layout">
+                <t t-set="disable_footer">1</t>
+                    <meta charset="UTF-8" />
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
+                    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+                    <style>
+                        .con-body {
+                            background-color: #d1e4e6;
+                            min-height: 100vh;
+                            display: flex;
+                            flex-direction: column;
+                            justify-content: center;
+                            align-items: center;
+                        }
+
+                        .main-card {
+                            background-color: white;
+                            border-radius: 0.75rem;
+                            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+                            padding: 2rem;
+                            width: 100%;
+                            max-width:500px;
+                            margin: 1rem auto;
+                        }
+
+                        .form-control {
+                            margin-bottom: 1rem;
+                            padding: 0.75rem;
+                            font-size: 1rem;
+                        }
+
+                        .auth-input:focus {
+                            border-color: #25b7d3;
+                            box-shadow: 0 0 0 2px rgba(37, 183, 211, 0.2);
+                        }
+
+                        .action-btn {
+                            width: 100%;
+                            background-color: #25b7d3;
+                            color: white;
+                            border: none;
+                            padding: 0.75rem;
+                            border-radius: 0.375rem;
+                            margin-top: 1rem;
+                            transition: background-color 0.2s;
+                            font-weight: 500;
+                        }
+
+                        .action-btn:hover {
+                            background-color: #1da1bb;
+                        }
+
+                        .qr-con {
+                            width: 10rem;
+                            height: 10rem;
+                            background-color: #000000;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            margin: 0 auto; /* ← this centers it horizontally */
+                            border-radius: 0.5rem; /* optional: to make it a bit nicer */
+                        }
+
+
+                        .footer {
+                            text-align: center;
+                            padding: 1rem;
+                            color: #9ca3af;
+                            font-size: 0.75rem;
+                            margin-top: 1rem;
+                        }
+
+                    
+                    </style>
+                    <div class="con-body">
+                        <div class="container">
+                        <div class="row justify-content-center">
+                            <div class="col-12">
+                            <!-- Main card -->
+                            <div class="main-card">
+                                <h4 class="text-center my-4">Two-Factor Authentication</h4>
+                                <p class="text-center mb-3" style="font-size: 18px;">To login, enter below the six-digit authentication code provided by your Authenticator app.<br/><a href="https://www.odoo.com/documentation/17.0/applications/general/auth/2fa.html"
+                                            title="Learn More" target="_blank">Learn More</a></p>
+                                <div class="form-outline form-white my-4 px-3"> 
+                                    <p class="mt-3 text-center" style="font-size: 18px;"><strong>Authentication Code</strong></p>
+                                        <form method="POST" action="" class="">
+                                            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                            <input type="hidden" name="redirect" t-att-value="redirect"/>
+
+                                            <label style="font-size: 18px;" for="totp_token">Enter the 6-digit code from your Authenticator app:</label>
+                                            <input class="auth-input text-center form-control mt-4" type="text" id="totp_token" name="totp_token" autocomplete="off" inputmode="numeric" autofocus="autofocus" required="required" pattern="\d{6}" maxlength="6"/>
+                                            <p class="alert alert-danger text-center" t-if="error" role="alert">
+                                                <t t-esc="error"/>
+                                            </p>
+                                            <div class="mb-2 mt-2 text-center text-muted">
+                                            <input type="checkbox" name="remember" id="switch-remember" value="1"/>
+                                            <label for="switch-remember">Don't ask again on this device</label>
+                                            </div>
+                                            <div t-attf-class="clearfix oe_login_buttons text-center d-grid mb-1">
+                                            <button type="submit" class="action-btn">Login</button>
+                                            </div>
+                            
+                                        </form>
+                                        <form method="POST" action="/web/session/logout">
+                                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                        <div class="w-100 text-center mt-3">
+                                            <button type="submit" class="btn btn-link text-dark btn-sm mb-2">
+                                                Cancel
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            
+                            <!-- Footer -->
+                            <div class="footer">
+                                Copyright © Synapse Medical Pte Ltd
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+            </t>
+        </template>
+
+
+    </data>
+</odoo>

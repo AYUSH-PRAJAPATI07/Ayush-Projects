@@ -1,0 +1,871 @@
+<odoo>
+    <data>
+        <!-- patient dashboard -->
+        <template id="patient_dashboard_template" name="Patient Dashboard">
+            <t t-call="web.layout">
+                <t t-set="title">VANAESA</t>
+                <meta charset="UTF-8"/>
+                <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+                <meta name="description" content="Medical Dashboard for patient pre-operation guidance"/>
+                
+                
+                <!-- Preload critical resources -->
+                <link rel="preload" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" as="style"/>
+                <link rel="preload" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" as="style"/>
+                
+                <!-- Bootstrap CSS -->
+                <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous"/>
+                
+                <!-- Bootstrap Icons -->
+                <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet" crossorigin="anonymous"/>
+                
+                <!-- Font Awesome with integrity check -->
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" 
+                    integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" 
+                    crossorigin="anonymous" referrerpolicy="no-referrer"/>
+
+                <style>
+                    :root {
+                    --primary-color: #54b1c9;
+                    --primary-light: #e0e7ff;
+                    --sidebar-bg: #f8f9fa;
+                    --sidebar-width: 250px;
+                    --text-dark: #212529;
+                    --text-muted: #6c757d;
+                    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+                    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+                    --transition-base: all 0.3s ease-in-out;
+                    }
+                    
+                    .body {
+                    background-color: #f5f7fb;
+                    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                    color: var(--text-dark);
+                    line-height: 1.6;
+                    }
+                    
+                    /* Accessibility improvements */
+                    a, button {
+                    transition: var(--transition-base);
+                    }
+                    
+                    a:focus-visible, 
+                    button:focus-visible {
+                    outline: 2px solid var(--primary-color);
+                    outline-offset: 2px;
+                    }
+                    
+                    /* Sidebar styles */
+                    .sidebar {
+                    width: var(--sidebar-width);
+                    background-color: var(--sidebar-bg);
+                    height: 100vh;
+                    position: fixed;
+                    left: 0;
+                    top: 0;
+                    overflow-y: auto;
+                    border-right: 1px solid #e9ecef;
+                    padding: 1.5rem 1rem;
+                    z-index: 1030;
+                    transition: transform 0.3s ease;
+                    }
+
+                    .sidebar-footer {
+                    margin-top: 2rem;
+                    padding-top: 1rem;
+                    }
+                    
+                    .logo-container {
+                    margin-bottom: 2rem;
+                    }
+                    
+                    .logo {
+                    color: var(--primary-color);
+                    width: 50px;
+                    height: 50px;
+                    border-radius: 0.5rem;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-weight: bold;
+                    font-size: 1.5rem;
+                    transition: var(--transition-base);
+                    }
+
+                    .left-logo{
+                    margin-left: 2rem;
+                    }
+                    
+                    .main-content {
+                    margin-left: var(--sidebar-width);
+                    transition: margin-left 0.3s ease;
+                    }
+                    
+                    .header {
+                    background-color: white;
+                    border-bottom: 1px solid #e9ecef;
+                    padding: 0.75rem 2rem;
+                    position: sticky;
+                    top: 0;
+                    z-index: 1020;
+                    }
+                    
+                    .nav-link {
+                    color: #64748b;
+                    padding: 0.5rem 0.75rem;
+                    padding-left: 3rem;
+                    border-radius: 0.375rem;
+                    margin-bottom: 0.5rem;
+                    display: flex;
+                    align-items: center;
+                    gap: 0.75rem;
+                    text-decoration: none;
+                    }
+
+                    .nav-link-logout {
+                    margin-top: 140%;
+                    }
+                    
+                    .nav-link:hover, 
+                    .nav-link.active,
+                    .nav-link:focus {
+                    background-color: var(--primary-light);
+                    color: var(--primary-color);
+                    }
+                    
+                    .nav-link.active {
+                    font-weight: 500;
+                    }
+                    
+                    .nav-icon {
+                    font-size: 1.25rem;
+                    width: 24px;
+                    text-align: center;
+                    }
+                    
+                    .avatar {
+                    width: 32px;
+                    height: 32px;
+                    border-radius: 50%;
+                    overflow: hidden;
+                    }
+                    
+                    .avatar img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                    }
+                    
+                    /* Card styles */
+                    .card {
+                    border: none;
+                    border-radius: 0.5rem;
+                    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+                    transition: var(--transition-base);
+                    height: 100%;
+                    }
+                    
+                    .card:hover {
+                    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+                    }
+                    
+                    .guide-section {
+                    border-left: 3px solid var(--primary-color);
+                    padding-left: 1rem;
+                    margin-bottom: 1rem;
+                    }
+                    
+                    /* Main content area */
+                    .content-area {
+                    padding: 10px;
+                    }
+                    
+                    .overlay {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background-color: rgba(0, 0, 0, 0.5);
+                    z-index: 1025;
+                    opacity: 0;
+                    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+                    visibility: hidden;
+                    transition: var(--transition-base);
+                    }
+                    
+                    /* Date navigation */
+                    .date-nav {
+                    background-color: #E6EAF1;
+                    padding: 15px;
+                    border-radius: 5px;
+                    margin-bottom: 15px;
+                    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+                    }
+                    
+                    .date-pill {
+                    background-color: #b4e2ff;
+                    border-radius: 10px;
+                    padding: 5px 15px;
+                    margin: 0 10px;
+                    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+                    }
+
+                    /* Info cards */
+                    .info-card {
+                    background-color: white;
+                    border-radius: 5px;
+                    padding: 20px;
+                    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+                    margin-bottom: 15px;
+                    height: 100%;
+                    }
+                    
+                    .icon-bg {
+                    background-color: #EDF1FC;
+                    padding: 8px;
+                    border-radius: 5px;
+                    color: var(--text-muted);
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: center;
+                    }
+                    
+                    /* Profile sections */
+                    .profile-section {
+                    background-color: white;
+                    padding: 30px;
+                    padding-left: 4rem;
+                    border-radius: 10px;
+                    overflow-y: auto;
+                    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+                    margin-bottom: 10px;
+                    
+                    }
+                    
+                    .profile-image {
+                    width: 80px;
+                    height: 80px;
+                    background-color: #eee;
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    overflow: hidden;
+                    }
+                    
+                    /* Timeline */
+                    .timeline-item {
+                    position: relative;
+                    padding-left: 30px;
+                    margin-bottom: 40px;
+                    }
+                    
+                    .timeline-item:before {
+                    content: "";
+                    position: absolute;
+                    left: 0;
+                    top: 3px;
+                    width: 20px;
+                    height: 20px;
+                    border-radius: 50%;
+                    background-image: url("../p7_patient_management/static/src/img/Group 1000004947.png");
+                    background-repeat: no-repeat;
+                    background-position: center;
+                    background-size: cover;
+                    background-color: white;
+                    }
+                    
+                    .timeline-item:after {
+                    content: "";
+                    position: absolute;
+                    left: 9px;
+                    top: 23px;
+                    height: calc(100% + 20px);
+                    border-left: 1px solid #c4c4c4;
+                    }
+                    
+                    .timeline-item:last-child:after {
+                    display: none;
+                    }
+                    
+                    .timeline-content {
+                    border: 1px solid #c4c4c4;
+                    border-radius: 5px;
+                    padding: 15px;
+                    width: 70%;
+                    color: var(--text-muted);
+                    }
+                    
+                    /* Floating buttons */
+                    .floating-buttons {
+                    position: fixed;
+                    bottom: 20px;
+                    right: 0px;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 10px;
+                    z-index: 1040;
+                    margin-bottom: 3rem;
+                    }
+                    
+                    .fab {
+                    width: 40px;
+                    height: 40px;
+                    color: white;
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 24px;
+                    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+                    transition: var(--transition-base);
+                    text-decoration: none;
+                    border: none;
+                    cursor: pointer;
+                    }
+                    
+                    .fab:focus {
+                    transform: scale(1.1);
+                    outline: none;
+                    }
+                    
+                    .fab:hover {
+                    transform: scale(1.1);
+                    }
+
+                    .hov-fab:focus {
+                        transform: scale(1.5);
+                        outline: none;
+                    }
+                    
+                    .hov-fab:hover {
+                        transform: scale(1.5);
+                    }
+                    
+                    .doctor-support {
+                    background-color: #28a745;
+                    }
+                    
+                    .doctor-support:hover {
+                    background-color: #218838;
+                    }
+                    
+                    .tech-support {
+                    background-color: #007bff;
+                    }
+                    
+                    .tech-support:hover {
+                    background-color: #0056b3;
+                    }
+
+                    .doc-fab{
+                        font-size: 13px;
+                        margin-left: -2rem; 
+                        margin-right: 2rem; 
+                        margin-top: -0.5rem; 
+                        padding: 1px; 
+                        background-color: #218838; 
+                        border-radius: 5px; 
+                        color: #ffffff;
+                    }
+
+                    .tec-fab {
+                        font-size: 13px;
+                        margin-left: -1.6rem; 
+                        margin-right: 2rem;
+                        margin-top: -0.5rem;
+                        padding: 1px; 
+                        background-color: #0680e4; 
+                        border-radius: 5px; 
+                        color: #ffffff;
+                    }
+                    
+                    /* Calendar button */
+                    .calendar-btn {
+                    margin-top: 1rem;
+                    background: #C3E7FE;
+                    color: #035283;
+                    border: none;
+                    transition: var(--transition-base);
+                    }
+                    
+                    .calendar-btn:hover {
+                    background: #A3D7F0;
+                    color: #035283;
+                    }
+                    
+                    .blue-text {
+                    color: #0d6efd;
+                    }
+                    
+                    /* Footer */
+                    footer {
+                    background-color: #F8F8F8;
+                    height: 70px;
+                    padding: 0 20px;
+                    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    }
+
+                    @media (min-width: 1440px) {
+                    .profile-section{
+                        height: 550px;
+                    }
+                    }
+
+                    @media (max-width: 1439px) and (min-width: 768px){
+                    .profile-section{
+                        height: 700px;
+                    }
+                    }
+                    
+                    /* Responsive adjustments */
+                    @media (max-width: 992px) {
+                    .sidebar {
+                        transform: translateX(-100%);
+                    }
+                    
+                    .sidebar.show {
+                        transform: translateX(0);
+                    }
+                    
+                    .main-content {
+                        margin-left: 0;
+                    }
+                    
+                    .overlay.show {
+                        opacity: 1;
+                        visibility: visible;
+                    }
+                    
+                    .mobile-toggle {
+                        display: block !important;
+                    }
+                    
+                    .profile-section {
+                    
+                        
+                        padding: 20px;
+                    }
+                    
+                    .timeline-content {
+                        width: 100%;
+                    }
+                    }
+                    
+                    @media (max-width: 768px) {
+                        .date-nav .d-flex {
+                            flex-wrap: wrap;
+                            justify-content: center;
+                        }
+                        
+                        .date-controls {
+                        
+                            justify-content: center;
+                        }
+                        
+                        .view-more-btn {
+                            margin-top: 10px;
+                            width: 100%;
+                        }
+                        
+                        .profile-image {
+                            width: 60px;
+                            height: 60px;
+                        }
+
+                        .nav-link-logout {
+                            margin-top:90%;
+                        }
+                    }
+                    
+                    @media (max-width: 576px) {
+                    .header {
+                        padding: 0.75rem 1rem;
+                    }
+
+                    .date-pill {
+                    margin: 0;
+                    }
+                    
+                    .content-area {
+                        padding: 15px;
+                    }
+                    
+                    .profile-section {
+                        padding: 15px;
+                    }
+                    
+                    .pro-d {
+                        margin-bottom: 5px;
+                    }
+                    
+                    .d-flex.pro-details {
+                        flex-direction: column;
+                    }
+
+                    footer {
+                        font-size: 12px;
+                    }
+                    }
+
+                    @media (max-width: 430px) {
+                        
+                        .pro-d {
+                            width: 150px;
+                        }
+                    }
+                </style>
+                    <div class="body"> 
+                        <!-- Sidebar -->
+                        <div class="sidebar" id="sidebar">
+                            <div class="left-logo d-flex justify-content-between align-items-center mb-4">
+                            <div class="logo-container d-flex align-items-center gap-3">
+                                <div class="logo" aria-hidden="true"><img src="../p7_patient_management/static/src/img/vanaesa.jpg" alt="Company logo" class="img-fluid" style="border-radius: 10px;"/></div>
+                                <!-- <h1 class="fw-bold fs-5 m-0">VANAESA</h1> -->
+                            </div>
+                            <button class="btn d-lg-none" id="closeSidebar" aria-label="Close sidebar">
+                                <i class="bi bi-x-lg"></i>
+                            </button>
+                            </div>
+                            
+                            <nav class="mb-4" aria-label="Main navigation">
+            
+                            <ul class="nav flex-column">
+                                <li class="nav-item">
+                                <a href="#" class="nav-link" aria-current="page">
+                                    <i class="bi bi-house-fill nav-icon" aria-hidden="true"></i>
+                                    <span>Home</span>
+                                </a>
+                                </li>
+                                <li class="nav-item">
+                                <!-- <a href="/direct-chat" class="nav-link">
+                                    <i class="bi bi-chat-fill nav-icon" aria-hidden="true"></i>
+                                    <span>Chat</span>
+                                </a> -->
+                                    <div class="dropdown mt-2 mt-sm-0">
+                                        <button  style="width: 100%;" class="nav-link dropdown-toggle mt-3" type="button" id="calendarDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <i class="bi bi-chat-fill nav-icon" aria-hidden="true"></i>
+                                            <span>Chat</span>
+                                        </button>
+                                        <ul class="dropdown-menu" style="width: 100%;" aria-labelledby="calendarDropdown">
+                                            <li t-if="doc_support == 'premium'"><a href="/chat?target=doctor" class="dropdown-item nav-link" style="padding-left:2rem;" >Doctor</a></li>
+                                            <li><a href="/chat?target=tech" class="dropdown-item nav-link" style="padding-left:2rem;" >Tech-Support</a></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            </ul>
+                            </nav>
+                            
+                            <div class="sidebar-footer align-items-end">
+                            <a href="/web/session/logout?redirect=/" class="nav-link nav-link-logout">
+                                <i class="bi bi-box-arrow-right nav-icon" aria-hidden="true"></i>
+                                <span>Logout</span>
+                            </a>
+                            </div>
+                        </div>
+
+                        <!-- Overlay for mobile sidebar -->
+                        <div class="overlay" id="overlay"></div>
+
+                        <!-- Main Content -->
+                        <div class="main-content">
+                            <!-- Header -->
+                            <header class="header d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <button class="btn d-lg-none mobile-toggle me-2" id="sidebarToggle" style="display: none;" aria-label="Toggle sidebar">
+                                <i class="bi bi-list"></i>
+                                </button>
+                                <nav aria-label="Breadcrumb">
+                                <ol class="breadcrumb m-0">
+                                    <li class="breadcrumb-item"><a href="#" class="text-decoration-none text-muted">Home</a></li>
+                                    <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
+                                </ol>
+                                </nav>
+                            </div>
+                            
+                            <div class="d-flex align-items-center gap-4">
+                                <div class="avatar">
+                                <img t-if="main_case.patient_id.image_1920" t-att-src="image_data_uri(main_case.patient_id.image_1920)" alt="User profile picture" width="32" height="32"/>
+                                </div>
+                            </div>
+                            </header>
+
+                            <!-- Patient Guide Content -->
+                            <div class="container-fluid py-1 px-1">
+                            <div class="row">
+                                <div class="col-12">
+                                <!-- Main Content Area -->
+                                <main class="content-area">
+                                    <!-- Date Navigation -->
+                                    <section class="date-nav" aria-labelledby="date-navigation-heading">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div class="d-flex flex-wrap align-items-center">
+                                        <div class="me-3 mb-2 mb-md-0">
+                                            <button type="button" class="btn bg-white" style="box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);">Upcoming</button>
+                                        </div>
+                                        <div class="date-controls d-flex align-items-center">
+                                            <button type="button" class="btn btn-sm" aria-label="Previous date">
+                                            <i class="fas fa-chevron-left"></i>
+                                            </button>
+                                            <div t-if="main_case.op_date" class="date-pill" id="date-navigation-heading" t-esc="main_case.get_date()"/>
+                                            <button type="button" class="btn btn-sm" aria-label="Next date">
+                                            <i class="fas fa-chevron-right"></i>
+                                            </button>
+                                        </div>
+                                        </div>
+                                    </div>
+                                    </section>
+
+                                    <!-- Info Cards -->
+                                            <div class="row mb-4">
+                                                <div class="col-md-4 mb-3 mb-md-0">
+                                                    <div class="info-card">
+                                                        <p>
+                                                            <img src="./p7_patient_management/static/src/img/Group_1000004958.png" alt="" style="width: 30px; height: 30px;" />
+                                                            <span t-if="patient_cases.op_process_detail" class="ms-2"><t t-esc="main_case.op_process_detail"/></span>
+                                                        </p>
+                                                        <p>
+                                                            <img src="./p7_patient_management/static/src/img/Group_1000004959.png" alt="" style="width: 30px; height: 30px;" />
+                                                            <span t-if="patient_cases.op_location_id" class="ms-2"><t t-esc="patient_cases.op_location_id.name"/></span>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4 mb-3 mb-md-0">
+                                                    <div class="info-card">
+                                                        <div class="d-flex flex-wrap justify-content-between">
+                                                            <div>
+                                                                <p>
+                                                                    <img src="./p7_patient_management/static/src/img/Group_1000004962.png" alt="" style="width: 30px; height: 30px;" />
+                                                                    <span t-if="patient_cases.op_date" class="ms-2">Start <span class="ms-2"><t t-esc="patient_cases.get_start_date()"/></span></span>
+                                                                </p>
+                                                                <p>
+                                                                    <img src="./p7_patient_management/static/src/img/Group_1000004962.png" alt="" style="width: 30px; height: 30px;" />
+                                                                    <span t-if="patient_cases.op_end_date" class="ms-2">End <span class="ms-2">&amp;nbsp;<t t-esc="patient_cases.get_end_date()"/></span> 
+                                                                    <span t-if="patient_cases.op_end_date" class="text-muted small">(Approx)</span></span>
+                                                                </p>
+                                                            </div>
+                                                            <div class="dropdown mt-2 mt-sm-0">
+                                                                <button t-if="patient_cases.op_date" style="background: #C3E7FE; color: #035283;" class="btn btn-sm calendar-btn dropdown-toggle mt-3" type="button" id="calendarDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                                                    Add to<br/> Calendar
+                                                                </button>
+                                                                <ul class="dropdown-menu" aria-labelledby="calendarDropdown">
+                                                                    <li><a t-if="patient_cases.op_date" class="dropdown-item" target="_blank" t-att-href="main_case.get_google_calendar_url()">Google Calendar</a></li>
+                                                                    <li><a t-if="patient_cases.op_date" class="dropdown-item" target="_blank" t-att-href="main_case.get_ics_calendar_url()">iCal</a></li>
+                                                                    <li><a t-if="patient_cases.op_date" class="dropdown-item" target="_blank" t-att-href="main_case.get_outlook_calendar_url()">Outlook</a></li>
+                                                                </ul>
+                                                                
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="info-card">
+                                                        <div class="d-flex mb-4">
+                                                            <div style="width: 100px;"><span class="text-muted">Surgeon</span></div>
+                                                            <div t-if="patient_cases.op_surgeon" class="ms-4"><span>Dr. </span> <t t-esc="patient_cases.op_surgeon"/></div>
+                                                        </div>
+                                                        <div class="d-flex mb-2">
+                                                            <div style="width: 100px;"><span class="text-muted">Anaesthetist</span></div>
+                                                            <div t-if="main_case.create_uid.partner_id" class="ms-4"><span>Dr. </span> <t t-esc="main_case.create_uid.partner_id.name"/> <t t-esc="main_case.create_uid.partner_id.last_name"/></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                    <!-- Doctor Profile and Procedure Info -->
+                                    <div class="row">
+                                    <div class="col-md-6 mb-4 mb-md-0">
+                                        <section class="profile-section doctor-profile" aria-labelledby="doctor-profile-heading">
+                                        <h2 id="doctor-profile-heading" class="visually-hidden">Doctor Profile</h2>
+                                        <div class="d-flex align-items-center mb-4">
+                                            <div class="profile-image">
+                                            <img t-if="main_case.create_uid.partner_id.image_1920" t-att-src="image_data_uri(main_case.create_uid.partner_id.image_1920)" alt="Dr profile picture" width="80" height="80"/>
+                                            </div>
+                                            <div class="ms-3">
+                                            <h3 t-if="main_case.create_uid.partner_id" class="blue-text m-0"><span>Dr. </span><t t-esc="main_case.create_uid.partner_id.name"/> <t t-esc="main_case.create_uid.partner_id.last_name"/></h3>
+                                            <!-- <p class="m-0 mt-1">Senior Consultant</p> -->
+                                            </div>
+                                        </div>
+
+                                        <div class="mb-4">
+                                            <strong>About</strong>
+                                            <p t-if="main_case.create_uid.partner_id.bio" class="text-secondary mt-2">
+                                                <t t-esc="main_case.create_uid.partner_id.bio"/>
+                                            </p>
+                                        </div>
+
+                                        <div>
+                                            <h4 class="mb-3">Professional Details</h4>
+                                            <div class="row mb-2" t-if="main_case.create_uid.partner_id.oms_number">
+                                                <div class="col-md-4">OMS License Number</div>
+                                                <div class="col-md-8 text-muted" t-esc="main_case.create_uid.partner_id.oms_number"/>
+                                            </div>
+                                            <div class="row mb-2">
+                                                <div class="col-md-4">Primary Specialty</div>
+                                                <div class="col-md-8 text-muted" t-if="main_case.create_uid.partner_id.skill" t-esc="main_case.create_uid.partner_id.skill"/>
+                                            </div>
+                                            <div class="row mb-2">
+                                                <div class="col-md-4">Additional Specialties</div>
+                                                <div class="col-md-8 text-muted" t-if="main_case.create_uid.partner_id.interest" t-esc="main_case.create_uid.partner_id.interest"/>
+                                            </div>
+                                            <div class="row mb-2">
+                                                <div class="col-md-4">Languages Spoken</div>
+                                                <div class="col-md-8 text-muted" t-if="main_case.create_uid.partner_id.language" t-esc="main_case.create_uid.partner_id.language"/>
+                                            </div>
+                                        </div>
+                                        </section>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <section class="profile-section procedure-info" aria-labelledby="procedure-info-heading">
+                                        <h4 id="procedure-info-heading" class="mb-4"><strong>Your VANAESA Journey</strong></h4>
+                                        <!-- <div style="text-align: justify;" class="mb-4" t-if="main_case.op_process_detail"><span class="text-secondary" t-esc="main_case.op_process_detail"/></div> -->
+                                        
+                                        <form action="/patient-dashboard" method="post">
+                                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                        <div class="timeline">
+                                            <div class="timeline-item">
+                                            <div class="text-muted small mb-2" t-esc="main_case.medic_survey_submit_date"/>
+                                            <div class="d-flex flex-wrap">
+                                                <div class="timeline-content">
+                                                    <span class="text-secondary">Your Pre-Anaesthetic Questionnaire Submission</span>
+                                                    <span>(<t t-esc="dict(main_case._fields['medic_state'].selection).get(main_case.medic_state)"/>)</span>
+                                                </div>
+                                                <div class="ms-3 mt-2 mt-sm-0 view-more-btn">
+                                                    <button t-if="main_case.medic_state not in ('submit','review')" class="btn btn-sm calendar-btn" name="medical_history_edit" t-att-value="main_case.id">Edit</button>
+                                                    <button t-if="main_case.medic_state in ('submit','review')" class="btn btn-sm calendar-btn" name="medical_history" t-att-value="main_case.id" >View</button>
+                                                </div>
+                                            </div>
+                                            </div>
+
+                                            <t t-if="dict(main_case._fields['guide_state'].selection).get(main_case.guide_state) != 'Draft'">
+                                                <div class="timeline-item">
+                                                <div class="text-muted small mb-2"></div>
+                                                <div class="d-flex flex-wrap">
+                                                    <div class="timeline-content">
+                                                        <span class="text-secondary">Your Anesthesia Information Guide</span>
+                                                        <span>(<t t-esc="dict(main_case._fields['guide_state'].selection).get(main_case.guide_state)"/>)</span>
+                                                    </div>
+                                                    <div class="ms-3 mt-2 mt-sm-0 view-more-btn">
+                                                    <button class="btn btn-sm calendar-btn" name="inform_guide" t-att-value="main_case.id">View</button>
+                                                    </div>
+                                                </div>
+                                                </div>
+                                            </t>
+
+                                            <t t-if="dict(main_case._fields['feedback_state'].selection).get(main_case.feedback_state) != 'Draft'">
+                                                <div class="timeline-item">
+                                                <div class="text-muted small mb-2" t-esc="main_case.feedback_survey_submit_date"/>
+                                                <div class="d-flex flex-wrap">
+                                                    <div class="timeline-content">
+                                                        <span class="text-secondary">Your Post-Anaesthetic Feedback</span>
+                                                        <span>(<t t-esc="dict(main_case._fields['feedback_state'].selection).get(main_case.feedback_state)"/>)</span>
+                                                        <!-- <span t-if="not main_case.feedback_answer_id">(Draft)</span> -->
+                                                    </div>
+                                                    <div class="ms-3 mt-2 mt-sm-0 view-more-btn">
+                                                        <button t-if="main_case.feedback_state not in ('submit','review')" class="btn btn-sm calendar-btn" name="feedback_edit" t-att-value="main_case.id">Edit</button>
+                                                        <button t-if="main_case.feedback_state in ('submit','review')" class="btn btn-sm calendar-btn" name="feedback_form" t-att-value="main_case.id" >View</button>
+                                                    </div>
+                                                </div>
+                                                </div>
+                                            </t>
+                                        </div>
+                                         </form>
+                                        </section>
+                                    </div>
+                                    </div>
+
+                                    <!-- Floating Buttons -->
+                                    <div class="floating-buttons">
+                                        <t t-if="doc_support == 'premium'">
+                                        <div class="hov-fab">
+                                            <a href="/chat?target=doctor" class="fab doctor-support" title="Doctor Support" aria-label="Contact doctor support">
+                                                <i class="fas fa-user-md" aria-hidden="true"></i>
+                                            </a>
+                                            <a href="/chat?target=doctor" aria-label="Contact doctor support" style="text-decoration: none;"><span class="text-center doc-fab doc-tec-fab" >Doctor Support</span></a>
+                                        </div>
+                                        </t>
+                                        <div class="hov-fab">
+                                            <a href="/chat?target=tech" class="fab tech-support" title="Tech Support" aria-label="Contact technical support">
+                                                <i class="fa fa-headset" aria-hidden="true"></i>
+                                                
+                                            </a>
+                                            <a href="/chat?target=tech" aria-label="Contact doctor support" style="text-decoration: none;"><span class="text-center tec-fab doc-tec-fab">Tech Support</span></a>
+                                        </div>
+                                    </div>
+                                </main>
+                                </div>
+                            </div>
+                            </div>
+                            
+                            <footer>
+                            <div class="text-center"><i class="far fa-copyright" aria-hidden="true"></i> Copyright © Synapse Medical Pte Ltd</div>
+                            <div>
+                                <a href="#" class="text-decoration-none text-dark me-2">Privacy Policy</a>
+                                <a href="#" class="text-decoration-none text-dark">Cookies</a>
+                            </div>
+                            </footer>
+                        </div>
+
+                        <!-- Bootstrap Bundle with Popper -->
+                        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" 
+                                integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" 
+                                crossorigin="anonymous"></script>
+                        
+                        <!-- Improved JavaScript -->
+                        <script>
+                            document.addEventListener('DOMContentLoaded', function() {
+                            // Sidebar toggle functionality
+                            const sidebar = document.getElementById('sidebar');
+                            const sidebarToggle = document.getElementById('sidebarToggle');
+                            const closeSidebar = document.getElementById('closeSidebar');
+                            const overlay = document.getElementById('overlay');
+                            
+                            function toggleSidebar() {
+                                sidebar.classList.toggle('show');
+                                overlay.classList.toggle('show');
+                                document.body.style.overflow = sidebar.classList.contains('show') ? 'hidden' : '';
+                            }
+                            
+                            if (sidebarToggle) {
+                                sidebarToggle.addEventListener('click', toggleSidebar);
+                            }
+                            
+                            if (closeSidebar) {
+                                closeSidebar.addEventListener('click', toggleSidebar);
+                            }
+                            
+                            if (overlay) {
+                                overlay.addEventListener('click', toggleSidebar);
+                            }
+                            
+                            // Add focus styles for keyboard navigation
+                            document.addEventListener('keyup', function(e) {
+                                if (e.key === 'Tab') {
+                                document.documentElement.classList.add('keyboard-nav');
+                                }
+                            });
+                            
+                            // Smooth scrolling for anchor links
+                            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                                anchor.addEventListener('click', function(e) {
+                                e.preventDefault();
+                                const target = document.querySelector(this.getAttribute('href'));
+                                if (target) {
+                                    target.scrollIntoView({
+                                    behavior: 'smooth'
+                                    });
+                                }
+                                });
+                            });
+                            });
+                        </script>
+                    </div>
+            </t>
+        </template>
+    </data>
+</odoo>

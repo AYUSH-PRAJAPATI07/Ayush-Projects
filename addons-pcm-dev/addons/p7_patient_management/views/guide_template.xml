@@ -1,0 +1,1408 @@
+<odoo>
+    <data>
+        <!-- patient dashboard -->
+        <template id="patient_guide_template" name="Patient Information Guide">
+            <t t-call="web.layout">
+                <meta charset="UTF-8"/>
+                <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+                <meta name="description" content="Medical Dashboard for patient pre-operation guidance"/>
+                
+                
+                <!-- Preload critical resources -->
+                <link rel="preload" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" as="style"/>
+                <link rel="preload" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" as="style"/>
+                
+                <!-- Bootstrap CSS -->
+                <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous"/>
+                
+                <!-- Bootstrap Icons -->
+                <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet" crossorigin="anonymous"/>
+                
+                <!-- Font Awesome with integrity check -->
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" 
+                    integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" 
+                    crossorigin="anonymous" referrerpolicy="no-referrer"/>
+
+                <style>
+                    :root {
+                    --vanesa: #54b1c9;
+                    --vanesa-light: #e0e7ff;
+                    --primary-color: #54b1c9;
+                    --primary-light: #e0e7ff;
+                    --sidebar-bg: #f8f9fa;
+                    --sidebar-width: 250px;
+                    --text-dark: #212529;
+                    --text-muted: #6c757d;
+                    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+                    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+                    --transition-base: all 0.3s ease-in-out;
+                    }
+                    
+                    .body {
+                    background-color: #f5f7fb;
+                    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                    color: var(--text-dark);
+                    line-height: 1.6;
+                    }
+                    
+                    /* Accessibility improvements */
+                    a, button {
+                    transition: var(--transition-base);
+                    }
+                    
+                    a:focus-visible, 
+                    button:focus-visible {
+                    outline: 2px solid var(--primary-color);
+                    outline-offset: 2px;
+                    }
+                    
+                    /* Sidebar styles */
+                    .sidebar {
+                    width: var(--sidebar-width);
+                    background-color: var(--sidebar-bg);
+                    height: 100vh;
+                    position: fixed;
+                    left: 0;
+                    top: 0;
+                    overflow-y: auto;
+                    border-right: 1px solid #e9ecef;
+                    padding: 1.5rem 1rem;
+                    z-index: 1030;
+                    transition: transform 0.3s ease;
+                    }
+
+                    .sidebar-footer {
+                    margin-top: 2rem;
+                    padding-top: 1rem;
+                    }
+
+                    .logo-container {
+                    margin-bottom: 2rem;
+                    }
+                    
+                    .logo {
+                    color: var(--primary-color);
+                    width: 80px;
+                    height: 80px;
+                    border-radius: 10px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-weight: bold;
+                    font-size: 1.5rem;
+                    transition: var(--transition-base);
+                    }
+
+                    .left-logo{
+                    margin-left: 4rem;
+                    }
+                    
+                    .main-content {
+                    margin-left: var(--sidebar-width);
+                    transition: margin-left 0.3s ease;
+                    }
+                    
+                    .header {
+                    background-color: white;
+                    border-bottom: 1px solid #e9ecef;
+                    padding: 0.75rem 2rem;
+                    position: sticky;
+                    top: 0;
+                    z-index: 1020;
+                    }
+                    
+                    .nav-link {
+                    color: #64748b;
+                    padding: 0.5rem 0.75rem;
+                    padding-left: 3rem;
+                    border-radius: 0.375rem;
+                    margin-bottom: 0.5rem;
+                    display: flex;
+                    align-items: center;
+                    gap: 0.75rem;
+                    text-decoration: none;
+                    }
+
+                    .nav-link-logout {
+                    margin-top: 140%;
+                    }
+                    
+                    .nav-link:hover, 
+                    .nav-link.active,
+                    .nav-link:focus {
+                    background-color: var(--primary-light);
+                    color: var(--primary-color);
+                    }
+                    
+                    .nav-link.active {
+                    font-weight: 500;
+                    }
+                    
+                    .nav-icon {
+                    font-size: 1.25rem;
+                    width: 24px;
+                    text-align: center;
+                    }
+                    
+                    .avatar {
+                    width: 32px;
+                    height: 32px;
+                    border-radius: 50%;
+                    overflow: hidden;
+                    }
+                    
+                    .avatar img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                    }
+
+                    .overlay {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background-color: rgba(0, 0, 0, 0.5);
+                    z-index: 1025;
+                    opacity: 0;
+                    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+                    visibility: hidden;
+                    transition: var(--transition-base);
+                    }
+                    
+                    /* Card styles */
+                    .guide-card {
+                        background-color: white;
+                        border-radius: 0.5rem;
+                        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+                        padding: 1.5rem;
+                        margin-bottom: 1rem;
+                    }
+                    .guide-section {
+                        border-left: 3px solid var(--vanesa);
+                        padding-left: 1rem;
+                        margin-bottom: 1rem;
+                    }
+
+                    .about-bio {
+                        margin-left: 2rem;
+                    }
+
+                    .doc-intro {
+                        text-align: justify;
+                        line-height: 1.6;
+                    }
+
+                    .doctor-info {
+                        display: flex;
+                        align-items: center;
+                        gap: 1rem;
+                        padding: 1rem;
+                        
+                        border-radius: 0.5rem;
+                    }
+
+                    .profile-image {
+                        width: 80px;
+                        height: 80px;
+                        background-color: #eee;
+                        border-radius: 50%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        overflow: hidden;
+                    }
+
+                    .doctor-avatar img {
+                        width: 100%;
+                        height: 100%;
+                        object-fit: cover;
+                    }
+                    .anesthesia-option {
+                        border: 1px solid #e2e8f0;
+                        border-radius: 0.5rem;
+                        padding: 1rem;
+                        cursor: pointer;
+                        transition: all 0.2s;
+                    }
+                    .anesthesia-option:hover {
+                        border-color: var(--vanesa);
+                    }
+                    .anesthesia-option.selected {
+                        border-color: var(--vanesa);
+                        background-color: var(--vanesa-light);
+                    }
+
+                    .form-check-input:checked {
+                        background-color: var(--vanesa);
+                        border-color: var(--vanesa);
+                    }
+                    .reminder-item {
+                        text-align: justify;
+                        display: flex;
+                        align-items: flex-start;
+                        gap: 0.75rem;
+                        margin-bottom: 1rem;
+                    }
+                    .reminder-icon {
+                        background-color: var(--vanesa-light);
+                        color: var(--vanesa);
+                        width: 28px;
+                        height: 28px;
+                        border-radius: 50%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        flex-shrink: 0;
+                    }
+
+                    .doc-bio {
+                            text-align: justify;
+                            margin-right: 15px;
+                    }
+
+                    .action-btn {
+                        width: 15rem;
+                        background-color: #25b7d3;
+                        box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+                        color: white;
+                        border: none;
+                        padding: 0.75rem;
+                        border-radius: 0.375rem;
+                        margin-top: 1rem;
+                        transition: background-color 0.2s;
+                        font-weight: 500;
+                    }
+
+                    .action-btn:hover {
+                        background-color: #1da1bb;
+                        color: white;
+                    }
+                    
+                    /* Footer */
+                    footer {
+                    background-color: #F8F8F8;
+                    height: 70px;
+                    padding: 0 20px;
+                    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    }
+
+                    @media (min-width: 1440px) {
+                    .profile-section{
+                        height: 550px;
+                    }
+                    }
+
+                    @media (max-width: 1439px) and (min-width: 768px){
+                    .profile-section{
+                        height: 700px;
+                    }
+                    }
+                    
+                    /* Responsive adjustments */
+                    @media (max-width: 992px) {
+                    .sidebar {
+                        transform: translateX(-100%);
+                    }
+                    
+                    .sidebar.show {
+                        transform: translateX(0);
+                    }
+                    
+                    .main-content {
+                        margin-left: 0;
+                    }
+                    
+                    .overlay.show {
+                        opacity: 1;
+                        visibility: visible;
+                    }
+                    
+                    .mobile-toggle {
+                        display: block !important;
+                    }
+                    
+                    }
+                    
+                    @media (max-width: 768px) {
+                                        
+                    .profile-image {
+                        width: 60px;
+                        height: 60px;
+                    }
+
+                    .nav-link-logout {
+                    margin-top: 80%;
+                    }
+                    }
+                    
+                    @media (max-width: 600px) {
+                        .doctor-info{
+                        flex-direction: column;
+                        }
+
+                        .reminder-item {
+                            margin-left: -28px;
+                        }
+
+                        .reminder-icon {
+                            margin-right: -6px;
+                            margin-left: 8px;
+                            margin-top: 2px;
+                        }
+
+                        .ri-small {
+                            margin-left: -20px;
+                            text-align: justify;
+                        }
+                    }
+                </style>
+                    <div class="body"> 
+                        <!-- Sidebar -->
+                        <div class="sidebar" id="sidebar">
+                            <div class="left-logo d-flex justify-content-between align-items-center mb-4">
+                            <div class="logo-container d-flex align-items-center gap-3">
+                                <div class="logo" aria-hidden="true"><img src="../p7_patient_management/static/src/img/vanaesa.jpg" alt="Company logo" style="border-radius: 10px;" class="img-fluid"/></div>
+                                <!-- <h1 class="fw-bold fs-5 m-0">VANAESA</h1> -->
+                            </div>
+                            <button class="btn d-lg-none" id="closeSidebar" aria-label="Close sidebar">
+                                <i class="bi bi-x-lg"></i>
+                            </button>
+                            </div>
+                            
+                            <nav class="mb-4" aria-label="Main navigation">
+            
+                            <ul class="nav flex-column">
+                                <li class="nav-item">
+                                <a href="/patient-dashboard" class="nav-link" aria-current="page">
+                                    <i class="bi bi-house-fill nav-icon" aria-hidden="true"></i>
+                                    <span>Home</span>
+                                </a>
+                                </li>
+                                <li class="nav-item">
+                                    <div class="dropdown mt-2 mt-sm-0">
+                                        <button  style="width: 100%;" class="nav-link dropdown-toggle mt-3" type="button" id="calendarDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <i class="bi bi-chat-fill nav-icon" aria-hidden="true"></i>
+                                            <span>Chat</span>
+                                        </button>
+                                        <ul class="dropdown-menu" style="width: 100%;" aria-labelledby="calendarDropdown">
+                                            <li t-if="doc_support == 'premium'"><a href="/chat?target=doctor" class="dropdown-item nav-link" style="padding-left:2rem;" >Doctor</a></li>
+                                            <li><a href="/chat?target=tech" class="dropdown-item nav-link" style="padding-left:2rem;" >Tech-Support</a></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            </ul>
+                            </nav>
+                            
+                            <div class="sidebar-footer align-items-end">
+                            <a href="/web/session/logout?redirect=/" class="nav-link nav-link-logout">
+                                <i class="bi bi-box-arrow-right nav-icon" aria-hidden="true"></i>
+                                <span>Logout</span>
+                            </a>
+                            </div>
+                        </div>
+
+                        <!-- Overlay for mobile sidebar -->
+                        <div class="overlay" id="overlay"></div>
+
+                        <!-- Main Content -->
+                        <div class="main-content">
+                            <!-- Header -->
+                            <header class="header d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <button class="btn d-lg-none mobile-toggle me-2" id="sidebarToggle" style="display: none;" aria-label="Toggle sidebar">
+                                <i class="bi bi-list"></i>
+                                </button>
+                                <nav aria-label="Breadcrumb">
+                                <ol class="breadcrumb m-0">
+                                    <li class="breadcrumb-item"><a href="/patient-dashboard" class="text-decoration-none text-muted">Home</a></li>
+                                    <li class="breadcrumb-item active" aria-current="page">Pre operation guide</li>
+                                </ol>
+                                </nav>
+                            </div>
+                            
+                            <div class="d-flex align-items-center gap-4">
+                                <div class="avatar">
+                                    <img t-att-src="image_data_uri(case.patient_id.image_1920) if case.patient_id.image_1920 else '/web/static/img/placeholder.png'"
+                                         alt="User profile picture" width="32" height="32"/>
+                                </div>
+                            </div>
+                            </header>
+
+                            <form action="/patient-guide" method="post">
+                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                        <input type="hidden" name="doctor_id" id="doctor_id" t-att-value="doctor.id"/>
+                        <input type="hidden" name="pcid" id="pcid" t-att-value="case.id"/>
+                        <input type="hidden" name="anaesthesia_id" id="anaesthesia_id"/>
+                        <input type="hidden" name="anaesthesia_length" id="anaesthesia_length" t-att-value="len(guide.anaesthesia_type_ids)"/>
+                        <div class="container-fluid py-4 px-4">
+                            <div class="row">
+                            <div class="col-lg-8">
+                                
+                                <div class="guide-card mb-4">
+                                <h5 class="mb-2">Patient Information Guide</h5>
+                                <div class="doctor-info">
+                                    <div class="profile-image col-lg-3 col-md-2 col-sm-1">
+                                        <img t-att-src="image_data_uri(case.create_uid.partner_id.image_1920) if case.create_uid.partner_id.image_1920 else '/web/static/img/placeholder.png'"
+                                             alt="Dr profile picture" width="80" height="80"/>
+                                    </div>
+                                    <div>
+                                    <h6 class="doc-intro">
+                                        Hi! I am <t t-esc="doctor.name"/>, your anaesthetist for your 
+                                        <t t-esc="case.op_process"/> operation on 
+                                        <t t-esc="formatted_op_date"/>
+                                        at <t t-esc="case.op_location_id.name"/>.
+                                    </h6>
+                                    </div>
+                                </div>
+                                <div class="about-bio mt-3">
+                                    <div class="reminder-item">
+                                    <div class="reminder-icon">
+                                    <i class="bi bi-person-circle"></i>
+                                    </div>
+                                    <div class="mt-1">
+                                    <h6 class="mb-1">Bio:</h6>
+                                    <p class="doc-bio text-muted mb-0"><t t-esc="doctor.bio"/></p>
+                                    </div>
+                                </div>
+                                
+                                <div class="reminder-item" t-if="doctor.oms_number">
+                                    <div class="reminder-icon">
+                                    <i class="bi bi-person-vcard"></i>
+                                    </div>
+                                <t>
+                                    <p class="mb-1">
+                                        OMS License Number: <span class="text-muted mb-0"><t t-esc="doctor.oms_number"/></span>
+                                    </p>
+                                </t>
+                                </div>
+                                </div>
+                                </div>
+
+                                <div class="guide-card mb-4">
+                                <div class="my-3 mx-3"  style="text-align: justify;">
+                                    <!-- Welcome message -->
+                                    <p><t t-esc="guide.welcome_msg"/></p>
+                                </div>
+                                </div>
+                                    
+                                
+                                <!-- Procedure Information -->
+                                <div class="guide-card">
+                                <div class="guide-section">
+                                    <div class="mb-3" style="text-align: justify; margin-right: 15px;"> 
+                                        <!-- Anaesthesia Intro -->
+                                        <p ><t t-esc="guide.anaesthesia_intro"/></p>
+                                    </div>
+                                </div>
+
+                                <div t-if="case.additional_info_ids" class="guide-section">
+                                    <h5>Additional Information:</h5>
+                                    <t t-foreach="case.additional_info_ids" t-as="info">
+                                        <div class="mb-3" t-raw="info.explanation"/>
+                                    </t>
+                                </div>
+
+                                <div t-if="case.guide_state == 'sent'" class="guide-section">
+                                    <t t-if="len(guide.anaesthesia_type_ids) > 1">
+                                        <!--                                        <h5>Anaesthetic Plan</h5>-->
+                                        <!--                                        <p class="mb-3">Your preferred anesthesia plan:</p>-->
+                                        <h5>Anesthesia Options</h5>
+                                        <p class="mb-3">Please select your preferred anaesthetic plan. Please
+                                                    note that the choice indicated here is for your anaesthetist’s
+                                                    reference. The actual anaesthetic plan may differ from your
+                                                    preference (due to findings on physical examination, for example)
+                                        </p>
+                                    </t>
+<!--                                    <t t-else="">-->
+<!--                                        <h5>Anesthesia Options</h5>-->
+<!--                                        <p class="mb-3">More than one anaesthetic plan is available for your procedure. Please indicate your preference.-->
+<!--                                                        Depending on the final assessment on the procedure day, the actual anaesthetic conducted may be different from the preference you indicate here. This may be due to physical examination findings or changes in your health status, for example.-->
+<!--                                                        You will have the opportunity to discuss with your Anaesthetist on the procedure day</p>-->
+<!--                                    </t>-->
+                                    <div class="row g-3 mb-4">
+                                        <t t-if="len(guide.anaesthesia_type_ids) > 1">
+                                            <t t-foreach="guide.anaesthesia_type_ids" t-as="option">
+                                                <div class="col-md-6">
+                                                    <div class="anesthesia-option mb-1">                
+                                                        <label class="form-check" t-att-for="'option-%s' % option.id">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input anaesthesia-checkbox" t-att-id="'option-%s' % option.id" t-att-value="option.id"
+                                                                t-att-data-reminders="','.join([reminder.get_prep_steps(case) for reminder in option.reminder_ids])" type="radio" name="anaesthesia_options" id="anaesthesia_options"/>
+                                                                <span class="form-check-label"><t t-esc="option.name"/></span>
+                                                            </div>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </t>
+                                        </t>
+<!--                                        <t t-if="len(guide.anaesthesia_type_ids) == 1">-->
+<!--                                            <div class="col-md-6">-->
+<!--                                                <div class="anesthesia-option">-->
+<!--                                                    <label class="form-check">-->
+<!--                                                        <span class="form-check-label"><t t-esc="guide.anaesthesia_type_ids[0].name"/></span>-->
+<!--                                                    </label>-->
+<!--                                                </div>-->
+<!--                                            </div>-->
+<!--                                        </t>-->
+                                    </div>
+                                </div>
+
+                                <div t-if="case.guide_state == 'confirm'" class="guide-section">
+                                    <h5>Selected Anaesthesia Option:</h5>
+                                    <div class="col-md-6">
+                                        <div class="anesthesia-option">
+                                            <label class="form-check">
+                                                <span class="form-check-label"><t t-esc="case.anaesthesia_line_ids[0].name"/></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+<!--                                <div class="guide-section">-->
+<!--                                    <h5>Additional Information:</h5>-->
+<!--                                    <p>-->
+<!--                                        <t t-esc="', '.join(case.additional_info_ids.mapped('name'))"/>-->
+<!--                                    </p>-->
+<!--                                </div>-->
+                                
+                                <div class="guide-section">
+                                    <h5>Disposition Location</h5>
+                                    <p><t t-if="case.location_id" t-esc="case.location_id.name"/></p>
+                                </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-lg-4">
+                                <!-- Important Reminders -->
+                                <div t-if="case.guide_state == 'sent'" class="guide-card">
+                                    <h5 class="mb-3">Reminders</h5>
+                                
+                                    <t t-foreach="case.reminder_line_ids" t-as="reminder">
+                                        <div class="reminder-item ri-small">
+                                            <div class="reminder-icon">
+                                                <i class="bi bi-exclamation-circle-fill"></i>
+                                            </div>
+                                            <div>
+                                                <p class="mb-1 text-muted"><t t-esc="reminder.preparation_steps"/></p>
+                                            </div>
+                                        </div>
+                                    </t>
+                                    
+                                    <t t-if="len(guide.anaesthesia_type_ids) == 1">
+                                        <t t-foreach="guide.anaesthesia_type_ids[0].reminder_ids" t-as="reminder">
+                                            <div class="reminder-item">
+                                                <div class="reminder-icon">
+                                                    <i class="bi bi-exclamation-circle-fill"></i>
+                                                </div>
+                                                <div>
+                                                    <p class="mb-1 text-muted"><t t-esc="reminder.preparation_steps"/></p>
+                                                </div>
+                                            </div>
+                                        </t>
+                                    </t>
+                                </div>
+
+                                <div t-if="case.guide_state == 'confirm'" class="guide-card">
+                                    <h5 class="mb-3">Reminders</h5>
+                                
+                                    <t t-foreach="case.reminder_line_ids" t-as="reminder">
+                                        <div class="reminder-item">
+                                            <div class="reminder-icon">
+                                                <i class="bi bi-exclamation-circle-fill"></i>
+                                            </div>
+                                            <div>
+                                                <p class="mb-1 text-muted"><t t-esc="reminder.preparation_steps"/></p>
+                                            </div>
+                                        </div>
+                                    </t>
+                                </div>
+                                <t t-if="guide.check_close_msg == True">
+                                    <div class="guide-card" style="text-align: justify;">
+                                        <div class="mx-3">
+                                            <p class="text-muted mb-3 mx-3"><t t-esc="guide.close_msg"/></p>
+                                        </div>
+                                    </div>
+                                </t>
+                                <t t-elif="guide.check_close_msg == False">
+                                    <div></div>
+                                </t>
+                            </div>
+                            </div>
+                        
+                        <!-- Confirm and submit -->
+                        <div class="guide-card col-lg-12">
+                            <div>
+                                <div t-if="case.guide_state == 'sent'" class="text-center">
+                                                
+                                                <label for="confirmation"><input type="checkbox" id="confirmation" required="required"/> I confirm that I have read and understood the information laid out in this guide.</label>
+                                            </div>
+
+                                            <div class="mt-1 text-center">
+                                                <button t-if="case.guide_state == 'sent'" type="submit" name="submit" id="submit" value="True" class="action-btn btn">Submit</button>
+                                            </div>
+                            </div>
+                        </div>
+                        </div>
+                    </form>
+                            
+                            <footer>
+                            <div class="text-center"><i class="far fa-copyright" aria-hidden="true"></i> Copyright © Synapse Medical Pte Ltd</div>
+                            <div>
+                                <a href="#" class="text-decoration-none text-dark me-2">Privacy Policy</a>
+                                <a href="#" class="text-decoration-none text-dark">Cookies</a>
+                            </div>
+                            </footer>
+                        </div>
+
+                        <!-- Bootstrap Bundle with Popper -->
+                        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" 
+                                integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" 
+                                crossorigin="anonymous"></script>
+                        
+                        <!-- Improved JavaScript -->
+                        <script>
+                            document.addEventListener('DOMContentLoaded', function() {
+                            // Sidebar toggle functionality
+                            const sidebar = document.getElementById('sidebar');
+                            const sidebarToggle = document.getElementById('sidebarToggle');
+                            const closeSidebar = document.getElementById('closeSidebar');
+                            const overlay = document.getElementById('overlay');
+                            
+                            function toggleSidebar() {
+                                sidebar.classList.toggle('show');
+                                overlay.classList.toggle('show');
+                                document.body.style.overflow = sidebar.classList.contains('show') ? 'hidden' : '';
+                            }
+                            
+                            if (sidebarToggle) {
+                                sidebarToggle.addEventListener('click', toggleSidebar);
+                            }
+                            
+                            if (closeSidebar) {
+                                closeSidebar.addEventListener('click', toggleSidebar);
+                            }
+                            
+                            if (overlay) {
+                                overlay.addEventListener('click', toggleSidebar);
+                            }
+                            
+                            // Add focus styles for keyboard navigation
+                            document.addEventListener('keyup', function(e) {
+                                if (e.key === 'Tab') {
+                                document.documentElement.classList.add('keyboard-nav');
+                                }
+                            });
+                            
+                            // Smooth scrolling for anchor links
+                            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                                anchor.addEventListener('click', function(e) {
+                                e.preventDefault();
+                                const target = document.querySelector(this.getAttribute('href'));
+                                if (target) {
+                                    target.scrollIntoView({
+                                    behavior: 'smooth'
+                                    });
+                                }
+                                });
+                            });
+                            });
+                        </script>
+
+                <script>
+                    document.addEventListener("DOMContentLoaded", function () {
+                        const checkboxes = document.querySelectorAll(".anaesthesia-checkbox");
+                        const reminderList = document.getElementById("reminder_list");
+                        const anaesthesiaInput = document.getElementById("anaesthesia_id");
+                        const anaesthesiaLength = document.getElementById("anaesthesia_length");
+                        const submitButton = document.getElementById("submit");
+                        const form = document.querySelector("form");
+                        checkboxes.forEach(function (checkbox) {
+                            checkbox.addEventListener("change", function () {
+                                // Uncheck other checkboxes
+                                checkboxes.forEach(cb => {
+                                    if (cb !== this) cb.checked = false;
+                                });
+
+                                anaesthesiaInput.value = this.checked ? this.value : "";
+
+                                // Update reminder list
+                                reminderList.innerHTML = "";
+                                if (this.checked) {
+                                    const reminders = this.getAttribute("data-reminders").split(",");
+                                    reminders.forEach(reminder => {
+                                        if (reminder.trim() !== "") {
+                                            const li = document.createElement("li");
+                                            li.textContent = reminder.trim();
+                                            reminderList.appendChild(li);
+                                        }
+                                    });
+                                }
+                            });
+                        });
+
+                        form.addEventListener("submit", function (event) {
+                            if (anaesthesiaLength.value != 1) {
+                                if (!anaesthesiaInput.value) {
+                                    event.preventDefault();
+                                    alert("Please select an anaesthesia option before submitting.");
+                                }
+                            }
+                        });
+                    });
+                </script>
+                </div>
+            </t>
+        </template>
+
+        <template id="template_guide_preview" name="Guide Preview">
+            <t t-call="web.layout">
+                <meta charset="UTF-8"/>
+                <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+                <meta name="description" content="Medical Dashboard for patient pre-operation guidance"/>
+                
+                
+                <!-- Preload critical resources -->
+                <link rel="preload" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" as="style"/>
+                <link rel="preload" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" as="style"/>
+                
+                <!-- Bootstrap CSS -->
+                <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous"/>
+                
+                <!-- Bootstrap Icons -->
+                <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet" crossorigin="anonymous"/>
+                
+                <!-- Font Awesome with integrity check -->
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" 
+                    integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" 
+                    crossorigin="anonymous" referrerpolicy="no-referrer"/>
+
+                <style>
+                    :root {
+                    --vanesa: #54b1c9;
+                    --vanesa-light: #e0e7ff;
+                    --primary-color: #54b1c9;
+                    --primary-light: #e0e7ff;
+                    --sidebar-bg: #f8f9fa;
+                    --sidebar-width: 250px;
+                    --text-dark: #212529;
+                    --text-muted: #6c757d;
+                    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+                    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+                    --transition-base: all 0.3s ease-in-out;
+                    }
+                    
+                    .body {
+                    background-color: #f5f7fb;
+                    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                    color: var(--text-dark);
+                    line-height: 1.6;
+                    }
+                    
+                    /* Accessibility improvements */
+                    a, button {
+                    transition: var(--transition-base);
+                    }
+                    
+                    a:focus-visible, 
+                    button:focus-visible {
+                    outline: 2px solid var(--primary-color);
+                    outline-offset: 2px;
+                    }
+                    
+                    /* Sidebar styles */
+                    .sidebar {
+                    width: var(--sidebar-width);
+                    background-color: var(--sidebar-bg);
+                    height: 100vh;
+                    position: fixed;
+                    left: 0;
+                    top: 0;
+                    overflow-y: auto;
+                    border-right: 1px solid #e9ecef;
+                    padding: 1.5rem 1rem;
+                    z-index: 1030;
+                    transition: transform 0.3s ease;
+                    }
+
+                    .sidebar-footer {
+                    margin-top: 2rem;
+                    padding-top: 1rem;
+                    }
+
+                    .logo-container {
+                    margin-bottom: 2rem;
+                    }
+                    
+                    .logo {
+                    color: var(--primary-color);
+                    width: 80px;
+                    height: 80px;
+                    border-radius: 10px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-weight: bold;
+                    font-size: 1.5rem;
+                    transition: var(--transition-base);
+                    }
+
+                    .left-logo{
+                    margin-left: 4rem;
+                    }
+                    
+                    .main-content {
+                    margin-left: var(--sidebar-width);
+                    transition: margin-left 0.3s ease;
+                    }
+                    
+                    .header {
+                    background-color: white;
+                    border-bottom: 1px solid #e9ecef;
+                    padding: 0.75rem 2rem;
+                    position: sticky;
+                    top: 0;
+                    z-index: 1020;
+                    }
+                    
+                    .nav-link {
+                    color: #64748b;
+                    padding: 0.5rem 0.75rem;
+                    padding-left: 3rem;
+                    border-radius: 0.375rem;
+                    margin-bottom: 0.5rem;
+                    display: flex;
+                    align-items: center;
+                    gap: 0.75rem;
+                    text-decoration: none;
+                    }
+
+                    .nav-link-logout {
+                    margin-top: 140%;
+                    }
+                    
+                    .nav-link:hover, 
+                    .nav-link.active,
+                    .nav-link:focus {
+                    background-color: var(--primary-light);
+                    color: var(--primary-color);
+                    }
+                    
+                    .nav-link.active {
+                    font-weight: 500;
+                    }
+                    
+                    .nav-icon {
+                    font-size: 1.25rem;
+                    width: 24px;
+                    text-align: center;
+                    }
+                    
+                    .avatar {
+                    width: 32px;
+                    height: 32px;
+                    border-radius: 50%;
+                    overflow: hidden;
+                    }
+                    
+                    .avatar img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                    }
+
+                    .overlay {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background-color: rgba(0, 0, 0, 0.5);
+                    z-index: 1025;
+                    opacity: 0;
+                    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+                    visibility: hidden;
+                    transition: var(--transition-base);
+                    }
+                    
+                    /* Card styles */
+                    .guide-card {
+                        background-color: white;
+                        border-radius: 0.5rem;
+                        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+                        padding: 1.5rem;
+                        margin-bottom: 1rem;
+                    }
+                    .guide-section {
+                        border-left: 3px solid var(--vanesa);
+                        padding-left: 1rem;
+                        margin-bottom: 1rem;
+                    }
+
+                    .about-bio {
+                        margin-left: 2rem;
+                    }
+
+                    .doc-intro {
+                        text-align: justify;
+                        line-height: 1.6;
+                    }
+
+                    .doctor-info {
+                        display: flex;
+                        align-items: center;
+                        gap: 1rem;
+                        padding: 1rem;
+                        
+                        border-radius: 0.5rem;
+                    }
+
+                    .profile-image {
+                        width: 80px;
+                        height: 80px;
+                        background-color: #eee;
+                        border-radius: 50%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        overflow: hidden;
+                    }
+
+                    .doctor-avatar img {
+                        width: 100%;
+                        height: 100%;
+                        object-fit: cover;
+                    }
+                    .anesthesia-option {
+                        border: 1px solid #e2e8f0;
+                        border-radius: 0.5rem;
+                        padding: 1rem;
+                        cursor: pointer;
+                        transition: all 0.2s;
+                    }
+                    .anesthesia-option:hover {
+                        border-color: var(--vanesa);
+                    }
+                    .anesthesia-option.selected {
+                        border-color: var(--vanesa);
+                        background-color: var(--vanesa-light);
+                    }
+
+                    .form-check-input:checked {
+                        background-color: var(--vanesa);
+                        border-color: var(--vanesa);
+                    }
+                    .reminder-item {
+                        text-align: justify;
+                        display: flex;
+                        align-items: flex-start;
+                        gap: 0.75rem;
+                        margin-bottom: 1rem;
+                    }
+                    .reminder-icon {
+                        background-color: var(--vanesa-light);
+                        color: var(--vanesa);
+                        width: 28px;
+                        height: 28px;
+                        border-radius: 50%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        flex-shrink: 0;
+                    }
+
+                    .doc-bio {
+                            text-align: justify;
+                            margin-right: 15px;
+                    }
+
+                    .action-btn {
+                        width: 15rem;
+                        background-color: #25b7d3;
+                        box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+                        color: white;
+                        border: none;
+                        padding: 0.75rem;
+                        border-radius: 0.375rem;
+                        margin-top: 1rem;
+                        transition: background-color 0.2s;
+                        font-weight: 500;
+                    }
+
+                    .action-btn:hover {
+                        background-color: #1da1bb;
+                        color: white;
+                    }
+                    
+                    /* Footer */
+                    footer {
+                    background-color: #F8F8F8;
+                    height: 70px;
+                    padding: 0 20px;
+                    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    }
+
+                    @media (min-width: 1440px) {
+                    .profile-section{
+                        height: 550px;
+                    }
+                    }
+
+                    @media (max-width: 1439px) and (min-width: 768px){
+                    .profile-section{
+                        height: 700px;
+                    }
+                    }
+                    
+                    /* Responsive adjustments */
+                    @media (max-width: 992px) {
+                    .sidebar {
+                        transform: translateX(-100%);
+                    }
+                    
+                    .sidebar.show {
+                        transform: translateX(0);
+                    }
+                    
+                    .main-content {
+                        margin-left: 0;
+                    }
+                    
+                    .overlay.show {
+                        opacity: 1;
+                        visibility: visible;
+                    }
+                    
+                    .mobile-toggle {
+                        display: block !important;
+                    }
+                    
+                    }
+                    
+                    @media (max-width: 768px) {
+                                        
+                    .profile-image {
+                        width: 60px;
+                        height: 60px;
+                    }
+
+                    .nav-link-logout {
+                    margin-top: 80%;
+                    }
+                    }
+                    
+                    @media (max-width: 600px) {
+                        .doctor-info{
+                        flex-direction: column;
+                        }
+
+                        .reminder-item {
+                            margin-left: -28px;
+                        }
+
+                        .reminder-icon {
+                            margin-right: -6px;
+                            margin-left: 8px;
+                            margin-top: 2px;
+                        }
+
+                        .ri-small {
+                            margin-left: -20px;
+                            text-align: justify;
+                        }
+                    }
+                </style>
+                    <div class="body"> 
+
+                        <!-- Main Content -->
+                        <div class="main-content">
+
+                            <form action="/patient-guide" method="post">
+                                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                <input type="hidden" name="doctor_id" id="doctor_id" t-att-value="doctor.id"/>
+                                <input type="hidden" name="pcid" id="pcid" t-att-value="case.id"/>
+                                <input type="hidden" name="anaesthesia_id" id="anaesthesia_id"/>
+                                <input type="hidden" name="anaesthesia_length" id="anaesthesia_length" t-att-value="len(guide.anaesthesia_type_ids)"/>
+                                <div class="container-fluid py-4 px-4">
+                                    <div class="row">
+                                    <div class="col-lg-8">
+                                        
+                                        <div class="guide-card mb-4">
+                                        <h5 class="mb-2">Patient Information Guide</h5>
+                                        <div class="doctor-info">
+                                            <div class="profile-image col-lg-3 col-md-2 col-sm-1">
+                                                <img t-att-src="image_data_uri(case.create_uid.partner_id.image_1920) if case.create_uid.partner_id.image_1920 else '/web/static/img/placeholder.png'"
+                                                     alt="Dr profile picture" width="80" height="80"/>
+                                            </div>
+                                            <div >
+                                            <h6 class="doc-intro">
+                                                Hi! I am <t t-esc="doctor.name"/>, your anaesthetist for your 
+                                                <t t-esc="case.op_process"/> operation on 
+                                                <t t-esc="formatted_op_date"/>
+                                                at <t t-esc="case.op_location_id.name"/>.
+                                            </h6>
+                                            </div>
+                                        </div>
+                                        <div class="about-bio mt-3">
+                                            <div class="reminder-item">
+                                            <div class="reminder-icon">
+                                            <i class="bi bi-person-circle"></i>
+                                            </div>
+                                            <div class="mt-1">
+                                            <h6 class="mb-1">Bio:</h6>
+                                            <p class="doc-bio text-muted mb-0"><t t-esc="doctor.bio"/></p>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="reminder-item">
+                                            <div class="reminder-icon">
+                                            <i class="bi bi-person-vcard"></i>
+                                            </div>
+                                            <t t-if="doctor.oms_number">
+                                                <p class="mb-1">
+                                                    OMS License Number: <span class="text-muted mb-0"><t t-esc="doctor.oms_number"/></span>
+                                                </p>
+                                            </t>
+                                        </div>
+                                        </div>
+                                        </div>
+
+                                        <div class="guide-card mb-4">
+                                        <div class="my-3 mx-3"  style="text-align: justify;">
+                                            <!-- Welcome message -->
+                                            <p><t t-esc="guide.welcome_msg"/></p>
+                                        </div>
+                                        </div>
+                                            
+                                        
+                                        <!-- Procedure Information -->
+                                        <div class="guide-card">
+                                        <div class="guide-section">
+                                            <div class="mb-3" style="text-align: justify; margin-right: 15px;"> 
+                                                <!-- Anaesthesia Intro -->
+                                                <p ><t t-esc="guide.anaesthesia_intro"/></p>
+                                            </div>
+                                        </div>
+
+                                        <div t-if="case.additional_info_ids" class="guide-section">
+                                            <h5>Additional Information:</h5>
+                                            <t t-foreach="case.additional_info_ids" t-as="info">
+                                                <div class="mb-3" t-raw="info.explanation"/>
+                                            </t>
+                                        </div>
+                                        
+                                        <div class="guide-section">
+                                            <t t-if="len(guide.anaesthesia_type_ids) > 1">
+                                                <h5>Anesthesia Options</h5>
+                                                <p class="mb-3">Please select your preferred anaesthetic plan. Please
+                                                    note that the choice indicated here is for your anaesthetist’s
+                                                    reference. The actual anaesthetic plan may differ from your
+                                                    preference (due to findings on physical examination, for example).
+                                                </p>
+                                            </t>
+<!--                                            <t t-else="">-->
+<!--                                                <h5>Anesthesia Options</h5>-->
+<!--                                                <p class="mb-3">Please select your preferred anaesthetic plan. Please-->
+<!--                                                    note that the choice indicated here is for your anaesthetist’s-->
+<!--                                                    reference. The actual anaesthetic plan may differ from your-->
+<!--                                                    preference (due to findings on physical examination, for example)-->
+<!--                                                </p>-->
+<!--                                            </t>-->
+                                            <div class="row g-3 mb-4">
+                                                <t t-if="len(guide.anaesthesia_type_ids) > 1">
+                                                    <t t-foreach="guide.anaesthesia_type_ids" t-as="option">
+                                                        <div class="col-md-6">
+                                                            <div class="anesthesia-option mb-1">                
+                                                                <label class="form-check" t-att-for="'option-%s' % option.id">
+                                                                    <div class="form-check">
+                                                                        <input readonly="readonly" class="form-check-input anaesthesia-checkbox" t-att-id="'option-%s' % option.id" t-att-value="option.id"
+                                                                        t-att-data-reminders="','.join([reminder.get_prep_steps(case) for reminder in option.reminder_ids])" type="radio" name="anaesthesia_options" id="anaesthesia_options"/>
+                                                                        <span class="form-check-label"><t t-esc="option.name"/></span>
+                                                                    </div>
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </t>
+                                                </t>
+<!--                                                <t t-if="len(guide.anaesthesia_type_ids) == 1">-->
+<!--                                                    <div class="col-md-6">-->
+<!--                                                        <div class="anesthesia-option">-->
+<!--                                                            <label class="form-check">-->
+<!--                                                                <span class="form-check-label"><t t-esc="guide.anaesthesia_type_ids[0].name"/></span>-->
+<!--                                                            </label>-->
+<!--                                                        </div>-->
+<!--                                                    </div>-->
+<!--                                                </t>-->
+                                            </div>
+                                        </div>
+                                        
+<!--                                        <div class="guide-section">-->
+<!--                                            <h5>Additional Information:</h5>-->
+<!--                                            <p><t t-esc="', '.join(case.additional_info_ids.mapped('name'))"/></p>-->
+<!--                                        </div>-->
+                                        
+                                        <div class="guide-section">
+                                            <h5>Disposition Location</h5>
+                                            <p><t t-if="case.location_id" t-esc="case.location_id.name"/></p>
+                                        </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-lg-4">
+
+                                        <div class="guide-card">
+                                            <h5 class="mb-3">Reminders</h5>
+                                        
+                                            <t t-foreach="case.reminder_line_ids" t-as="reminder">
+                                                <div class="reminder-item">
+                                                    <div class="reminder-icon">
+                                                        <i class="bi bi-exclamation-circle-fill"></i>
+                                                    </div>
+                                                    <div>
+                                                        <p class="mb-1 text-muted"><t t-esc="reminder.preparation_steps"/></p>
+                                                    </div>
+                                                </div>
+                                            </t>
+                                        </div>
+                                        <t>
+                                            <div class="guide-card" style="text-align: justify;">
+                                                <div class="mx-3">
+                                                    <p class="text-muted mb-3 mx-3"><t t-esc="guide.close_msg"/></p>
+                                                </div>
+                                            </div>
+                                        </t>
+                                    </div>
+                                    </div>
+                                </div>
+                            </form>
+                            
+                            <footer>
+                                <div class="text-center"><i class="far fa-copyright" aria-hidden="true"></i> Copyright © Synapse Medical Pte Ltd</div>
+                                <div>
+                                    <a href="#" class="text-decoration-none text-dark me-2">Privacy Policy</a>
+                                    <a href="#" class="text-decoration-none text-dark">Cookies</a>
+                                </div>
+                            </footer>
+                        </div>
+
+                        <!-- Bootstrap Bundle with Popper -->
+                        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" 
+                                integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" 
+                                crossorigin="anonymous"></script>
+                </div>
+            </t>
+        </template>
+
+        <template id="patient_guide_confirmation_page" name="Survey: Patient Guide Thank You"> 
+            <meta charset="UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+            <style>
+                .con-body {
+                    background-color: #d1e4e6;
+                    min-height: 100vh;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                }
+                .main-card {
+                    background-color: white;
+                    border-radius: 0.75rem;
+                    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+                    padding: 2rem;
+                    width: 100%;
+                    height: 100%;
+                    margin: 1rem auto;
+                }
+                .card-header {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    }
+                .pulse-icon {
+                    animation: pulse 1.5s infinite;
+                }
+                    @keyframes pulse {
+                    0% {
+                        transform: scale(1);
+                        opacity: 1;
+                    }
+                    50% {
+                        transform: scale(1.1);
+                        opacity: 0.8;
+                    }
+                    100% {
+                        transform: scale(1);
+                        opacity: 1;
+                    }
+                    }
+                .faq-link {
+                        text-align: right;
+                        font-size: 0.875rem;
+                    }
+                    .faq-link a {
+                        color: #25b7d3;
+                        text-decoration: none;
+                    }
+                    .faq-link a:hover {
+                        color: #1da1bb;
+                }
+                .footer {
+                    text-align: center;
+                    padding: 1rem;
+                    color: #9ca3af;
+                    font-size: 0.75rem;
+                    margin-top: 1rem;
+                }   
+            </style>
+            <!-- Start your code here -->
+            <div class="con-body">
+                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                    <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-xl-8 col-lg-10 col-md-12">
+                            <!-- Main card -->
+                            <div class="main-card">
+                            <!-- Logo -->
+                                <div class="text-center mt-4 mb-3">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="pulse-icon text-info bi bi-check-circle" width="75" height="75"
+                                        fill="currentColor" viewBox="0 0 16 16">
+                                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+                                        <path
+                                            d="M10.97 4.97a.235.235 0 0 0-.02.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05z" />
+                                    </svg>
+                                </div>
+                                <div class="text-center my-4">
+                                    <h3 class="my-4">Thank you for your confirmation</h3>
+                                    <h4 class="fs-6 text-secondary lh-base px-4">You will now be redirected to the dashboard.</h4>
+                                </div>
+                                <div class="faq-link mt-5 text-center">
+                                    <a href="https://vanaesa.com/" target="_blank">What is VANAESA?</a>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Footer -->
+                        <div class="footer">
+                            Copyright © Synapse Medical Pte Ltd
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                <script>
+                    setTimeout(() => {
+                        window.location.href = "/patient-dashboard";
+                    },5000);
+                </script>
+        </template>
+
+    </data>
+</odoo>

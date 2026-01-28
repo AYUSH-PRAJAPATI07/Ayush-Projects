@@ -1,0 +1,508 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<data>
+    <template id="questions_char_box" name="Questions: char box">
+        <style>
+            .form-control-charbox {
+                margin-bottom: 1rem;
+                padding: 0.75rem;
+                font-size: 1rem;
+                background-color: #e9ecef;
+            }
+        </style>
+        <div class="form-control-charbox text-muted">
+            <span t-esc="answer_lines[0].value_char_box"></span>
+        </div>
+    </template>
+
+    <template id="questions_text_box" name="Questions: text box">
+        <style>
+            .form-control-textbox {
+                margin-bottom: 1rem;
+                padding: 0.75rem;
+                font-size: 1rem;
+                background-color: #e9ecef;
+            }
+        </style>
+        <div class="form-control-textbox text-muted">
+            <span t-esc="answer_lines[0].value_text_box"></span>
+        </div>
+    </template>
+
+    <template id="questions_numerical_box" name="Questions: number box">
+        <style>
+            .form-control-numberbox {
+                margin-bottom: 1rem;
+                padding: 0.75rem;
+                font-size: 1rem;
+                background-color: #e9ecef;
+            }
+        </style>
+        <div class="form-control-numberbox text-muted">
+            <span t-esc="answer_lines[0].value_numerical_box"></span>
+        </div>
+    </template>
+
+    <template id="questions_date" name="Questions: date box">
+        <style>
+            .form-control-date {
+                margin-bottom: 1rem;
+                padding: 0.75rem;
+                font-size: 1rem;
+                background-color: #e9ecef;
+            }
+        </style>
+        <div class="form-control-date text-muted">
+            <span t-esc="answer_lines[0].value_date"></span>
+        </div>
+    </template>
+
+    <template id="questions_datetime" name="Questions: datetime box">
+        <style>
+            .form-control-datetime {
+                margin-bottom: 1rem;
+                padding: 0.75rem;
+                font-size: 1rem;
+                background-color: #e9ecef;
+            }
+        </style>
+        <div class="form-control-datetime text-muted">
+            <span t-esc="answer_lines[0].value_datetime"></span>
+        </div>
+    </template>
+
+    <template id="questions_file" name="Questions: File">
+            <style>
+                .form-control-file {
+                    margin-bottom: 1rem;
+                    padding: 0.75rem;
+                    font-size: 1rem;
+                    background-color: #e9ecef;
+                }
+            </style>
+            <div t-foreach="answer_lines" t-as="line" class="form-control-file text-muted">
+                <span t-esc="line.attachment_id.name"></span>
+            </div>
+    </template>
+
+
+    <!-- Survey last page -->
+    <template id="survey.survey_fill_form_done" name="Survey: finished">
+        <t t-set="survey_form_readonly" t-value="true"/>
+        <!-- <t t-if="answer.test_entry" t-call="survey.survey_button_form_view" /> -->
+        <t t-set="main_object" t-value="survey"/>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+        <style>
+            .con-body {
+                background-color: #d1e4e6;
+                min-height: 100vh;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .main-card {
+                background-color: white;
+                border-radius: 0.75rem;
+                box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+                padding: 2rem;
+                width: 100%;
+            
+                margin: 1rem auto;
+            }
+
+            .step-indicator {
+                color: #94a3b8;
+                font-size: 0.875rem;
+                
+            }
+
+            .card-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+
+            .logo {
+                height: 40px;
+                width: 40px;
+                background-color: #25b7d3;
+                border-radius: 10%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: white;
+                font-weight: bold;
+                font-size: 1.5rem;
+                margin: 0 auto 1.5rem;
+            }
+
+            .form-control {
+                margin-bottom: 1rem;
+                padding: 0.75rem;
+                font-size: 1rem;
+            }
+
+            .action-btn {
+                width: 100%;
+                background-color: #25b7d3;
+                color: white;
+                border: none;
+                padding: 0.75rem;
+                border-radius: 0.375rem;
+                margin-top: 3rem;
+                transition: background-color 0.2s;
+                font-weight: 500;
+            }
+
+            .action-btn:hover {
+                background-color: #1da1bb;
+            }
+
+            .faq-link {
+                        text-align: right;
+                        font-size: 0.875rem;
+                        }
+                        
+                        .faq-link a {
+                        color: #25b7d3;
+                        text-decoration: none;
+                        }
+                        
+                        .faq-link a:hover {
+                        color: #1da1bb;
+                        }
+
+            .footer {
+                text-align: center;
+                padding: 1rem;
+                color: #9ca3af;
+                font-size: 0.75rem;
+                margin-top: 1rem;
+            }
+
+
+            @media (min-width: 762px){
+                .matrix-con{
+                    margin-left: 4.5rem;
+                }
+            }
+            
+
+        </style>
+
+            <div class="con-body">
+            <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-12">
+                <!-- Main card -->
+                <div class="main-card">
+                    <!-- Logo -->
+                    <div class="card-header mb-3">                        
+
+                    </div>
+                    <div class="wrap bg-white">
+                        <div class="o_survey_print">
+                            <div>
+                                <h4 class="text-center mb-2" t-if="survey.type_of_survey == 'medical_history'"><span class="text-break">Pre-Anaesthetic Questionnaire</span></h4>
+                                <h4 class="text-center mb-2" t-elif="survey.type_of_survey == 'feedback'"><span class="text-break">Post-Anaesthetic Feedback</span></h4>
+                                <h4 class="text-center mb-2" t-else=""><span t-field="survey.title" class="text-break"/></h4>
+                                <span class="d-block text-center">Please review your answers</span>
+                            </div>
+                    <div class="form-outline form-white my-4 px-3">
+                        
+                    <!-- Form-main-card -->
+                    <div>
+                        <fieldset disabled="disabled">
+                            <t t-set="question" t-value="False" />
+                            <t t-foreach='answer.get_question()' t-as='question'>
+                                <t t-if="question.is_page and
+                                            (any(q in questions_to_display for q in question.question_ids)
+                                            or not is_html_empty(question.description))">
+                                    <hr t-if="question != survey.page_ids[0]" />
+                                    <div class="o_page_header mb-5">
+                                        <h1 t-field='question.title' class="text-break fs-2" />
+                                        <!-- <div t-if="question.description" t-field='question.description' class="text-muted oe_no_empty mt-1 text-break"/> -->
+                                    </div>
+                                </t>
+                                <t t-if="not question.is_page" >
+                                    <t t-set="answer_lines" t-value="answer.user_input_line_ids.filtered(lambda line: line.question_id == question)"/>
+                                    <div class="js_question-wrapper" t-att-id="question.id" t-att-style="'background-color: ' + question.colour if question.colour else ''">
+                                        <p class="fs-5">
+                                            <span t-field='question.title' class="text-break"/>
+                                            <span t-if="question.constr_mandatory" class="text-danger">*</span>
+                                            <span t-if="scoring_display_correction" class="badge rounded-pill" t-att-data-score-question="question.id"></span>
+                                        </p>
+                                        <!-- <div class="text-muted oe_no_empty mt-1 text-break" t-if="not is_html_empty(question.description)" t-field='question.description'/> -->
+                                        <t t-if="question.question_type in ['numerical_box', 'date', 'datetime', 'text_box', 'char_box', 'file']">
+                                            <t t-if="answer_lines">
+                                                <t t-set="answer_line" t-value="answer_lines[0]"/>
+                                                <t t-if="answer_line.skipped">
+                                                    <!-- question was skipped, display an orange block with the text "Skipped" in place of the answer -->
+                                                    <div class="row g-0">
+                                                        <div class="col-12 col-md-6 col-lg-4 rounded ps-4 o_survey_question_skipped">
+                                                            <input type="text"
+                                                                t-attf-class="form-control fst-italic o_survey_question_{{question.question_type}} bg-transparent rounded-0 p-0" value="Skipped"/>
+                                                        </div>
+                                                    </div>
+                                                </t>
+                                                <t t-elif="answer_line.survey_id.scoring_type != 'no_scoring' and question.question_type in ['numerical_box', 'date', 'datetime'] and question['answer_%s' % question.question_type]">
+                                                    <div class="row g-0">
+                                                        <div t-attf-class="col-12 col-md-6 col-lg-4 rounded ps-4 #{'bg-success' if answer_line.answer_is_correct else 'bg-danger'}">
+                                                            <t t-if="question.question_type == 'numerical_box'" t-call="p7_patient_management.questions_numerical_box"/>
+                                                            <t t-if="question.question_type == 'date'" t-call="p7_patient_management.questions_date"/>
+                                                            <t t-if="question.question_type == 'datetime'" t-call="p7_patient_management.questions_datetime"/>
+                                                            <t t-if="question.question_type == 'file'" t-call="p7_patient_management.questions_file"/>
+                                                        </div>
+                                                    </div>
+                                                </t>
+                                                <t t-else="">
+                                                    <t t-if="question.question_type == 'text_box'" t-call="p7_patient_management.questions_text_box"/>
+                                                    <t t-if="question.question_type == 'char_box'" t-call="p7_patient_management.questions_char_box"/>
+                                                    <t t-if="question.question_type == 'numerical_box'" t-call="p7_patient_management.questions_numerical_box"/>
+                                                    <t t-if="question.question_type == 'date'" t-call="p7_patient_management.questions_date"/>
+                                                    <t t-if="question.question_type == 'datetime'" t-call="p7_patient_management.questions_datetime"/>
+                                                    <t t-if="question.question_type == 'file'" t-call="p7_patient_management.questions_file"/>
+                                                </t>
+                                                <t t-if="answer_lines.survey_id.scoring_type != 'no_scoring'
+                                                    and question.question_type in ['numerical_box', 'date', 'datetime']
+                                                    and question['answer_%s' % question.question_type]
+                                                    and not answer_line.answer_is_correct">
+                                                    <div class="row g-0">
+                                                        <t t-set="correct_answer" t-value="question['answer_%s' % question.question_type ]"/>
+                                                        <div class="col-12 text-success mt-1">
+                                                            The correct answer was:
+                                                            <strong t-esc="correct_answer" t-if="question.question_type == 'numerical_box'"/>
+                                                            <strong t-esc="format_date(correct_answer)" t-if="question.question_type == 'date'"/>
+                                                            <strong t-esc="format_datetime(correct_answer)" t-if="question.question_type == 'datetime'"/>
+                                                        </div>
+                                                    </div>
+                                                </t>
+                                            </t>
+                                            <t t-else="">
+                                                <t t-if="question.question_type == 'text_box'" t-call="p7_patient_management.questions_text_box"/>
+                                                <t t-if="question.question_type == 'char_box'" t-call="p7_patient_management.questions_char_box"/>
+                                                <t t-if="question.question_type == 'numerical_box'" t-call="p7_patient_management.questions_numerical_box"/>
+                                                <t t-if="question.question_type == 'date'" t-call="p7_patient_management.questions_date"/>
+                                                <t t-if="question.question_type == 'datetime'" t-call="p7_patient_management.questions_datetime"/>
+                                                <t t-if="question.question_type == 'file'" t-call="p7_patient_management.questions_file"/>
+                                            </t>
+                                        </t>
+                                        <t t-if="question.question_type == 'simple_choice'" t-call="survey.question_simple_choice"/>
+                                        <t t-if="question.question_type == 'multiple_choice'" t-call="survey.question_multiple_choice"/>
+                                        <div class="matrix-con">
+                                        <t t-if="question.question_type == 'matrix'" t-call="survey.question_matrix"/>
+                                        </div>
+                                        <t t-if="question.question_type in ['simple_choice', 'multiple_choice','matrix']">
+                                            <t t-if="answer_lines">
+                                                <t t-if="answer_lines[0].skipped">
+                                                    <div class="row g-0">
+                                                        <div class="col-12 o_survey_choice_question_skipped mt-1">
+                                                            This question was skipped
+                                                        </div>
+                                                    </div>
+                                                </t>
+                                            </t>
+                                        </t>
+                                        <div class="o_survey_question_error overflow-hidden border-0 py-0 px-3 alert alert-danger" role="alert"></div>
+                                    </div>
+                                </t>
+                            </t>
+                            <!--Set question to false to avoid background miss match as last question is still in context and is used in survey.layout t-call.-->
+                            <t t-set="question" t-value="False"/>
+                        </fieldset>
+                    </div>
+                    <form id="survey_form" action="/survey/edit" method="post">
+                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                        <input type="hidden" id="survey" name="survey" t-att-value="survey.id"/>
+                        <input type="hidden" id="answer" name="answer" t-att-value="answer.id"/>
+                        <input type="hidden" id="edit" name="edit" value=""/>
+                        <div class="text-center" style="margin-top: 3rem;">
+                            <label style="font-size: 14px; color: #555;">
+                                <input type="checkbox" id="confirm_survey" name="confirm_survey" style="margin-right: 5px;"/>
+                                Please acknowledge all the above answers were correct by clicking the checkbox.
+                            </label>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 text-center">
+                                <button type="button" class="action-btn btn" onclick="toggleSubmitButton()">Submit</button>
+                            </div>
+                            <div class="col-6 text-center">
+                                <button type="button" class="action-btn btn btn-secondary me-2" onclick="toggleBackButton()">Edit</button>
+                            </div>
+                        </div>
+                    </form>
+                    <script>
+                        function toggleSubmitButton() {
+                            const checkbox = document.getElementById("confirm_survey");
+                            const form = document.getElementById("survey_form");
+                            if (!checkbox.checked) {
+                                alert("Please acknowledge the answers by checking the checkbox.");
+                            } else {
+                                document.getElementById("edit").value = "";
+                                form.submit();
+                            }
+                        }
+                        function toggleBackButton() {
+                            const form = document.getElementById("survey_form");
+                            document.getElementById("edit").value = "1";
+                            form.submit();
+                        }
+                    </script>
+                </div>
+            </div>
+                            
+                    </div>
+
+                    <div class="faq-link mt-5 text-center">
+                        <a href="https://vanaesa.com/" target="_blank">What is VANAESA?</a>
+                    </div>
+                </div>
+                
+                <!-- Footer -->
+                <div class="footer">
+                    Copyright © Synapse Medical Pte Ltd
+                </div>
+                </div>
+            </div>
+            </div>
+            </div>
+            
+            
+    </template>
+
+    <template id="confirmation_page" name="Survey: Thank You">
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet" crossorigin="anonymous"/>
+        
+        <style>
+            .con-body {
+                background-color: #d1e4e6;
+                min-height: 100vh;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .main-card {
+                background-color: white;
+                border-radius: 0.75rem;
+                box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+                padding: 2rem;
+                width: 100%;
+                max-width: 700px;
+                height: 100%;
+                
+                margin: 1rem auto;
+            }
+
+            .card-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                }
+
+            .pulse-icon {
+                animation: pulse 1.5s infinite;
+                }
+
+                @keyframes pulse {
+                0% {
+                    transform: scale(1);
+                    opacity: 1;
+                }
+                50% {
+                    transform: scale(1.1);
+                    opacity: 0.8;
+                }
+                100% {
+                    transform: scale(1);
+                    opacity: 1;
+                }
+                }
+
+            .form-control {
+                margin-bottom: 1rem;
+                padding: 0.75rem;
+                font-size: 1rem;
+            }
+
+            .faq-link {
+                        text-align: right;
+                        font-size: 0.875rem;
+                        }
+                        
+                        .faq-link a {
+                        color: #25b7d3;
+                        text-decoration: none;
+                        }
+                        
+                        .faq-link a:hover {
+                        color: #1da1bb;
+                        }
+
+            .footer {
+                text-align: center;
+                padding: 1rem;
+                color: #9ca3af;
+                font-size: 0.75rem;
+                margin-top: 1rem;
+            }
+        </style>
+
+        <div class="con-body">
+            <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-12">
+                    <!-- Main card -->
+                    <div class="main-card">
+                    <!-- Logo -->
+                        <div class="text-center mt-4 mb-3">
+                            <svg xmlns="http://www.w3.org/2000/svg"  width="75" height="75"
+                                    fill="currentColor" class="pulse-icon text-info bi bi-check-circle" viewBox="0 0 16 16">
+                                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+                                    <path
+                                        d="M10.97 4.97a.235.235 0 0 0-.02.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05z" />
+                                </svg>
+                            <h2 class="mt-4 mb-5">Thank you!</h2>   
+                        </div>
+
+                        <div class="text-center mb-4">
+                            <h4 class="text-secondary">Your responses have been submitted successfully.</h4>
+                        </div>
+
+                        <div class="faq-link mt-5 text-center">
+                            <a href="https://vanaesa.com/" target="_blank">What is VANAESA?</a>
+                        </div>
+
+                    </div>
+                </div>
+
+                    
+                
+                <!-- Footer -->
+                <div class="footer">
+                    Copyright © Synapse Medical Pte Ltd
+                </div>
+                </div>
+            </div>
+            </div>
+        
+            <script>
+                setTimeout(() => {
+                    window.location.href = "/patient-dashboard";
+                },5000);
+            </script>
+    </template>
+
+</data>
+</odoo>

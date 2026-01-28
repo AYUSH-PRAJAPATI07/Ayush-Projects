@@ -1,0 +1,9 @@
+.required-label {
+    color: #ba2626 !important;
+    font-weight: bold;
+}
+
+.o_web_client .o_form_view.o_xxs_form_view .o_group .o_form_label.required-label {
+    color: #ba2626 !important;
+    font-weight: bold;
+}

@@ -1,0 +1,99 @@
+<odoo>
+    <data>
+
+        <!-- Anaesthesia view -->
+        <record id="view_anaesthesia_form" model="ir.ui.view">
+            <field name="name">anaesthesia.type.form</field>
+            <field name="model">anaesthesia.type</field>
+            <field name="arch" type="xml">
+                <form string="Anaesthesia Types Setup">
+                    <sheet>
+                        <group>
+                            <field name="name" required="1"/>
+                            <field name="date_updated" invisible="1"/>
+                            <field name="explanation" placeholder="Write here..." class="oe-bordered-editor o_example_note" invisible="1"/>
+                            <field name="preparation_steps" placeholder="Write here..." class="oe-bordered-editor o_example_note" invisible="1"/>
+                            <field name="created_by" readonly="1"/>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="activity_ids"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_anaesthesia_tree" model="ir.ui.view">
+            <field name="name">anaesthesia.type.tree</field>
+            <field name="model">anaesthesia.type</field>
+            <field name="arch" type="xml">
+                <tree string="Anaesthesia Types Setup">
+                    <field name="name"/>
+                    <field name="user_id" string="Created by User"/>
+                    <field name="created_by"/>
+                    <field name="create_date" string="Date Created"/>
+                    <field name="date_updated"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_anaesthesia_search" model="ir.ui.view">
+            <field name="name">anaesthesia.select</field>
+            <field name="model">anaesthesia.type</field>
+            <field name="arch" type="xml">
+                <search string="Search Anaesthesia Types">
+                    <field name="name"/>
+                    <field name="date_updated"/>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_anaesthesia_details" model="ir.actions.act_window">
+            <field name="name">Anaesthesia Types Setup</field>
+            <field name="res_model">anaesthesia.type</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_anaesthesia_tree"/>
+            <field name="domain">[]</field>
+            <field name="context"></field>
+            <field name="help" type="html">
+                <p>
+                    This is the list of anaesthesia types.
+                </p>
+            </field>
+        </record>
+
+        <!-- Anaesthesia line view -->
+        <record id="view_anaesthesia_line_form" model="ir.ui.view">
+            <field name="name">anaesthesia.type.line.form</field>
+            <field name="model">anaesthesia.type.line</field>
+            <field name="arch" type="xml">
+                <form string="Anaesthesia Type Lines">
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                            <field name="date_updated" invisible="1"/>
+                            <field name="explanation" placeholder="Write here..." class="oe-bordered-editor o_example_note"/>
+                            <field name="preparation_steps" placeholder="Write here..." class="oe-bordered-editor o_example_note"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_anaesthesia_line_details" model="ir.actions.act_window">
+            <field name="name">Anaesthesia Type Lines Setup</field>
+            <field name="res_model">anaesthesia.type.line</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_anaesthesia_line_form"/>
+            <field name="domain">[]</field>
+            <field name="context"></field>
+            <field name="help" type="html">
+                <p>
+                    This is the list of anaesthesia type lines.
+                </p>
+            </field>
+        </record>
+
+    </data>
+</odoo>

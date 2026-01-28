@@ -1,0 +1,59 @@
+<odoo>
+    <data>
+
+        <!-- Operation Location View -->
+        <record id="view_location_form" model="ir.ui.view">
+            <field name="name">res.location.form</field>
+            <field name="model">res.location</field>
+            <field name="arch" type="xml">
+                <form string="Setup Operation Locations">
+                    <sheet>
+                        <group>
+                            <field name="name" required="1"/>
+                            <field name="created_by" invisible="1"/>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="activity_ids"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_location_tree" model="ir.ui.view">
+            <field name="name">res.location.tree</field>
+            <field name="model">res.location</field>
+            <field name="arch" type="xml">
+                <tree string="Setup Operation Locations">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_location_search" model="ir.ui.view">
+            <field name="name">location.select</field>
+            <field name="model">res.location</field>
+            <field name="arch" type="xml">
+                <search string="Search Operation Locations">
+                    <field name="name"/>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_location_details" model="ir.actions.act_window">
+            <field name="name">Setup Operation Locations</field>
+            <field name="res_model">res.location</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_location_tree"/>
+            <field name="domain">[]</field>
+            <field name="context"></field>
+            <field name="help" type="html">
+                <p>
+                    This is the list of Operation Locations.
+                </p>
+            </field>
+        </record>
+
+    </data>
+</odoo>
